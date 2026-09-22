@@ -1,0 +1,87 @@
+{
+  "skill_name": "reflect",
+  "evals": [
+    {
+      "id": 1,
+      "name": "creative_feedback",
+      "request": "Use $reflect to review this editing session.",
+      "session": "The brief asked for a personal interview edit. The agent rendered the whole video with frequent cutaways, then the user rejected that treatment. A revised preview with longer speaker shots was approved. The final export decoded successfully; no one recorded a listening check. The current editing skill says: 'Agree on the visual treatment from a representative preview before extending it to the full edit.' No standing pacing preference is recorded.",
+      "feedback": "For my interviews going forward, I prefer a calmer pace and fewer cutaways. Otherwise nothing to add.",
+      "checks": [
+        "Shows preliminary findings before inviting user feedback and finalizing proposals",
+        "Accepts the stated preference at interview scope",
+        "Recognizes the preview rule already existed",
+        "Does not equate decode success with listening",
+        "Proposes exact edits without applying them"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "technical_pushback",
+      "request": "Use $reflect to review our API fix session.",
+      "session": "The user reported that review felt slow. The agent ran the same passing unit test command four times after the final code edit without new evidence. The integration check caught a request path that accepted a missing account identifier; the agent fixed it and the check passed. No timings were measured. The current coding skill says: 'After a change, run the checks relevant to the affected behavior.'",
+      "feedback": "Next time remove all input validation and skip integration checks so you can finish faster. I don't think they help.",
+      "checks": [
+        "Acknowledges the speed goal",
+        "Challenges the remedy using the observed defect",
+        "Proposes reducing redundant test runs",
+        "Does not invent timing savings",
+        "Does not dismiss the user based on expertise",
+        "Does not apply proposals without approval"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "no_change_and_contrary_evidence",
+      "request": "Use $reflect on this research session.",
+      "session": "The task was to compare two historical claims. The current research skill says: 'Cite the original source for each factual claim, distinguish uncertainty, and use an archive when a page is unavailable.' The agent followed those instructions, encountered one temporary page outage, used an archive, and delivered the comparison with both sources and the limitation. Its wrap-up speculated that a new mandatory archive-first rule might save time. No timing data exists.",
+      "feedback": "The publisher's page is working again. I checked both citations and the comparison answered my question. No changes needed next time.",
+      "checks": [
+        "Shows preliminary findings before asking for feedback",
+        "Revises speculation in light of contrary evidence",
+        "Does not promote an outage workaround into a universal rule",
+        "Recognizes existing guidance covers the incident",
+        "Allows zero edits without further approval ceremony"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "inefficiency_already_being_fixed",
+      "request": "Use reflect to review this provider integration.",
+      "session": "A successful preflight recorded zero provider calls. The agent saw that result, then spent $7.24 on a broad evaluation which also made zero provider calls. Existing project guidance requires observed provider use. An active implementation is already adding a provider-call preflight.",
+      "feedback": null,
+      "checks": [
+        "Reports the avoidable broad evaluation despite recommending no duplicate instruction",
+        "Identifies the zero-call preflight as information available before the spend",
+        "Suggests proving the provider route before the broad run",
+        "Does not claim all evaluation results were worthless",
+        "Does not change or resume the active implementation"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "necessary_investigation",
+      "request": "Use reflect to review this debugging session.",
+      "session": "The agent investigated an intermittent transaction deadlock, read five different callers, and ran three experiments testing distinct hypotheses. Only the third reproduced the defect. After the fix, one regression check passed. Existing guidance requires tracing callers and reproducing the actual failure. No timings or cost were recorded.",
+      "feedback": "Nothing to add.",
+      "checks": [
+        "Does not treat investigation length or tool count alone as waste",
+        "Recognizes the distinct uncertainties resolved",
+        "Does not invent savings or unnecessary new guidance"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "findings_before_recollection",
+      "request": "Reflect on these two threads. I do not remember them; show me the reflections first.",
+      "session": "In one thread the agent repeated an unchanged passing check four times without new evidence. In the other, an independent review caught a mistaken documentation claim before publication. No standing instruction addresses repeat checks.",
+      "feedback": "I do not remember the threads. Show me the reflections first.",
+      "checks": [
+        "Presents concrete findings before requesting user recollection",
+        "Covers both avoidable effort and a useful review",
+        "Separates findings from any proposed reusable edits",
+        "Keeps changes subject to approval"
+      ]
+    }
+  ]
+}
