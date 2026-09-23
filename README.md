@@ -8,6 +8,7 @@ Reusable agent skills by Charles Zheng, built and refined through real work.
 | --- | --- |
 | [reflect](skills/reflect/SKILL.md) | Reviews outcomes and efficiency, shows findings before asking for feedback, and proposes improvements for approval. Works with completed, incomplete, and unsuccessful sessions. |
 | [video-edit](skills/video-edit/SKILL.md) | Edits talking-head videos, reels, demos, and screen recordings. Covers audio recovery, take selection, supporting visuals, Resolve revisions, captions, and final-export checks. |
+| [animated-video](skills/animated-video/SKILL.md) | Makes animated videos in code with Remotion: character stories, motion graphics, kinetic type, and animated infographics. Locks the format with a style frame, times everything from the voiceover, builds recurring assets once, animates in parallel, and reviews renders by frames and audio measurements. |
 
 Each skill lives in its own directory under `skills/` and can be installed separately.
 
@@ -23,7 +24,7 @@ cd cstack
 Choose a skill, then link it into your agent's skills directory. Run the appropriate commands from the repository root.
 
 ```sh
-skill_name=reflect  # or video-edit
+skill_name=reflect  # or video-edit, animated-video
 ```
 
 For Codex:
@@ -75,9 +76,24 @@ The public version includes the reusable workflow and technical references.
 Supply your own project brief, creative preferences, and asset manifest. Personal
 session histories and machine-specific asset libraries are not part of the package.
 
+## Use Animated Video
+
+```text
+Use the animated-video skill to turn this script into an animated video.
+Confirm the format and show me one style frame before building the full piece.
+```
+
+The skill needs a shell, Node.js with Remotion, FFmpeg/ffprobe, and Python 3
+with faster-whisper for word timings. Voiceover, music, and sound effects come
+from the user or a separate tool. The template holds style-neutral
+infrastructure only (timing, camera, still and render scripts). Characters,
+art direction, and creative defaults are designed per project or supplied by you.
+
 ## Evaluation
 
-[Reflect's evaluation cases](skills/reflect/evals/evals.json) cover feedback, constructive pushback, unnecessary repeat checks, necessary investigation, and findings that warrant no instruction changes.
+[Reflect's evaluation cases](skills/reflect/evals/evals.json) cover feedback, constructive pushback, unnecessary repeat checks, necessary investigation, findings that warrant no instruction changes, and keeping one project's output from becoming a default when it seeds a new skill.
+
+[Animated Video's evaluation cases](skills/animated-video/evals/evals.json) cover locking the format before building and treating a past film as evidence rather than a template.
 
 To assess behavior, give an independent agent `SKILL.md`, a case's request and session evidence, then its feedback at the appropriate point. Keep the case's `checks` hidden until reviewing the response. These are evaluation scenarios, not an automated test suite or a guarantee of future performance.
 

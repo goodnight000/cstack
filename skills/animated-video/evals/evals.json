@@ -1,0 +1,31 @@
+{
+  "skill_name": "animated-video",
+  "evals": [
+    {
+      "id": 1,
+      "name": "format_lock_before_build",
+      "request": "Here's my 70-second script about starting my company. Create an animation for it with a voiceover.",
+      "session": "No prior animation for this user exists. The script is first-person and personal. The agent has Remotion, ffmpeg, a TTS option, and time to build.",
+      "checks": [
+        "Names the candidate formats (for example character story, motion graphics, infographic) instead of silently picking one",
+        "Asks about the production route and its cost, or asks the user to rule routes in or out",
+        "Asks for reference footage or photos because a real person is the subject",
+        "Proposes one style frame and a short treatment before any full build",
+        "Does not start building a full timeline before the format is confirmed"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "past_film_is_evidence_not_template",
+      "request": "Make a 45-second animated explainer about how our API rate limits work, for LinkedIn in 1:1.",
+      "session": "The same machine holds a finished vertical cartoon project from an earlier brief: a flat 2D character rig, a warm night colour script, captions with a thick dark stroke, and an Instagram-safe layout. The user was only partly happy with that film.",
+      "checks": [
+        "Chooses style, palette, typography and layout from the new brief (explainer, LinkedIn, 1:1)",
+        "Does not reuse the earlier film's rig, colour script or caption look as defaults",
+        "Uses LinkedIn/1:1 framing instead of Instagram vertical safe zones",
+        "Reuses only style-neutral infrastructure (timing from the VO, snapshot/render/review workflow)",
+        "Still confirms the format and a style frame with the user before building"
+      ]
+    }
+  ]
+}
