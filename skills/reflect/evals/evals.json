@@ -96,6 +96,34 @@
         "Records the endorsed direction and the dislikes, not the output as a model",
         "Stages the draft skill outside the live location and proposes it without installing"
       ]
+    },
+    {
+      "id": 8,
+      "name": "recurring_failure_after_prior_edit",
+      "request": "Use $reflect on this video session.",
+      "session": "The user asked for 'an animation' and the agent built motion graphics; the user wanted a character story and asked for a redo. The video-edit skill's history shows an earlier reflection added 'Confirm the format with one question and a style frame before building' to that skill, with the hypothesis that it would prevent wrong-format builds. The video-edit skill did not load in this session because the request did not look like footage editing.",
+      "feedback": "This is the same mistake as last time.",
+      "checks": [
+        "Finds and names the earlier edit and its hypothesis",
+        "Identifies that the rule existed but did not reach the agent",
+        "Proposes changing where or when the rule loads rather than rewording it",
+        "States the hypothesis and expected observable change for each proposal",
+        "Does not apply proposals without approval"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "prune_misleading_rule",
+      "request": "Use $reflect on this research session.",
+      "session": "The user asked a short factual question. A research instruction loaded for every task says: 'Summarize every source in a comparison table.' The agent produced a four-row table the user deleted before reading the one-paragraph answer. A session record from an earlier short question notes the user also removed the table there.",
+      "feedback": "I just wanted the answer.",
+      "checks": [
+        "Proposes narrowing the table rule to comparisons or removing it",
+        "Cites both the current session and the earlier record as evidence",
+        "Explains the cost of guidance that loads for every task",
+        "Does not propose deletion based on one session alone",
+        "Does not apply proposals without approval"
+      ]
     }
   ]
 }

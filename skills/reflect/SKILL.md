@@ -33,6 +33,10 @@ For each failure, determine whether guidance was missing, wrong, hard to find, o
 
 Look for existing checks and tools before proposing new ones. Prefer a working deterministic check for a mechanical mistake; keep judgment in instructions. Inspect enough of the actual workflow to distinguish an absent check from a broken or unused one. Propose implementation changes separately when they need additional work or authorization.
 
+Check what earlier reflections changed in the guidance you inspected: its version history, change notes, or session records kept beside it. If an earlier edit targeted the same failure and the failure happened again, treat that edit's reasoning as weakened rather than rewording it. Change how the guidance reaches the agent instead (where it lives, when it loads, or which workflow step, checkpoint, template, or tool enforces it), or propose removing it. Do not re-propose a change the user already rejected unless new evidence changes the case.
+
+Removing or narrowing guidance is a valid proposal when this work shows it misled the agent, duplicates other guidance, or cost effort without benefit, or when earlier records show it repeatedly going unused. Guidance that loads for every task competes for attention on every task; an addition there must justify that cost, so prefer a location that loads only when relevant.
+
 ## 4. Ask for the user's perspective
 
 Show a concise preliminary reflection with the relevant examples before asking for the user's perspective. Incorporate corrections already present in the thread, then invite corrections or missing priorities. Continue investigating independently while feedback is pending. If the user has nothing to add or wants findings first, proceed with the evidence available. Approval is still required before applying reusable-instruction edits.
@@ -54,12 +58,12 @@ Keep consequential findings in the reflection regardless of whether they justify
 
 - The evidence supporting it, and whether it is an explicit preference, observed result, or hypothesis.
 - A recognizable future situation and the action that should change.
-- Why it remains useful beyond the incident, at the proposed scope.
+- Why it would still make sense, and still help, on an unfamiliar brief of the same kind of work, at the proposed scope. Names, values, and choices that fit only this task fail this test.
 - What it adds beyond existing instructions, artifacts, or readily available documentation.
 
 Ask whether omitting the lesson would make a future agent repeat a meaningful mistake or redo substantial discovery. A single verified discovery or explicit preference can qualify; recurrence is useful evidence, not a required quota. Preserve helpful methods as well as failure prevention.
 
-Keep temporary outages, exact creative settings, and unverified optimizations out of general rules. Examples, templates, and pointers to worked examples steer future output as strongly as rules: carry one forward only when the user accepted it as a reference, and label it as a single instance. When one project seeds a new skill, keep its durable content to process, checks, failure patterns, and tool gotchas that would hold for a different brief; the project's creative choices stay in its session record. Retain an experiment only with its uncertainty and a check that could disprove it. Merge duplicates and narrow or replace stale guidance. If nothing qualifies for a durable edit, report the consequential findings and explain that no instruction change is warranted.
+Keep temporary outages, exact creative settings, and unverified optimizations out of general rules. Examples, templates, and pointers to worked examples steer future output as strongly as rules: carry one forward only when the user accepted it as a reference, and label it as a single instance. When one project seeds a new skill, keep its durable content to process, checks, failure patterns, and tool gotchas that would hold for a different brief; the project's creative choices stay in its session record. Retain an experiment only with its uncertainty and a check that could disprove it. Merge duplicates and narrow or replace stale guidance. Reject additions that demand open-ended effort ("keep refining until it's great") without a stopping point, and removals of a safeguard without a replacement. If nothing qualifies for a durable edit, report the consequential findings and explain that no instruction change is warranted.
 
 ## 6. Choose the smallest useful destination
 
@@ -86,7 +90,9 @@ Lead with the most consequential findings and the user feedback that changed you
 - Target file and section, with exact replacement text or a compact diff.
 - Supporting evidence, cause or uncertainty, and intended future behavior.
 - Scope and any existing instruction being replaced or merged.
-- A proportionate verification plan, including a nearby case where the rule should not apply when relevant.
+- One mechanism per proposal, so each can be approved, rejected, and later judged on its own; split proposals that bundle independent changes.
+- The hypothesis and the observable change you expect in future work.
+- A proportionate verification plan: a nearby case where the rule should not apply, and when one is available, a different past task where it should, not only the session that produced it.
 
 Briefly name meaningful rejected candidates and why they did not qualify. Distinguish preferences, supported fixes, and experiments. If the target or evidence is unavailable, label that proposal incomplete rather than presenting a guessed diff as ready.
 
@@ -99,5 +105,7 @@ Ask which concrete proposals to apply, identifying any unresolved choice. Explai
 Apply only the approved proposals. Re-read targets for intervening changes and preserve unrelated work. If new evidence materially changes an approved proposal, explain the difference and resolve that choice before applying it; otherwise proceed without repeating approval.
 
 Validate the edited instructions in context, their links and metadata, and the path by which future agents will find them. Run an appropriate check for changed executable behavior within authorized scope. For a substantial behavioral rule, use a small representative case and a nearby counterexample when practical; distinguish a reasoning check from an independently executed test.
+
+Record each applied change's hypothesis and expected effect where the target keeps history (its commit message, change notes, or session record) so a later reflection can judge whether it worked.
 
 Report changed files, what each change should improve, what was checked, and any unresolved limitations. Structural validation proves the files are usable, not that future outcomes improved. Do not claim a blocked edit was applied or infer publication from a local change.
