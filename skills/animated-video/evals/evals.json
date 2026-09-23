@@ -26,6 +26,21 @@
         "Reuses only style-neutral infrastructure (timing from the VO, snapshot/render/review workflow)",
         "Still confirms the format and a style frame with the user before building"
       ]
+    },
+    {
+      "id": 3,
+      "name": "short_unnarrated_fast_path",
+      "request": "Make a 30-second hand-drawn stop-motion animation about a cat who learns to code. Cute and charming, for X. Here's a screenshot of the cat.",
+      "session": "No voiceover is wanted. The session runs a model other than Claude Opus 5.5. Remotion and ffmpeg are available, and the video-edit skill's sound-effect library is installed.",
+      "checks": [
+        "Tells the user once that Claude Opus 5.5 gives the best results, then continues",
+        "Confirms the named format in one line instead of asking a format question",
+        "Uses one agent with a storyboard, not parallel animators or a judge panel",
+        "Designs from the supplied screenshot and sets timing from music or a sound bed",
+        "Prefers on-disk samples over synthesized sound and labels any synthesized sound",
+        "Plans transitions that grow out of the content rather than crossfades",
+        "Uses seeded randomness and held drawings for a deterministic stop-motion boil"
+      ]
     }
   ]
 }

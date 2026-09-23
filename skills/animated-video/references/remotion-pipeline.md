@@ -15,6 +15,13 @@
   @types/react`, a tsconfig with `lib: ["ES2023","DOM"]`, a Python venv with `faster-whisper`,
   and `git init`.
 
+## Procedural drawing
+- A `<canvas>` inside a Remotion component suits procedural art (grain, boil, particles). Redraw
+  it from `useCurrentFrame()` and take randomness from Remotion's `random(seed)`, never
+  `Math.random()`, so every render matches its stills.
+- Other deterministic HTML-to-MP4 renderers exist, such as HyperFrames. This template targets
+  Remotion; switch only if the user asks.
+
 ## Structural conventions that paid off
 - Scene logic uses absolute frames (`fr`), with no nested `<Sequence>` offsets, so a cue means
   the same frame everywhere.

@@ -23,3 +23,26 @@ piece; choose fresh per brief.
 - Music ducked word by word pumps audibly. Duck by phrase.
 - For a personal story, graphics alone plateaued: every judge named "no human on screen" as the
   ceiling. When the subject is a person, surface this as a format question in step 1.
+
+## Craft techniques
+
+Techniques from widely shared code-drawn Opus 5.5 animations (X, September 2026). They are
+tools, not a house style: a brief can call for clean vector work instead.
+
+- **Handmade texture:** procedural paper grain and slightly uneven tone, torn or deckled edges,
+  cut-paper layers with soft shadows, shapes and outlines that are a little irregular. Render the
+  grain once and reuse it; recomputing a full-frame texture every frame is slow.
+- **Line boil for a stop-motion feel:** re-jitter outlines with seeded noise and hold each
+  drawing for 2–3 frames.
+- **Avoid the generic looks:** SaaS illustration, flat corporate icons, neon glow, stock-looking
+  gradients, and photorealism unless the brief asks for it.
+- **Motion:** easing or springs, never linear. Squash and stretch, anticipation and secondary
+  motion make even simple shapes feel alive.
+- **On-screen text:** at most about 8 words at once, each line visible for at least 2.5s. One
+  display face, plus a monospace face if something is "machine output".
+- **Recurring motif:** one character or object that travels through every scene and changes
+  with the story (a single glowing word gaining senses and hands, a jar collecting phrases). It
+  holds a long piece together better than a narrator.
+- **Pacing:** alternate dense and calm moments, and give the key beat room to breathe.
+- **Details reward replay:** real paper titles, tiny UI touches, plausible outputs. Keep them
+  accurate or leave them out.

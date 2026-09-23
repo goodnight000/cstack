@@ -89,9 +89,14 @@ Use the animated-video skill to turn this script into an animated video.
 Confirm the format and show me one style frame before building the full piece.
 ```
 
+For the best results, run it with Claude Opus 5.5 at high or max effort. Short
+unnarrated pieces take one agent and a storyboard; longer narrated films use the
+full production with parallel animators and a review panel.
+
 The skill needs a shell, Node.js with Remotion, FFmpeg/ffprobe, and Python 3
-with faster-whisper for word timings. Voiceover, music, and sound effects come
-from the user or a separate tool. The template holds style-neutral
+with faster-whisper for word timings. Voiceover comes from the user or a
+separate tool. Music and effects come from the user's files, on-disk samples
+such as the video-edit sound library, or sound synthesized in code. The template holds style-neutral
 infrastructure only (timing, camera, still and render scripts). Characters,
 art direction, and creative defaults are designed per project or supplied by you.
 
