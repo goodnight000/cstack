@@ -2,7 +2,8 @@
 
 Review the result and the path taken, including incomplete or unsuccessful edits.
 A request to reflect authorizes review; apply reusable-instruction changes only
-when the user has approved them. Carry forward explicit approval already given.
+when the user has approved them. Carry forward explicit approval already given,
+including a standing approval recorded in the user's profile.
 
 1. Recover the brief, corrections, selected takes, edit manifest, QA evidence,
    and delivered version. Compare early completion claims with later feedback.
@@ -20,7 +21,8 @@ when the user has approved them. Carry forward explicit approval already given.
 5. Read the existing guidance before proposing changes. Route general workflow
    fixes to [SKILL.md](../SKILL.md), command details to
    [technical.md](technical.md), and native operations to [resolve.md](resolve.md).
-   Keep personal preferences and session evidence in the user's project guidance.
+   Keep personal preferences in the user's profile (`~/.video-edit/profile.md`)
+   and session evidence in the project or profile.
    A missed existing rule may need a better check, not duplicate prose.
 6. Present exact proposed edits and their evidence. Keep speculative optimizations
    as experiments with a check that could disprove them. Apply only approved

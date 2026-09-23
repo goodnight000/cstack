@@ -12,11 +12,15 @@ paths, keep source files untouched, and overwrite only known derived outputs.
 ```bash
 ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,sample_aspect_ratio,pix_fmt,sample_rate,channel_layout:stream_tags=rotate:stream_side_data=rotation:format=duration -of json IN
 ffmpeg -v error -i IN -vn -ac 1 -ar 16000 audio.wav
+# Apple Silicon:
 uvx --from mlx-whisper mlx_whisper audio.wav --model mlx-community/whisper-large-v3-turbo --word-timestamps True --output-format json --output-dir . --verbose False
+# Any other macOS, Linux or Windows host:
+uvx whisper-ctranslate2 audio.wav --model large-v3-turbo --word_timestamps True --output_format json --output_dir . --verbose False
 ```
 
-Prefer an existing local Whisper environment/model cache over downloading
-another. On non-Apple-Silicon hosts use the available local Whisper backend.
+Both write `segments[].words[].{word,start,end}` JSON, the input the caption
+helper reads; `preflight.py` prints the one for this host. Prefer an existing
+local Whisper environment/model cache over downloading another.
 Probe rotation, color/HDR information when relevant, and displayed geometry;
 encoded width/height alone may describe a rotated source incorrectly.
 
@@ -86,7 +90,9 @@ For simple synchronized cuts, write an FFmpeg filter file from the cutlist:
 [v0][a0][v1][a1]concat=n=2:v=1:a=1[vout][aout]
 ```
 
-Micro-fades reduce clicks; make them short enough to preserve consonants.
+Snap `A` and `B` to frame boundaries (a multiple of 1/fps) so each segment's
+picture and audio have the same length; `DUR_MINUS_008` is the segment duration
+minus 0.008 s. Micro-fades reduce clicks; make them short enough to preserve consonants.
 For independent picture/audio cuts, concatenate each track separately and
 check matching total durations. Record the incoming pre-roll and picture
 join explicitly. Do not create a frozen face to fill every missing handle.
@@ -110,8 +116,22 @@ natural voice pitch with the available tempo filter and check delivery in contex
 
 For audio, start near -14 LUFS with peak headroom, for example
 `highpass=f=70,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000`, adapting to the
-source and mix. Measure the actual final export because encoding/mixing
+source and mix. On a quiet source whose true peak is already near the ceiling,
+`loudnorm` cannot reach the target linearly and silently switches to dynamic mode;
+measure first (`loudnorm=print_format=json`), and if so apply gentle compression
+and a limiter (for example `acompressor`, then `volume`, then `alimiter`) before a
+final linear pass. Measure the actual final export because encoding/mixing
 can change loudness and peaks. Sparse sound effects should sit below speech.
+
+Place effects on the speech track with `adelay` and mix without auto-normalizing:
+
+```text
+[1:a]volume=-10dB,adelay=500|500[s1];
+[2:a]volume=-13dB,adelay=2400|2400[s2];
+[speech][s1][s2]amix=inputs=3:normalize=0:duration=first[mix]
+```
+
+Delays are milliseconds in final output time; gains are starting points to adjust.
 For a reported inaudible bed, compare the stem, intended mix, and exported mix
 in matching speech and pause intervals. Stereo-side energy can be dominated by
 camera ambience, so it does not reliably isolate music. Native pitch correction
@@ -158,9 +178,11 @@ For speed changes, supply word timings in final output time or map them
 explicitly; this generator's source-to-output offset alone does not scale time.
 
 The helper expects checked local JSON and uses fixed phrase/timing heuristics.
-It selects words whose start falls inside the cut, excluding the final 50 ms,
-and adds caption padding. Inspect boundary words and clamp output to the actual
-export duration. Very close phrases can still overlap because of the minimum
+It keeps words that reach at least 50 ms into a cut, clamps ones that start
+before it, joins split numbers, lowercases mid-sentence segment capitals, and
+adds caption padding that never starts before a clip or ends after the export.
+Review every word it reports as clamped or lowercased. Emphasis styling is not
+automatic: add ASS override tags to the chosen lines. Very close phrases can still overlap because of the minimum
 display duration. The overlap warning does not produce a failing exit code;
 inspect the reported count and repair timing before burning. Review caption text
 containing ASS control characters before rendering it.
@@ -256,6 +278,11 @@ Treat unexpectedly long word timestamps as a reason to inspect the underlying
 audio. A recognizer can assign a single word a long interval containing repeated
 speech. A long transcription and a short check ending at the previous take can
 both miss it.
+
+Transcribe each window as its own file and call; several inputs in one call can
+return a single mismatched JSON. Add `--condition-on-previous-text False` (mlx) or
+`--condition_on_previous_text False` (whisper-ctranslate2) to reduce invented text,
+and treat low-probability words at a window edge as suspect.
 
 Inspect overlapping windows containing the outgoing phrase, the join, and the
 first phrase of the incoming clip. Include the interior of a selected passage

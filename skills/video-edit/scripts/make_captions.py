@@ -18,14 +18,20 @@ cutlist.json schema (only "segments" is required):
   "fix": {"Alexx": "Alex"},          // caption-only word replacements
   "drop_word_before": {"the": "Alex"},  // drop word X when next word starts with Y
   "capitalize_first": true,           // first caption of the video
-  "style": {
-    "play_res": [1280, 720],
-    "font": "Arial", "size": 40,
-    "margin_lr": 460,                 // keeps column clear of a right-side webcam
-    "margin_v": 56,
-    "zoom_margins": [380, 540]        // [MarginL, MarginR] during zoomed segments
+  "style": {                          // defaults below suit a 9:16 Reel
+    "play_res": [1080, 1920],
+    "font": "Arial", "size": 72, "bold": true,
+    "margin_lr": 100,
+    "margin_v": 350,
+    "zoom_margins": [100, 100]        // [MarginL, MarginR] during zoomed segments
   }
 }
+
+Words that straddle a clip start are kept and clamped to it (ASR often stretches
+a first word back into the silence before the cut); each is reported so it can be
+checked. Segment-start capitals mid-sentence are lowercased and reported.
+Number pieces such as "$2" + ",000" are joined. Captions never start
+before their clip or end after the export.
 
 --expected FILE also writes the raw (un-fixed) expected transcript, one line
 per segment, for the final mixed-audio transcription comparison.
@@ -33,6 +39,7 @@ per segment, for the final mixed-audio transcription comparison.
 Prints chunk count and overlap count. Require overlaps == 0 before burning.
 """
 import json
+import re
 import sys
 
 
@@ -44,32 +51,53 @@ def main():
         args.remove(expected_path)
     audio_path, cut_path, out_path = args
 
-    words = [w for s in json.load(open(audio_path))['segments']
-             for w in s.get('words', [])]
+    words = [dict(w, seg_first=(i == 0)) for s in json.load(open(audio_path))['segments']
+             for i, w in enumerate(s.get('words', []))]
     cfg = json.load(open(cut_path))
     fix = cfg.get('fix', {})
     drop = cfg.get('drop_word_before', {})
     st_cfg = cfg.get('style', {})
-    W, H = st_cfg.get('play_res', [1280, 720])
+    W, H = st_cfg.get('play_res', [1080, 1920])
     font = st_cfg.get('font', 'Arial')
-    size = st_cfg.get('size', 40)
-    mlr = st_cfg.get('margin_lr', 460)
-    mv = st_cfg.get('margin_v', 56)
-    zml, zmr = st_cfg.get('zoom_margins', [380, 540])
+    size = st_cfg.get('size', 72)
+    bold = 1 if st_cfg.get('bold', True) else 0
+    mlr = st_cfg.get('margin_lr', 100)
+    mv = st_cfg.get('margin_v', 350)
+    zml, zmr = st_cfg.get('zoom_margins', [100, 100])
+    export_end = max(s['out_start'] + s['src_end'] - s['src_start'] for s in cfg['segments'])
 
     all_chunks = []
+    clip_starts = []
     zoom_windows = []
     expected = []
     for seg in cfg['segments']:
         st, en, outs = seg['src_start'], seg['src_end'], seg['out_start']
         if seg.get('zoom'):
             zoom_windows.append((outs - 0.15, outs + (en - st) - 0.05))
-        # tolerance below st leaks boundary-debris words; none below st, -0.05 at en
-        sel = [w for w in words if st <= w['start'] < en - 0.05]
+        # a word must reach 50 ms into the clip; ones starting earlier are clamped
+        sel = [dict(w) for w in words if w['end'] > st + 0.05 and w['start'] < en - 0.05]
+        for w in sel:
+            if w['start'] < st:
+                print(f"clamped boundary word {w['word'].strip()!r} "
+                      f"({w['start']:.2f}-{w['end']:.2f}) to clip start {st:.2f}")
+                w['start'] = st
+        merged = []
+        for w in sel:  # rejoin number pieces: "$2" ",000", "3" ".5", "50" "%"
+            if merged and re.match(r'^([,.]\d|%)', w['word'].strip()):
+                merged[-1]['word'] = merged[-1]['word'].rstrip() + w['word'].strip()
+                merged[-1]['end'] = w['end']
+            else:
+                merged.append(w)
+        sel = merged
         expected.append(' '.join(w['word'].strip() for w in sel))
         toks = []
         for i, w in enumerate(sel):
             t = w['word'].strip()
+            # ASR capitalizes each segment's first word even mid-sentence
+            if (toks and w.get('seg_first') and toks[-1][2][-1:] not in '.?!' and len(t) > 1
+                    and t[0].isupper() and t[1:].rstrip('.,?!').islower() and not t.startswith("I'")):
+                print(f"lowercased segment-start word {t!r}; restore with fix if it is a name")
+                t = t[0].lower() + t[1:]
             nxt = sel[i + 1]['word'].strip() if i + 1 < len(sel) else ''
             if t in drop and nxt.startswith(drop[t]):
                 continue
@@ -92,6 +120,7 @@ def main():
         if cur:
             chunks.append(cur)
         all_chunks += chunks
+        clip_starts += [outs] * len(chunks)
 
     if not all_chunks:
         sys.exit('no words selected — check cutlist times against audio.json')
@@ -99,14 +128,14 @@ def main():
         t0, t1, txt = all_chunks[0][0]
         all_chunks[0][0] = (t0, t1, txt[0].upper() + txt[1:])
 
-    # compute ALL starts first, then clamp ends to next start (see skill Phase 5)
-    starts = [max(0.0, ch[0][0] - 0.06) for ch in all_chunks]
+    # compute ALL starts first, then clamp ends to the next start and the export end
+    starts = [max(clip_starts[i], ch[0][0] - 0.06) for i, ch in enumerate(all_chunks)]
     ends = []
     for i, ch in enumerate(all_chunks):
         e = ch[-1][1] + 0.18
         if i + 1 < len(all_chunks):
             e = min(e, starts[i + 1] - 0.01)
-        ends.append(max(e, starts[i] + 0.15))
+        ends.append(min(max(e, starts[i] + 0.15), export_end))
     overlaps = sum(1 for i in range(len(starts) - 1) if starts[i + 1] < ends[i])
 
     def ts(t):
@@ -121,7 +150,7 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Cap,{font},{size},&H00FFFFFF,&H00FFFFFF,&H00101010,&H80000000,1,0,0,0,100,100,0.5,0,1,2.4,0,2,{mlr},{mlr},{mv},1
+Style: Cap,{font},{size},&H00FFFFFF,&H00FFFFFF,&H00101010,&H80000000,{bold},0,0,0,100,100,0.5,0,1,2.4,0,2,{mlr},{mlr},{mv},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text

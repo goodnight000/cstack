@@ -40,6 +40,35 @@ def check():
                                 check=True, timeout=10)
         assert "overlaps=1" in result.stdout and "FIX BEFORE BURNING" in result.stdout
 
+        # A first word stretched back before the cut is kept and clamped, number
+        # pieces are joined, and the last caption stops at the export end.
+        audio.write_text(json.dumps({"segments": [{"words": [
+            {"word": " I", "start": 9.4, "end": 10.3},
+            {"word": " spent", "start": 10.3, "end": 10.6},
+            {"word": " $2", "start": 10.6, "end": 10.8},
+            {"word": ",000.", "start": 10.8, "end": 11.95},
+        ]}]}))
+        cuts.write_text(json.dumps({"segments": [
+            {"src_start": 10, "src_end": 12, "out_start": 1}]}))
+        result = subprocess.run(command, capture_output=True, text=True,
+                                check=True, timeout=10)
+        assert "clamped boundary word 'I'" in result.stdout
+        text = output.read_text()
+        assert "0:00:01.00" in text and "I spent $2,000." in text
+        assert "0:00:03.00" in text and "0:00:03.13" not in text
+
+        audio.write_text(json.dumps({"segments": [
+            {"words": [{"word": " My", "start": 10.1, "end": 10.3},
+                       {"word": " spend", "start": 10.3, "end": 10.6}]},
+            {"words": [{"word": " Is", "start": 10.7, "end": 10.9},
+                       {"word": " high.", "start": 10.9, "end": 11.2}]},
+            {"words": [{"word": " Claude", "start": 11.3, "end": 11.6}]},
+        ]}))
+        result = subprocess.run(command, capture_output=True, text=True,
+                                check=True, timeout=10)
+        text = output.read_text()
+        assert "My spend is" in text and "Claude" in text
+
         audio.write_text('{"segments": []}')
         result = subprocess.run(command, capture_output=True, text=True, timeout=10)
         assert result.returncode != 0 and "no words selected" in result.stderr

@@ -66,15 +66,21 @@ Start from the latest accepted version and the brief. Preserve complete takes,
 use supporting visuals that match the spoken claims, and check the actual export.
 ```
 
-The skill needs access to media and a shell, FFmpeg/ffprobe, Python 3 for its
-caption helper, and a local Whisper-compatible transcription backend. Native
-Resolve work also needs DaVinci Resolve and scripting or UI access. Browser
-research and publishing require appropriate tools and authorized accounts.
-The skill does not install these tools or provide a hosted editing service.
+On first use the skill runs `scripts/preflight.py`, which checks for FFmpeg,
+Python 3, and [uv](https://docs.astral.sh/uv/) (for local Whisper transcription).
+It shows the install command for anything missing and runs it only if you agree.
+[DaVinci Resolve](https://www.blackmagicdesign.com/products/davinciresolve) (free)
+is recommended for a native, editable project; without it the skill renders with
+FFmpeg. Browser research and publishing need browser tools and your accounts.
 
-The public version includes the reusable workflow and technical references.
-Supply your own project brief, creative preferences, and asset manifest. Personal
-session histories and machine-specific asset libraries are not part of the package.
+With no brief, the skill asks where the video will be posted, how long it should
+be, and whether you want music, sound effects, or a hook headline, then follows
+its [default short-form style](skills/video-edit/references/style.md). To keep
+your own defaults across updates, put them in `~/.video-edit/profile.md`.
+
+The bundled [sound effects](skills/video-edit/assets/sfx/README.md) are not
+covered by the MIT license; their sources and unverified rights status are
+listed in their catalog.
 
 ## Use Animated Video
 

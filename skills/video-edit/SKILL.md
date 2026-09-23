@@ -14,28 +14,35 @@ Make the speaker's story easy to follow. Start with complete, camera-facing
 speech, then show the actual people, documents, products, and events being
 discussed. A valid render is only one part of a finished edit.
 
-## Requirements
+## Set up
 
-This agent workflow needs project media, a shell, FFmpeg/ffprobe, Python 3 for the
-caption helper, and a local Whisper-compatible backend for transcription.
-MLX Whisper is an optional Apple Silicon example. Native Resolve work needs the
-installed application and scripting or UI access. Research and publishing need
-browser tools and authorized accounts. Check available tools; report missing
-capabilities without claiming their checks were performed.
+On a new machine, run `python3 SKILL_DIR/scripts/preflight.py --project PROJECT_DIR`.
+For each missing tool, say what it is for and its install command, ask, and run it
+only after the user agrees; then rerun preflight. Resolve is the preferred editor
+([setup](references/resolve.md#set-up)); if it is missing or you cannot operate its
+console or UI here, render with FFmpeg and say the result has no editable project.
+Report missing browser or account access rather than claiming checks that did not run.
+
+Read `~/.video-edit/profile.md` if it exists (creative defaults, project locations,
+asset libraries, standing preferences); offer to record lasting preferences there.
 
 ## Choose the task
 
-- Read the current brief, accepted reference, and any user-provided creative defaults.
-  Scope preferences to their intended projects instead of treating them as universal.
+- Read the current brief, accepted reference, and profile. Scope preferences to
+  their intended projects instead of treating them as universal.
+- Without a brief, ask once: where the video will be posted, roughly how long,
+  whether to add music, sound effects, or a hook headline, and for screenshots or
+  recordings when claims concern the user's own data or product. Offer the
+  [default style](references/style.md), which applies wherever brief and profile are silent.
 - Verify platform length, caption, watermark, and ranking claims against current
   official sources when they affect the task; distinguish rules from creative choices.
 - For Resolve assembly, speed changes, native rendering, or console recovery,
   read [Resolve workflow](references/resolve.md).
-- For quiet-audio recovery, separate-audio sync, music extension, captions and timing checks, read
-  [technical reference](references/technical.md).
-- For a requested reflection, follow [the reflection protocol](references/reflection.md).
-  Present findings and proposed changes before applying unapproved instruction edits.
-  Reflection does not require another edit, render, or upload.
+- For FFmpeg rendering, quiet-audio recovery, separate-audio sync, music extension,
+  captions and timing checks, read [technical reference](references/technical.md).
+- Publish or schedule only when requested, following [the publishing procedure](references/publish.md).
+- For a requested reflection, follow [the reflection protocol](references/reflection.md): findings
+  before unapproved instruction edits, and no new edit, render, or upload required.
 
 Current user instructions override stored defaults. Honor staged boundaries:
 restate the brief, wait for uploads, create a folder, preprocess, assemble dialogue
@@ -76,10 +83,11 @@ context to find the restart instead of deleting an arbitrary number of seconds.
 
 Select the longest fluent, accurate delivery of each sentence or coherent passage.
 When the user prefers the last take, start from the last complete successful take;
-reorder it by script meaning rather than recording/file order. Check completeness.
-A script is the story outline, not a requirement to stitch every word verbatim.
-If the user says fluent takes exist, search the remaining source before proposing
-omissions or pickups. Keep required setup, transitions, attribution, and ending.
+reorder it by script meaning rather than recording/file order. Check completeness;
+if the source ends before the story does, report it and ask. A script is the story
+outline, not a requirement to stitch every word verbatim. If the user says fluent
+takes exist, search the remaining source before proposing omissions or pickups.
+Keep required setup, transitions, attribution, and ending.
 
 Review gaze and speech together at both ends of each selected take. Start on the
 first complete intended word with camera contact; trim script-reading lead-ins
@@ -144,22 +152,16 @@ check, not a mandatory approval stop.
 When generation would explain a beat better, use the connected generation skill
 for a bounded candidate and inspect it before extending the treatment.
 
-Choose placement from the current shot and content: torso-wide card, lower-left
-or lower-right inset, portrait beside the body, or a brief full-frame document.
-Keep important text and faces readable on a phone. Use motion only to direct
-attention, such as a restrained entry or highlight. Extra graphics, blur, and
-transitions need an editorial purpose, not empty space to occupy.
-For dense imagery, vary sequence, overlap, scale and position as well as asset
-choice. Count actual image/video appearances separately from scenes, titles and
-wordcards. For hand-anchored imagery, inspect the gesture's start, hold and exit.
+Place visuals by the [placement guidance](references/style.md#placement).
 
 Complete when every visual explains its spoken cue, has provenance, and meets
 the active placement/reuse/dwell/coverage rules in final playback time.
 
 ## 4. Assemble, finish, and revise
 
-When the brief calls for a native Resolve project, assemble and render there with
-separate camera, visual, caption, and mastered-audio tracks. FFmpeg remains useful for audio, previews,
+Assemble and render in native Resolve when it is installed, with separate camera,
+visual, caption, and mastered-audio tracks. Without Resolve, render with FFmpeg as
+described in the technical reference. FFmpeg remains useful for audio, previews,
 normalization, and QA. A flattened FFmpeg movie imported into Resolve does not
 satisfy a request for a native editable composition.
 
@@ -167,6 +169,11 @@ Preserve natural camera color. Diagnose rotation/HDR/output transforms before
 applying adjustments. Compare source, normalized sample, and exported frame;
 use one technical HDR-to-SDR conversion when needed, avoiding a second transform.
 Creative grading, brighter backgrounds, and blur are not automatic polish.
+
+Before rendering captions, mark emphasis passages across the complete selected dialogue.
+Record their words, timing, treatment and placement in existing caption data or the edit plan.
+Test the hook, one later emphasis passage and a quiet passage against their actual visuals
+before extending the treatment. Keep captions restrained when viewers need to read dense evidence.
 
 Create short phrase captions from the selected speech with a checked name map.
 Keep text clear of the face, visuals, and platform controls. Preserve editable
@@ -180,6 +187,8 @@ requested, make their contribution perceptible in a short exported mix under
 speech and in pauses. File presence and total-mix loudness do not establish
 music or effect audibility. Plan attribution needs when choosing the track so
 publishing does not unexpectedly expand a requested short caption.
+Pick effects from the profile's libraries and the bundled
+[sound-effect library](assets/sfx/README.md); read its rights note before publishing.
 
 For revisions, change the cutlist/manifest or native timeline instead of copying
 an entire pipeline per version. Ripple all dependent layers after a cut. Apply
@@ -201,7 +210,9 @@ Keep editorial and technical evidence separate:
 
 - Editorial review checks coherent story, complete words, fluent longer takes,
   camera contact, timely relevant visuals, readable captions, and a finished
-  ending. Use contextual playback/listening when available. User feedback is
+  ending. Check that emphasis extends beyond the opening, each effect fits the sentence,
+  and quieter passages provide contrast; identify automatic reuse of one treatment.
+  Use contextual playback/listening when available. User feedback is
   stronger evidence of taste than a contact sheet or automated transcript.
 - Technical review checks full decode, requested geometry, duration, linked speed,
   audio level/peaks, caption timing, all changed joins, and visual constraints.
@@ -229,23 +240,10 @@ it does not establish taste or fluent playback. Avoid rerunning unchanged work.
 Deliver one unmistakably named current file, native project when applicable, and
 brief change summary. A DRP referencing local media is not a portable media archive.
 
-## 6. Publish or schedule only when requested
-
-Use the authorized account and latest approved video. Read the browser's current
-upload instructions before opening its file chooser. Verify intended crop, full
-length, sound, cover, caption, and destination. For scheduling, verify today's
-actual date, timezone, and AM/PM in the UI; never silently substitute another date
-or post immediately when scheduling is unavailable.
-
-Submit when authorized, then wait for explicit success. An upload spinner is not
-success and is not a reason to submit again. After ambiguous results, inspect the
-profile or scheduled queue first. Verify the requested time/caption in the queue
-for scheduling, or retrieve the published post link for immediate posting. Leave
-the useful result page open. Distinguish scheduled from already published.
-
 ## Maintain the skill
 
 On a requested reflection, review corrections and artifacts and propose changes
 to their authoritative files. Apply approved changes, keep session evidence in
-the project, and record untested improvements as experiments. Use the linked
-protocol. Skill maintenance does not authorize memory changes or publication.
+the project or profile, and record untested improvements as experiments. Personal
+creative preferences belong in `~/.video-edit/profile.md`, not in this skill. Use
+the linked protocol. Skill maintenance does not authorize memory changes or publication.

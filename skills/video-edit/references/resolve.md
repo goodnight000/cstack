@@ -5,6 +5,29 @@ console failures. These observations come from Resolve 21.1 on macOS in
 September 2026. Recheck the installed SDK when methods differ; this is not
 a promise that every Resolve edition/version behaves identically.
 
+## Set up
+
+DaVinci Resolve is free from Blackmagic Design; the installer needs the user.
+How scripts reach it depends on the edition:
+
+- **Free Resolve** runs scripts only from inside the app: Workspace > Console, or
+  the Workspace > Scripts menu. Observed in September 2026 on Resolve 21.1 for macOS
+  (bundle named "DaVinci Resolve", the free edition): with the app running, the bundled `ResolvePython` and `fuscript` interpreters
+  both got `None`/`nil` from the shell. Plan on driving the console as described in
+  [Access the native application](#access-the-native-application).
+- **Resolve Studio** can also accept scripts from the shell once the user sets
+  Preferences > System > General > External scripting to Local (per the installed
+  scripting README; not yet verified here). Then run scripts with the bundled
+  `ResolvePython` (macOS `…/DaVinci Resolve.app/Contents/Applications/ResolvePython`,
+  Windows `…\DaVinci Resolve\ResolvePython\ResolvePython.exe`, Linux
+  `/opt/resolve/bin/ResolvePython`) and check that `scriptapp('Resolve')` is not `None`.
+
+Scripts saved under the user's `Fusion/Scripts/Utility` folder appear in the
+Workspace > Scripts menu after Resolve restarts (macOS: `~/Library/Application
+Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts`; Linux:
+`~/.local/share/DaVinciResolve/Fusion/Scripts`; Windows:
+`%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\Fusion\Scripts`).
+
 ## Establish one editable timeline
 
 Keep the normal-speed cutlist in integer timeline frames. Keep original-source

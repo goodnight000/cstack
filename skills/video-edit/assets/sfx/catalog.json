@@ -1,0 +1,571 @@
+[
+  {
+    "id": "sfx-01",
+    "title": "Gear mechanism",
+    "tags": [
+      "mechanical",
+      "texture"
+    ],
+    "duration_seconds": 0.7,
+    "peak_dbfs": 0.0,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 0.24,
+    "source_out": 0.94,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "c09100e62dc0ae3c4ef5687b7f49ef7780eabc0d1ce318fa5061d86e0d724e78",
+    "file": "gear-mechanism.wav",
+    "use": "A mechanism or hardware detail on screen; one short accent.",
+    "rms_dbfs": -28.3
+  },
+  {
+    "id": "sfx-02",
+    "title": "Swish whoosh",
+    "tags": [
+      "transition",
+      "whoosh"
+    ],
+    "duration_seconds": 0.45,
+    "peak_dbfs": -0.7,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 1.01,
+    "source_out": 1.46,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "dbcdc02341cfb569e8283aeb7f263c191138a9701989d10054d54abd62d0273a",
+    "file": "swish-whoosh.wav",
+    "use": "A major scene or topic change. Pick one whoosh per transition.",
+    "rms_dbfs": -16.5
+  },
+  {
+    "id": "sfx-03",
+    "title": "Click accent",
+    "tags": [
+      "click",
+      "ui"
+    ],
+    "duration_seconds": 0.25,
+    "peak_dbfs": 0.0,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 1.6,
+    "source_out": 1.85,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "104417ac3e386d41cf1dee8b1a97cfe0e4fc2e88ae1c0b9c0d71a6f64b0c4dd0",
+    "file": "click-accent.wav",
+    "use": "A button, checkbox or cart item appearing.",
+    "rms_dbfs": -21.1
+  },
+  {
+    "id": "sfx-04",
+    "title": "Pop accent",
+    "tags": [
+      "pop",
+      "ui"
+    ],
+    "duration_seconds": 0.175,
+    "peak_dbfs": -2.7,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 2.045,
+    "source_out": 2.22,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "303216ca44928d1dd6ddb7276c0eb3434eb7d79a37e2194142db8242a6e3f7a4",
+    "file": "pop-accent.wav",
+    "use": "A card, bubble or image popping in.",
+    "rms_dbfs": -18.1
+  },
+  {
+    "id": "sfx-05",
+    "title": "Digital glitch sequence",
+    "tags": [
+      "digital",
+      "glitch"
+    ],
+    "duration_seconds": 0.82,
+    "peak_dbfs": -7.2,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 2.4,
+    "source_out": 3.22,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "4fc5f330d18586c5bfbf71120b9c662b1d5f046c6d4188b7ce860879dd433429",
+    "file": "digital-glitch.wav",
+    "use": "A digital transfer, error or glitch visual; very brief.",
+    "rms_dbfs": -33.7
+  },
+  {
+    "id": "sfx-06",
+    "title": "Metallic riser",
+    "tags": [
+      "riser",
+      "metallic"
+    ],
+    "duration_seconds": 1.75,
+    "peak_dbfs": 0.0,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 3.23,
+    "source_out": 4.98,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "b5d33742b1a20a0caffa6b741389e74b359cb7e4c7fc957184c5e0ccebd6b632",
+    "file": "metallic-riser.wav",
+    "use": "A reveal building to a product or result; conspicuous, use rarely.",
+    "rms_dbfs": -17.9
+  },
+  {
+    "id": "sfx-07",
+    "title": "Keyboard typing",
+    "tags": [
+      "keyboard",
+      "typing",
+      "ui"
+    ],
+    "duration_seconds": 2.06,
+    "peak_dbfs": 0.0,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 5.06,
+    "source_out": 7.12,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "3a40abacd535d0b95823b6f6c6334f631f3d17a65d5db52b91ed45bd8338bb8c",
+    "file": "keyboard-typing.wav",
+    "use": "Typing on screen or writing a message; trim to under a second.",
+    "rms_dbfs": -22.6
+  },
+  {
+    "id": "sfx-08",
+    "title": "Mouse double click",
+    "tags": [
+      "mouse",
+      "click",
+      "ui"
+    ],
+    "duration_seconds": 0.27,
+    "peak_dbfs": -5.5,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 7.41,
+    "source_out": 7.68,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "df9b6bb7af8572fc00d9f26071f20e7471b510d7681168bace6989fd72dbef1f",
+    "file": "mouse-double-click.wav",
+    "use": "A cursor or computer interaction.",
+    "rms_dbfs": -31.7
+  },
+  {
+    "id": "sfx-09",
+    "title": "Decaying notification tone",
+    "tags": [
+      "notification",
+      "tone"
+    ],
+    "duration_seconds": 0.79,
+    "peak_dbfs": -1.2,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 7.85,
+    "source_out": 8.64,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "acea56b489ba340c57ff744d761caa3469f5bbd823368a0191504b86d30d0222",
+    "file": "decaying-notification-tone.wav",
+    "use": "A notification arriving. Label is provisional; audition first.",
+    "rms_dbfs": -19.7
+  },
+  {
+    "id": "sfx-10",
+    "title": "Cash register and coins",
+    "tags": [
+      "money",
+      "coins"
+    ],
+    "duration_seconds": 0.92,
+    "peak_dbfs": -1.6,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 8.71,
+    "source_out": 9.63,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "aa15afdf423fb7d747ed80d2697bb6abac5298d628e5dac1d9fcb62ef18a0008",
+    "file": "cash-register-coins.wav",
+    "use": "Pricing, revenue or a purchase.",
+    "rms_dbfs": -19.0
+  },
+  {
+    "id": "sfx-11",
+    "title": "Camera shutter",
+    "tags": [
+      "camera",
+      "shutter"
+    ],
+    "duration_seconds": 0.3,
+    "peak_dbfs": -0.0,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 9.78,
+    "source_out": 10.08,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "8fa63fb49895ffa5ce44600c3775b22ddbca77937021a706edeb582ca56b66c0",
+    "file": "camera-shutter.wav",
+    "use": "A photo, screenshot or captured moment appearing.",
+    "rms_dbfs": -24.5
+  },
+  {
+    "id": "sfx-12",
+    "title": "Explosion impact",
+    "tags": [
+      "impact",
+      "explosion"
+    ],
+    "duration_seconds": 2.082,
+    "peak_dbfs": 0.0,
+    "source_url": "https://www.instagram.com/p/DUrV2mgDeIc/",
+    "creator": "mardan.mp4",
+    "source_in": 10.2,
+    "source_out": 12.281905,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "000f6b1f887f00db73f60329570d29d74c43457c8e900290a2e203ed51891d05",
+    "file": "explosion-impact.wav",
+    "use": "A literal explosion or huge reveal; tail is truncated and it can bury speech.",
+    "rms_dbfs": -12.8
+  },
+  {
+    "id": "sfx-13",
+    "title": "Ceeday huh",
+    "tags": [
+      "meme",
+      "vocal",
+      "reaction"
+    ],
+    "duration_seconds": 0.47,
+    "peak_dbfs": -10.5,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 0.01,
+    "source_out": 0.48,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "62fdf2cc3f907be29323d49f3587fec4b53fc38653b108f04fb21d5e16a2c7ab",
+    "file": "ceeday-huh.wav",
+    "use": "Comedic confusion beat in a deliberate meme edit.",
+    "rms_dbfs": -20.9
+  },
+  {
+    "id": "sfx-14",
+    "title": "Fahhh",
+    "tags": [
+      "meme",
+      "vocal",
+      "reaction"
+    ],
+    "duration_seconds": 0.915,
+    "peak_dbfs": -4.7,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 0.49,
+    "source_out": 1.405,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "566cf7496e7549536dd397f533f58249d8751950263057d7d2fed4b2c6fcac50",
+    "file": "fahhh.wav",
+    "use": "Comedic frustration beat in a deliberate meme edit; audition its start.",
+    "rms_dbfs": -20.1
+  },
+  {
+    "id": "sfx-15",
+    "title": "Punch impact",
+    "tags": [
+      "impact",
+      "punch"
+    ],
+    "duration_seconds": 0.605,
+    "peak_dbfs": -3.4,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 1.405,
+    "source_out": 2.01,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "b42bf5df21d5db81982b64d11171ab15e6fa0b368e0f20f517b8b02251d3adaa",
+    "file": "punch-impact.wav",
+    "use": "A literal hit or punchline impact.",
+    "rms_dbfs": -15.1
+  },
+  {
+    "id": "sfx-16",
+    "title": "Cha-ching money",
+    "tags": [
+      "money",
+      "coins"
+    ],
+    "duration_seconds": 1.005,
+    "peak_dbfs": -3.8,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 2.01,
+    "source_out": 3.015,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "5d9c81ec57dac968b68099dac79a731c6f8ec7bd706ae96fee88fdd739f3c10d",
+    "file": "cha-ching-money.wav",
+    "use": "Money or a sale landing; a lighter alternative to the cash register.",
+    "rms_dbfs": -26.3
+  },
+  {
+    "id": "sfx-17",
+    "title": "Shocking stinger",
+    "tags": [
+      "meme",
+      "shock",
+      "stinger"
+    ],
+    "duration_seconds": 1.485,
+    "peak_dbfs": -5.4,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 3.015,
+    "source_out": 4.5,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "745033028f16060606343ebed4b54e6280a50c542a58fb19b2a88457c466aa44",
+    "file": "shocking-stinger.wav",
+    "use": "A shocking claim in a deliberate meme edit; audition its tail.",
+    "rms_dbfs": -18.9
+  },
+  {
+    "id": "sfx-18",
+    "title": "Rizz tone",
+    "tags": [
+      "meme",
+      "tone"
+    ],
+    "duration_seconds": 1.555,
+    "peak_dbfs": -5.2,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 4.5,
+    "source_out": 6.055,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "f7d6ba82f2234978da3334dc58d9d412fc8c0459060505c2e809061ddf05aefc",
+    "file": "rizz-tone.wav",
+    "use": "A playful flirt or charm beat in a meme edit; audition its start.",
+    "rms_dbfs": -18.0
+  },
+  {
+    "id": "sfx-19",
+    "title": "Oof",
+    "tags": [
+      "meme",
+      "vocal",
+      "reaction"
+    ],
+    "duration_seconds": 0.71,
+    "peak_dbfs": -5.8,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 6.055,
+    "source_out": 6.765,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "9bf30a2bc4e0a180429ec6252595cd2584d51357e6f268bc866932ae3c88664d",
+    "file": "oof.wav",
+    "use": "A comedic fail or painful moment.",
+    "rms_dbfs": -12.2
+  },
+  {
+    "id": "sfx-20",
+    "title": "Vine boom",
+    "tags": [
+      "meme",
+      "impact",
+      "boom"
+    ],
+    "duration_seconds": 1.23,
+    "peak_dbfs": -5.6,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 6.765,
+    "source_out": 7.995,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "f9a821795899bb3b2493793babe81f97b1ede9edbbc2667c4e2a62b3efcb6beb",
+    "file": "vine-boom.wav",
+    "use": "A dramatic punchline in a meme edit; can make a sincere hook feel manufactured.",
+    "rms_dbfs": -13.8
+  },
+  {
+    "id": "sfx-21",
+    "title": "Bruh",
+    "tags": [
+      "meme",
+      "vocal",
+      "reaction"
+    ],
+    "duration_seconds": 0.585,
+    "peak_dbfs": -10.0,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 7.995,
+    "source_out": 8.58,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "37f3c750b94eba9b4897de099148d97952431cd40e2738fe39e52507449caa96",
+    "file": "bruh.wav",
+    "use": "A deadpan reaction in a meme edit; audition its start.",
+    "rms_dbfs": -20.2
+  },
+  {
+    "id": "sfx-22",
+    "title": "Ding",
+    "tags": [
+      "notification",
+      "ding"
+    ],
+    "duration_seconds": 1.0,
+    "peak_dbfs": -12.2,
+    "source_url": "https://www.instagram.com/p/DUnObnSiKzT/",
+    "creator": "mistertwister.me",
+    "source_in": 8.615,
+    "source_out": 9.615,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "4e59952f6ec32c0d3a94fd81503229ff2a56b2bc4bad3098166884a85914e0fb",
+    "file": "ding.wav",
+    "use": "A message arriving or an idea landing; let the tail decay.",
+    "rms_dbfs": -26.7
+  },
+  {
+    "id": "sfx-23",
+    "title": "DJ stop",
+    "tags": [
+      "record-scratch",
+      "stop"
+    ],
+    "duration_seconds": 0.78,
+    "peak_dbfs": -7.1,
+    "source_url": "https://www.instagram.com/p/DQ8HJiaDNoy/",
+    "creator": "haimovmedia",
+    "source_in": 0,
+    "source_out": 0.78,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "e1953da40161dda891e3ea32d733bd00514d5dff0663826dd0fcd6eb636d7c68",
+    "file": "dj-stop.wav",
+    "use": "An abrupt stop or record-scratch interruption; onset is truncated.",
+    "rms_dbfs": -20.4
+  },
+  {
+    "id": "sfx-24",
+    "title": "Correct answer",
+    "tags": [
+      "notification",
+      "success"
+    ],
+    "duration_seconds": 0.885,
+    "peak_dbfs": -7.8,
+    "source_url": "https://www.instagram.com/p/DQ8HJiaDNoy/",
+    "creator": "haimovmedia",
+    "source_in": 0.8,
+    "source_out": 1.685,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "8636e196334effc95066db578131ee0cdcd6038c707553178a59ad42a1145de3",
+    "file": "correct-answer.wav",
+    "use": "A task completed or answer confirmed. Use this or the ding, not both.",
+    "rms_dbfs": -21.1
+  },
+  {
+    "id": "sfx-25",
+    "title": "Timer ticks",
+    "tags": [
+      "timer",
+      "ticking"
+    ],
+    "duration_seconds": 1.4,
+    "peak_dbfs": -0.5,
+    "source_url": "https://www.instagram.com/p/DQ8HJiaDNoy/",
+    "creator": "haimovmedia",
+    "source_in": 1.685,
+    "source_out": 3.085,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "ef03da20259c3779819679f8713e127e24cd2999653177d67b3603e0c6f78caf",
+    "file": "timer-ticks.wav",
+    "use": "A countdown or deadline.",
+    "rms_dbfs": -32.1
+  },
+  {
+    "id": "sfx-26",
+    "title": "Short whoosh",
+    "tags": [
+      "transition",
+      "whoosh"
+    ],
+    "duration_seconds": 0.31,
+    "peak_dbfs": -1.8,
+    "source_url": "https://www.instagram.com/p/DQ8HJiaDNoy/",
+    "creator": "haimovmedia",
+    "source_in": 3.14,
+    "source_out": 3.45,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "0bf3f29274ed44ebd27561947d2d31e50f89ee6b46b9094af664c603a336b8e3",
+    "file": "short-whoosh.wav",
+    "use": "A quick scene change; shorter and quieter than the swish.",
+    "rms_dbfs": -17.3
+  },
+  {
+    "id": "sfx-27",
+    "title": "Drum roll",
+    "tags": [
+      "drum",
+      "suspense",
+      "riser"
+    ],
+    "duration_seconds": 3.96,
+    "peak_dbfs": -0.8,
+    "source_url": "https://www.instagram.com/p/DQ8HJiaDNoy/",
+    "creator": "haimovmedia",
+    "source_in": 3.53,
+    "source_out": 7.49,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "9949f8a18884fc6190d214deb8ba66d3e47c89924044841236734309df1609bd",
+    "file": "drum-roll.wav",
+    "use": "An extended, deliberate reveal; nearly 4 seconds.",
+    "rms_dbfs": -17.7
+  },
+  {
+    "id": "sfx-28",
+    "title": "Suspense sting",
+    "tags": [
+      "suspense",
+      "stinger"
+    ],
+    "duration_seconds": 1.299,
+    "peak_dbfs": -0.0,
+    "source_url": "https://www.instagram.com/p/DQ8HJiaDNoy/",
+    "creator": "haimovmedia",
+    "source_in": 7.5,
+    "source_out": 8.798912,
+    "rights_status": "creator_invites_reuse; underlying_sound_license_unverified",
+    "review_status": "labels_and_waveform_checked_not_listened",
+    "sha256": "f4c010c3b3a8148b29959912c3a821ad469d33c8c2951105a40dc733fbb34edd",
+    "file": "suspense-sting.wav",
+    "use": "A cliffhanger or ominous turn.",
+    "rms_dbfs": -17.3
+  }
+]
