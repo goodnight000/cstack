@@ -59,7 +59,7 @@ Keep consequential findings in the reflection regardless of whether they justify
 
 Ask whether omitting the lesson would make a future agent repeat a meaningful mistake or redo substantial discovery. A single verified discovery or explicit preference can qualify; recurrence is useful evidence, not a required quota. Preserve helpful methods as well as failure prevention.
 
-Keep temporary outages, exact creative settings, and unverified optimizations out of general rules. Retain an experiment only with its uncertainty and a check that could disprove it. Merge duplicates and narrow or replace stale guidance. If nothing qualifies for a durable edit, report the consequential findings and explain that no instruction change is warranted.
+Keep temporary outages, exact creative settings, and unverified optimizations out of general rules. Examples, templates, and pointers to worked examples steer future output as strongly as rules: carry one forward only when the user accepted it as a reference, and label it as a single instance. When one project seeds a new skill, keep its durable content to process, checks, failure patterns, and tool gotchas that would hold for a different brief; the project's creative choices stay in its session record. Retain an experiment only with its uncertainty and a check that could disprove it. Merge duplicates and narrow or replace stale guidance. If nothing qualifies for a durable edit, report the consequential findings and explain that no instruction change is warranted.
 
 ## 6. Choose the smallest useful destination
 
@@ -89,6 +89,8 @@ Lead with the most consequential findings and the user feedback that changed you
 - A proportionate verification plan, including a nearby case where the rule should not apply when relevant.
 
 Briefly name meaningful rejected candidates and why they did not qualify. Distinguish preferences, supported fixes, and experiments. If the target or evidence is unavailable, label that proposal incomplete rather than presenting a guessed diff as ready.
+
+For a new skill or other multi-file proposal, stage the draft outside the live location, point to it, and install only after approval.
 
 Ask which concrete proposals to apply, identifying any unresolved choice. Explain that this skill's review-first workflow is why application waits for approval. Stop before editing reusable instructions. Keep the output proportional to the findings; no fixed lesson count or compulsory long report.
 

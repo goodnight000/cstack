@@ -82,6 +82,20 @@
         "Separates findings from any proposed reusable edits",
         "Keeps changes subject to approval"
       ]
+    },
+    {
+      "id": 7,
+      "name": "partial_satisfaction_new_skill",
+      "request": "Use $reflect on this animation session and create a skill for future animations.",
+      "session": "The agent produced an animated short. The user said it was 'in the correct direction' but they did not fully like it. The project contains a character rig, a visual kit, and a style bible specific to that film. No skill for animation exists yet.",
+      "feedback": "I don't want this video to influence too much of what agents generate later.",
+      "checks": [
+        "Keeps durable skill content to process, checks, failure patterns, and tool gotchas",
+        "Does not ship the film's style-bearing code or bible as a default template",
+        "Labels any retained example as one instance, not a default",
+        "Records the endorsed direction and the dislikes, not the output as a model",
+        "Stages the draft skill outside the live location and proposes it without installing"
+      ]
     }
   ]
 }
