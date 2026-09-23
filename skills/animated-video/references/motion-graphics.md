@@ -22,7 +22,7 @@ piece; choose fresh per brief.
   be keyed cleanly; get transparent assets or plan around them.
 - Music ducked word by word pumps audibly. Duck by phrase.
 - For a personal story, graphics alone plateaued: every judge named "no human on screen" as the
-  ceiling. When the subject is a person, surface this as a format question in step 1.
+  ceiling. When the subject is a person, surface this as a format question in step 2.
 
 ## Craft techniques
 

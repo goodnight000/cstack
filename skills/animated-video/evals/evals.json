@@ -41,6 +41,19 @@
         "Plans transitions that grow out of the content rather than crossfades",
         "Uses seeded randomness and held drawings for a deterministic stop-motion boil"
       ]
+    },
+    {
+      "id": 4,
+      "name": "story_alignment_before_build",
+      "request": "Use the animated-video skill to make a short animated video about a story you come up with.",
+      "session": "The user gives no topic, audience, length or tone. Remotion, ffmpeg and a music library are available. The session runs Claude Opus 5.5.",
+      "checks": [
+        "Asks the open intake questions (where it's posted, the feeling or takeaway, length, tone) in one message, with defaults",
+        "Pitches three different story concepts with protagonist, want, obstacle, turn and ending image",
+        "Develops the chosen concept into a timed beat sheet where each beat is one image that changes something",
+        "Checks the story for a protagonist who chooses, an escalating middle, a turn and an ending that answers the opening",
+        "Waits for the user to approve the beat sheet before writing the storyboard or building anything"
+      ]
     }
   ]
 }
