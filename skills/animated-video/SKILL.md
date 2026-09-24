@@ -58,14 +58,15 @@ infographic, a motion comic, AI clips). One session built five versions of the w
 - If a real person appears, ask where reference footage or photos live, and pull frames with
   ffmpeg instead of searching personal folders.
 - Ask for a reference image: a screenshot of the character, or a frame from an animation they
-  like. It specifies style better than adjectives. Design from it; don't copy another creator's
-  work.
-- Show one style frame (a single rendered still) before any full build: the cheapest point to
-  hear "not what I wanted". For a short piece, show the first scene's still and keep building
-  unless the user stops you; the story was already approved in step 1.
+  like; first look for ones they already chose (animations saved into their recent projects).
+  It specifies style better than adjectives. Design from it; don't copy another creator's work.
+- Show one style frame (a rendered still, or a few seconds of motion) before any full build: the
+  cheapest point to hear "not what I wanted". Then wait for a reply unless the user already
+  approved this look from an image; an approved written plan does not approve a look. Only a
+  single short piece may keep building after showing its first still.
 - Read `~/.animated-video/profile.md` if it exists: the user's preferences and past projects.
 
-Done when: the user has confirmed the format, the route, and a style frame (for a short piece,
+Done when: the user has confirmed the format, the route, and a style frame (a single short piece:
 the first still has been shown).
 
 ## 3. Build the audio spine

@@ -38,8 +38,10 @@ tools, not a house style: a brief can call for clean vector work instead.
   gradients, and photorealism unless the brief asks for it.
 - **Motion:** easing or springs, never linear. Squash and stretch, anticipation and secondary
   motion make even simple shapes feel alive.
-- **On-screen text:** at most about 8 words at once, each line visible for at least 2.5s. One
-  display face, plus a monospace face if something is "machine output".
+- **On-screen text:** picture first. Cover the words: if a beat stops reading, redesign the
+  picture instead of adding labels. Keep words for real names, numbers and quotes the picture
+  can't carry: at most about 8 at once, each line visible for at least 2.5s. One display face,
+  plus a monospace face if something is "machine output".
 - **Recurring motif:** one character or object that travels through every scene and changes
   with the story (a single glowing word gaining senses and hands, a jar collecting phrases). It
   holds a long piece together better than a narrator.

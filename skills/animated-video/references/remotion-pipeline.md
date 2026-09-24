@@ -15,6 +15,12 @@
   @types/react`, a tsconfig with `lib: ["ES2023","DOM"]`, a Python venv with `faster-whisper`,
   and `git init`.
 
+## Before the VO exists
+- To build ahead of a recording, generate `words.json` from the script at the speaker's measured
+  pace (words per second of an earlier recording) and build every beat from `cue()` as usual.
+  Label it a stand-in. After recording, align the real VO and re-render; a cue phrase the speaker
+  changed throws by name. Unverified end to end: check that every cue resolves after alignment.
+
 ## Procedural drawing
 - A `<canvas>` inside a Remotion component suits procedural art (grain, boil, particles). Redraw
   it from `useCurrentFrame()` and take randomness from Remotion's `random(seed)`, never
