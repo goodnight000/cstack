@@ -1,0 +1,19 @@
+{
+  "name": "forth-icons",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Line icons that act out what they mean: each one plays a short, meaningful animation when its control is hovered or focused.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./icons.js",
+    "./icons.css": "./icons.css",
+    "./svg/*": "./svg/*"
+  },
+  "files": ["icons.js", "icons.css", "sets", "svg"],
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check"
+  }
+}

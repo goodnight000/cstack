@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Forth Icons</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./icons.css" />
+    <style>
+      :root {
+        --bg: #141414;
+        --surface: #1c1c1c;
+        --raised: #262626;
+        --line: #2b2b2b;
+        --fg: #e0e0e0;
+        --muted: #8c8c8c;
+        --t-1: 0.8125rem;
+        --t0: 0.9375rem;
+        --t1: 1.25rem;
+        --t2: 2rem;
+        --s1: 4px;
+        --s2: 8px;
+        --s3: 12px;
+        --s4: 16px;
+        --s5: 24px;
+        --s6: 32px;
+        --s7: 48px;
+        --r: 10px;
+        font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+        font-size: var(--t0);
+        color: var(--fg);
+        background: var(--bg);
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f5f5f4;
+          --surface: #ffffff;
+          --raised: #ebebea;
+          --line: #e0e0de;
+          --fg: #1b1b1b;
+          --muted: #6b6b6b;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        min-height: 100vh;
+      }
+      main {
+        padding: var(--s7) var(--s6) var(--s7) var(--s7);
+      }
+      header {
+        display: flex;
+        align-items: baseline;
+        gap: var(--s4);
+        flex-wrap: wrap;
+        margin-bottom: var(--s6);
+      }
+      h1 {
+        font-size: var(--t2);
+        font-weight: 500;
+        letter-spacing: -0.03em;
+        margin: 0;
+      }
+      h1 small {
+        font-size: var(--t0);
+        color: var(--muted);
+        font-weight: 400;
+        letter-spacing: 0;
+        margin-left: var(--s2);
+      }
+      header p {
+        flex-basis: 100%;
+        margin: var(--s2) 0 0;
+        color: var(--muted);
+        max-width: 38rem;
+        line-height: 1.5;
+      }
+      .tools {
+        display: flex;
+        gap: var(--s2);
+        margin-left: auto;
+      }
+      input[type="search"] {
+        font: inherit;
+        color: var(--fg);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        padding: var(--s2) var(--s3);
+        width: 16rem;
+        outline: none;
+      }
+      input[type="search"]:focus {
+        border-color: var(--muted);
+      }
+      button.act {
+        all: unset;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--s2);
+        padding: var(--s2) var(--s3);
+        border-radius: var(--r);
+        background: var(--raised);
+        font-size: var(--t-1);
+        font-weight: 500;
+      }
+      button.act:focus-visible {
+        outline: 2px solid var(--muted);
+      }
+      button.act .ic {
+        width: 18px;
+        height: 18px;
+      }
+      h2 {
+        font-size: var(--t0);
+        font-weight: 600;
+        margin: var(--s6) 0 var(--s2);
+      }
+      h2 span {
+        color: var(--muted);
+        font-weight: 400;
+        margin-left: var(--s2);
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+        gap: var(--s1);
+      }
+      .pick {
+        all: unset;
+        cursor: pointer;
+        box-sizing: border-box;
+        width: 100%;
+        display: grid;
+        justify-items: center;
+        gap: var(--s3);
+        padding: var(--s5) var(--s2) var(--s3);
+        border-radius: var(--r);
+        font-size: var(--t-1);
+        color: var(--muted);
+      }
+      .pick .ic {
+        width: 32px;
+        height: 32px;
+        color: var(--fg);
+        stroke-width: var(--stroke, 1.75);
+      }
+      .pick:hover,
+      .pick:focus-visible {
+        background: var(--surface);
+        color: var(--fg);
+      }
+      .pick[aria-pressed="true"] {
+        background: var(--raised);
+        color: var(--fg);
+      }
+      .empty {
+        color: var(--muted);
+      }
+      aside {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding: var(--s7) var(--s6);
+        border-left: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: var(--s4);
+        overflow-y: auto;
+      }
+      .stage {
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        cursor: pointer;
+      }
+      .stage .ic {
+        width: 128px;
+        height: 128px;
+        stroke-width: var(--stroke, 1.75);
+      }
+      aside h3 {
+        font-size: var(--t1);
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        margin: var(--s2) 0 0;
+      }
+      aside .set {
+        color: var(--muted);
+        font-size: var(--t-1);
+      }
+      aside .motion {
+        margin: 0;
+        line-height: 1.5;
+        min-height: 4.5em;
+      }
+      .sizes {
+        display: flex;
+        align-items: end;
+        gap: var(--s4);
+        padding: var(--s3) 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .sizes .ic {
+        stroke-width: var(--stroke, 1.75);
+      }
+      label.stroke {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: var(--s3);
+        font-size: var(--t-1);
+        color: var(--muted);
+      }
+      label.stroke input {
+        accent-color: var(--fg);
+      }
+      code {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: var(--t-1);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        padding: var(--s3);
+        display: block;
+        overflow-x: auto;
+        white-space: pre;
+      }
+      .row {
+        display: flex;
+        gap: var(--s2);
+      }
+      @media (max-width: 820px) {
+        body {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: static;
+          height: auto;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+        main {
+          padding: var(--s6) var(--s4);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Forth Icons<small></small></h1>
+        <div class="tools">
+          <input type="search" placeholder="Search icons" aria-label="Search icons" />
+          <button class="act" type="button" id="play-all"></button>
+        </div>
+        <p>
+          Line icons that act out what they mean. At rest each one is the ordinary thing; hover or
+          focus the control holding it and it plays once: the lock unlocks, the bell rings, the
+          trash eats. Hover any icon to see it.
+        </p>
+      </header>
+      <div id="sets"></div>
+    </main>
+    <aside aria-live="polite">
+      <div class="stage" title="Play again"></div>
+      <div>
+        <h3></h3>
+        <div class="set"></div>
+      </div>
+      <p class="motion"></p>
+      <div class="sizes"></div>
+      <label class="stroke"
+        >Stroke <input type="range" min="1" max="2.5" step="0.25" value="1.75" /><span>1.75</span></label
+      >
+      <code></code>
+      <div class="row">
+        <button class="act" type="button" id="copy-js"></button>
+        <button class="act" type="button" id="copy-svg"></button>
+      </div>
+    </aside>
+    <script type="module">
+      import { icon, icons, motion, sets } from "./icons.js";
+
+      const $ = (s) => document.querySelector(s);
+      const setOf = {};
+      const root = $("#sets");
+      for (const set of sets) {
+        if (!set.names.length) continue;
+        const section = document.createElement("section");
+        section.innerHTML = `<h2>${set.title}<span>${set.names.length}</span></h2><ul></ul>`;
+        for (const name of set.names) {
+          setOf[name] = set.title;
+          const li = document.createElement("li");
+          li.innerHTML = `<button class="pick" type="button" data-name="${name}">${icon(name)}<span>${name}</span></button>`;
+          section.querySelector("ul").append(li);
+        }
+        root.append(section);
+      }
+      $("h1 small").textContent = Object.keys(icons).length;
+      $("#play-all").innerHTML = `${icon("sparkles")}Play all`;
+      $("#copy-js").innerHTML = `${icon("copy")}Copy code`;
+      $("#copy-svg").innerHTML = `${icon("copy")}Copy SVG`;
+
+      let current;
+      function show(name) {
+        current = name;
+        for (const t of document.querySelectorAll(".pick"))
+          t.setAttribute("aria-pressed", t.dataset.name === name);
+        play();
+        $("aside h3").textContent = name;
+        $("aside .set").textContent = setOf[name];
+        $("aside .motion").textContent = motion[name];
+        $(".sizes").innerHTML = [16, 20, 24, 32].map((s) => icon(name, { size: s })).join("");
+        $("aside code").textContent = `import { icon } from "./icons/icons.js";\n\nbutton.innerHTML = icon("${name}");`;
+        history.replaceState(null, "", `#${name}`);
+      }
+      // Re-inserting the svg inside .ic-play restarts its animation.
+      function play() {
+        const stage = $(".stage");
+        stage.classList.remove("ic-play");
+        stage.innerHTML = icon(current);
+        void stage.offsetWidth;
+        stage.classList.add("ic-play");
+      }
+      $(".stage").addEventListener("click", play);
+      root.addEventListener("click", (e) => {
+        const t = e.target.closest(".pick");
+        if (t) show(t.dataset.name);
+      });
+
+      $("input[type=search]").addEventListener("input", (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        for (const section of root.children) {
+          let any = false;
+          for (const li of section.querySelectorAll("li")) {
+            const name = li.firstChild.dataset.name;
+            const hit = !q || name.includes(q) || motion[name].toLowerCase().includes(q);
+            li.hidden = !hit;
+            any ||= hit;
+          }
+          section.hidden = !any;
+        }
+      });
+
+      $("#play-all").addEventListener("click", () => {
+        root.classList.remove("ic-play");
+        void root.offsetWidth;
+        root.classList.add("ic-play");
+        setTimeout(() => root.classList.remove("ic-play"), 2000);
+      });
+
+      $("label.stroke input").addEventListener("input", (e) => {
+        document.documentElement.style.setProperty("--stroke", e.target.value);
+        $("label.stroke span").textContent = e.target.value;
+      });
+
+      const copy = (text, btn) => {
+        navigator.clipboard.writeText(text);
+        const label = btn.lastChild;
+        const was = label.textContent;
+        label.textContent = "Copied";
+        setTimeout(() => (label.textContent = was), 1200);
+      };
+      $("#copy-js").addEventListener("click", (e) => copy(`icon("${current}")`, e.currentTarget));
+      $("#copy-svg").addEventListener("click", async (e) => {
+        const btn = e.currentTarget;
+        copy(await (await fetch(`./svg/${current}.svg`)).text(), btn);
+      });
+
+      const start = decodeURIComponent(location.hash.slice(1));
+      show(icons[start] !== undefined ? start : "lock");
+    </script>
+  </body>
+</html>

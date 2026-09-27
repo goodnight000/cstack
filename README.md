@@ -118,6 +118,13 @@ This checks caption generation, time mapping, raw transcript preservation, and
 known warning/error behavior. It does not validate a Resolve installation,
 listening quality, visual taste, or an end-to-end video edit on your machine.
 
+## Icons
+
+[Forth Icons](icons/README.md) are line icons that act out what they mean. Each one plays a short
+animation of its own verb when its button or link is hovered or focused: the lock unlocks, the
+bell swings, the trash eats a crumb. There are 203 icons in plain SVG and CSS, with no
+dependencies. Open `icons/index.html` from a local server to browse them.
+
 ## Contributing
 
 Keep each skill self-contained and focused on a recurring need. Include examples or evaluation cases that expose meaningful mistakes. Keep transcripts, credentials, personal project history, and machine-specific paths out of published skills. For third-party contributions, preserve attribution and confirm license compatibility.
