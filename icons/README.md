@@ -1,4 +1,4 @@
-# Forth Icons
+# Charade
 
 <img src="preview.gif" width="800" alt="Thirty icons playing their animations in a wave: the lock unlocks, the bell rings, the trash eats a crumb, the paper plane flies off and glides back.">
 
@@ -101,8 +101,8 @@ the character):
 ## What makes them ours
 
 - **The open ring.** Every circular outline, such as a clock face, a lens, or an info circle,
-  stops short of closing and leaves a small gap at the upper right. The gap comes from the Forth
-  mark, a stroke that runs into a loop that never quite closes.
+  stops short of closing and leaves a small gap at the upper right, like a stroke that runs into
+  a loop and never quite closes.
 - **One solid heart.** Most icons carry exactly one small filled part at their focal point: the
   keyhole, the clock's hub, the bell's clapper, the eye's pupil.
 - **Soft, sturdy geometry.** The icons use generous corner radii and soft tips, with no sharp

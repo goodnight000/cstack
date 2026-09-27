@@ -120,7 +120,7 @@ listening quality, visual taste, or an end-to-end video edit on your machine.
 
 ## Icons
 
-[Forth Icons](icons/README.md) are line icons that act out what they mean. Each one plays a short
+[Charade](icons/README.md) is a set of line icons that act out what they mean. Each one plays a short
 animation of its own verb when its button or link is hovered or focused: the lock unlocks, the
 bell swings, the trash eats a crumb. There are 203 icons in plain SVG and CSS, with no
 dependencies. Open `icons/index.html` from a local server to browse them.

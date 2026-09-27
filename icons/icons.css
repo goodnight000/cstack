@@ -14,7 +14,7 @@
 @import "./sets/life.css";
 @import "./sets/nature.css";
 
-/* Forth Icons. At rest every icon is still and ordinary; when the control holding it is hovered
+/* Charade. At rest every icon is still and ordinary; when the control holding it is hovered
    or focused, the icon acts out its verb once and settles back (nothing loops, nothing moves on
    its own). The trigger is the nearest control (a, button, label, summary, [role=button]) or any
    ancestor marked .ic-host; .ic-play on an ancestor plays every icon inside it at once.

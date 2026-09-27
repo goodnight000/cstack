@@ -1,4 +1,4 @@
-// Forth Icons: a line icon set drawn on a 24 grid, where every icon acts out what it means once
+// Charade: a line icon set drawn on a 24 grid, where every icon acts out what it means once
 // when the control holding it is hovered or focused. Each set lives in sets/<set>.js with its
 // motion in the matching .css; icons.css pulls them all in.
 import * as core from "./sets/core.js";
