@@ -51,8 +51,8 @@ and prior deliverables; keep derived assets local until upload is authorized.
 
 ## 1. Recover the project and active brief
 
-Inspect the existing directory format, source, manifests, scripts, and current
-native timeline before building anything. Reuse preprocessing and checked assets.
+Inspect the existing directory format, source, `timeline.json`, manifests, scripts,
+and current native timeline before building anything. Reuse preprocessing and checked assets.
 Locate the user's project and available media tools from the workspace and brief.
 Verify their availability. Do not start a server merely because it exists.
 
@@ -125,7 +125,8 @@ publication context, spoken cue, explanatory purpose, crop/highlight, layout, an
 timing. Distinguish an existing policy from a new agreement and a risk scenario
 from a confirmed event. Track selection/rejection separately from file existence;
 index reusable visual, music and SFX assets with provenance and deduplication
-evidence. Use an existing asset index or a project manifest as in the
+evidence. Keep placement fields as keys on the visual's timeline clip rather than
+in a second timed file. Use an existing asset index or a project manifest as in the
 [library procedure](references/technical.md#reusable-media-library).
 Highlight only words actually present in the source.
 Keep the research bibliography in notes and necessary qualifications readable.
@@ -150,7 +151,10 @@ whole visual set. Include the hardest requested layout or gesture and the hook;
 a clean easy frame cannot validate the whole treatment. This is an internal
 check, not a mandatory approval stop.
 When generation would explain a beat better, use the connected generation skill
-for a bounded candidate and inspect it before extending the treatment.
+for a bounded candidate and inspect it before extending the treatment. For an
+animation drawn in code, hand the animated-video skill a slot: frame count, size,
+fps, and the cue words it lands on. It returns a full-frame alpha movie that
+becomes one timeline clip.
 
 Place visuals by the [placement guidance](references/style.md#placement).
 
@@ -159,9 +163,11 @@ the active placement/reuse/dwell/coverage rules in final playback time.
 
 ## 4. Assemble, finish, and revise
 
+Keep one `timeline.json` as the edit and build every output from it with
+`scripts/reel.py` ([technical reference](references/technical.md#cut-and-render)).
 Assemble and render in native Resolve when it is installed, with separate camera,
-visual, caption, and mastered-audio tracks. Without Resolve, render with FFmpeg as
-described in the technical reference. FFmpeg remains useful for audio, previews,
+visual, caption, and mastered-audio tracks, using its generated console script.
+Without Resolve, render the same timeline with FFmpeg. FFmpeg remains useful for audio, previews,
 normalization, and QA. A flattened FFmpeg movie imported into Resolve does not
 satisfy a request for a native editable composition.
 
@@ -190,8 +196,8 @@ publishing does not unexpectedly expand a requested short caption.
 Pick effects from the profile's libraries and the bundled
 [sound-effect library](assets/sfx/README.md); read its rights note before publishing.
 
-For revisions, change the cutlist/manifest or native timeline instead of copying
-an entire pipeline per version. Ripple all dependent layers after a cut. Apply
+For revisions, edit `timeline.json` and rebuild; commit it per delivered version
+instead of writing a new script and manifest copy per version. Ripple all dependent layers after a cut. Apply
 requested speed once to linked picture/audio and all timed layers, preserving
 pitch. Derive final captions and visual intervals from the actual frame-rounded
 timeline, clamp them to its end, and update both speed metadata and visible
@@ -216,6 +222,7 @@ Keep editorial and technical evidence separate:
   stronger evidence of taste than a contact sheet or automated transcript.
 - Technical review checks full decode, requested geometry, duration, linked speed,
   audio level/peaks, caption timing, all changed joins, and visual constraints.
+  `reel.py qa` measures the first five and draws each camera join.
   Use checks that test the reported defect; a similarity score with an arbitrary
   threshold is not a substitute for that check. Count original identities across
   renamed/cropped assets. Compute coverage from

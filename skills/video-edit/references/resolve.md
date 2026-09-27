@@ -28,6 +28,31 @@ Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts`; Linux:
 `~/.local/share/DaVinciResolve/Fusion/Scripts`; Windows:
 `%APPDATA%\Blackmagic Design\DaVinci Resolve\Support\Fusion\Scripts`).
 
+## Build from the timeline
+
+`reel.py resolve timeline.json -o build.lua` writes a Lua script that builds the
+edit natively: each track from `timeline.json`, each clip appended at its record
+frame, with its start and length asserted. With `resolve.base` it duplicates that
+accepted timeline, leaves tracks marked `keep` (a speed compound, retained source
+stems) as they are, and rebuilds the rest, which is the visual-only revision below.
+Without a base it creates an empty timeline and sets the project's size and frame
+rate. `drp` exports the project; `render` queues an H.264 render.
+
+Open the project named in `resolve.project`, then run `dofile('/abs/build.lua')`
+in the Console, or save the script in `Fusion/Scripts/Utility` before starting
+Resolve and choose it from Workspace > Scripts. UI automation can press that menu
+item without taking keyboard focus. A failed assertion names the file and the frame
+it landed on.
+
+Verified in Resolve 21 (free, macOS) in September 2026 on a scratch project:
+a new timeline starts at 01:00:00:00, so the script offsets record frames by
+`GetStartFrame()`; a 60 fps camera appended to a 30 fps timeline with source-frame
+in/out landed exactly on picture and audio tracks; stills, converted to movies of
+the exact length first, landed exactly; `base` + `keep` rebuilt only the unkept
+track. Scripts run from the menu have no Lua `io`; to read results from outside,
+export a DRP, which is a zip of XML. The script refuses audio `gain_db`: bake gain
+and fades into one stem with `reel.py mix` and place that.
+
 ## Establish one editable timeline
 
 Keep the normal-speed cutlist in integer timeline frames. Keep original-source
@@ -40,10 +65,10 @@ a mastered PCM dialogue track. Mute original camera audio if a replacement mix
 is present. Keep caption text/timing in JSON plus SRT even when transparent PNGs
 are used for exact native compositing. PNG text is not natively editable text.
 
-The successful session used a checked FCP7 XML template for exact clip positions
-and durations, imported through `MediaPool:ImportTimelineFromFile`. Direct still
-appends defaulted to five seconds despite supplied duration. Verify imported
-start/end/duration and track counts before finishing. Save a fully layered
+`reel.py resolve` appends clips directly and converts stills to movies, because
+direct still appends defaulted to five seconds despite supplied duration. An earlier
+session imported a checked FCP7 XML through `MediaPool:ImportTimelineFromFile`
+instead. Either way, verify start/end/duration and track counts before finishing. Save a fully layered
 normal-speed XML and project before creating a speed-adjusted compound.
 
 A compound keeps camera, overlays, and captions editable internally while allowing
@@ -125,7 +150,8 @@ edits in one script with postcondition checks rather than repeated UI round trip
 
 ## Visual-only revisions
 
-Duplicate the accepted timeline; remove only the rejected/replaced visual clips
+`resolve.base` with `keep` tracks does this from the timeline file. By hand:
+duplicate the accepted timeline; remove only the rejected/replaced visual clips
 with `DeleteClips(items, false)` and append replacements at explicit integer frames.
 Keep native camera, captions and audio separate. Assert actual start/end/counts
 after append: a two-frame scene overlap has shifted an appended clip's start.

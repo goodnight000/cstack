@@ -73,6 +73,11 @@ It shows the install command for anything missing and runs it only if you agree.
 is recommended for a native, editable project; without it the skill renders with
 FFmpeg. Browser research and publishing need browser tools and your accounts.
 
+Each project keeps its edit in one `timeline.json`. The bundled
+[`reel.py`](skills/video-edit/scripts/reel.py) checks it, renders it with FFmpeg,
+writes the Resolve script that builds the same edit natively, and measures the
+export, so a revision is an edit to that file rather than a new script.
+
 With no brief, the skill asks where the video will be posted, how long it should
 be, and whether you want music, sound effects, or a hook headline, then follows
 its [default short-form style](skills/video-edit/references/style.md). To keep

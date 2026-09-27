@@ -81,38 +81,37 @@ normalized windows for revisions whose source ranges remain within their handles
 
 ## Cut and render
 
-For simple synchronized cuts, write an FFmpeg filter file from the cutlist:
+Keep the edit in one `timeline.json` per project and build every output from
+it with [`scripts/reel.py`](../scripts/reel.py); its docstring defines the format.
+Run it with `uv run`, which installs its Python dependencies. A revision edits
+the timeline; commit it for each delivered version instead of writing a new
+build script and a `-vN` manifest copy. Keep provenance (cue, source, reason)
+as extra keys on the clips; the tools carry them untouched.
 
-```text
-[0:v]trim=start=A:end=B,setpts=PTS-STARTPTS[v0];
-[0:a]atrim=start=A:end=B,asetpts=PTS-STARTPTS,afade=t=in:d=0.005,afade=t=out:st=DUR_MINUS_008:d=0.008[a0];
-...
-[v0][a0][v1][a1]concat=n=2:v=1:a=1[vout][aout]
-```
+- `check` rejects non-integer frames, overlaps within a track, clips past the
+  end, missing or too-short sources, and warns when a stem is shorter than the picture.
+- `render --preview` makes a fast half-size review copy; `render` the delivery.
+- `mix` writes the enabled audio tracks as one PCM stem, which is what Resolve gets.
+- `resolve` writes the console script (see [Resolve](resolve.md#build-from-the-timeline)).
+- `place` turns an image or video excerpt into a full-frame alpha movie
+  fitted to a box, with alpha fades; every overlay layer is one of these.
 
-Snap `A` and `B` to frame boundaries (a multiple of 1/fps) so each segment's
-picture and audio have the same length; `DUR_MINUS_008` is the segment duration
-minus 0.008 s. Micro-fades reduce clicks; make them short enough to preserve consonants.
-For independent picture/audio cuts, concatenate each track separately and
-check matching total durations. Record the incoming pre-roll and picture
-join explicitly. Do not create a frozen face to fill every missing handle.
-
-Use a smaller, fast-encoded preview until the story and layout settle.
-For final social delivery, these are starting settings, not platform mandates:
-
-```bash
-ffmpeg -i IN -filter_complex_script filters.txt -map '[vout]' -map '[aout]' -c:v libx264 -crf 19 -preset medium -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart master.mp4
-```
+Times are output frames. Video clips are fitted to the frame and layered above
+lower tracks, so captions go on a track above the visuals they must stay
+readable over. Audio clips get an 8 ms fade at each end: enough to remove cut
+clicks, short enough to keep consonants. Set `fade` to 0 on continuous stems.
+For split edits, give the audio track its own clip boundaries and check the
+incoming pre-roll and picture join explicitly. Do not create a frozen face to
+fill every missing handle.
 
 An upload copy can use CRF 23 and AAC 128k when it remains visually adequate.
-Prefer generating final variants from the same high-quality source over
-chaining unnecessary lossy transcodes. Match fps, dimensions, SAR, audio
-layout, and sample rate across concatenated sources. Upscaling does not
-restore detail in a low-resolution asset.
+Generate variants from the same high-quality sources rather than chaining lossy
+transcodes. Upscaling does not restore detail in a low-resolution asset.
 
-Apply tempo changes consistently to video, audio, captions, and overlays.
-Do not use source seconds as output seconds after a speed change. Preserve
-natural voice pitch with the available tempo filter and check delivery in context.
+The timeline has no speed field. Make a sped-up camera passage a source of its
+own (pitch-preserving tempo, applied once to picture and audio), or in Resolve
+keep the native speed compound as a `keep` track, and time every other layer in
+final output frames. Do not use source seconds as output seconds after a speed change.
 
 For audio, start near -14 LUFS with peak headroom, for example
 `highpass=f=70,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000`, adapting to the
@@ -220,10 +219,10 @@ duplicate-frame and silence tests alone cannot certify natural pacing.
 
 ## Delivery checks and caching
 
-```bash
-ffmpeg -v error -i OUT -f null -
-ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate:format=duration,size -of json OUT
-```
+`reel.py qa timeline.json OUT` decodes the file and reports geometry, frame
+count against the timeline, audio length, integrated loudness and true peak,
+and writes one join image per camera cut (add `--words` with the final-audio
+transcript to label them). It measures; it does not listen or judge the edit.
 
 Extract final mixed audio for one independent local transcription and
 compare substantive speech against the selected dialogue. Keep that QA
@@ -285,7 +284,9 @@ return a single mismatched JSON. Add `--condition-on-previous-text False` (mlx) 
 and treat low-probability words at a window edge as suspect.
 
 Inspect overlapping windows containing the outgoing phrase, the join, and the
-first phrase of the incoming clip. Include the interior of a selected passage
+first phrase of the incoming clip. `reel.py view VIDEO START END --words W.json
+--mark T` draws frames, the waveform with silences shaded, and word spans for
+one window in a single image. Include the interior of a selected passage
 when a word spans an implausibly long interval or the source contains restarts;
 a repeat can survive entirely within one clip. Use tiny source windows to localize a suspect
 repeat, then verify the combined final join again. Tiny-window ASR can also
@@ -300,8 +301,8 @@ separate. Use integer frames for edits; round only at conversion boundaries.
 After a removal, map every dependent layer through the same removed interval.
 After a speed change, compare predicted duration with the native result.
 
-For final manifests assert `0 <= start < end <= exported_duration`, caption
-bounds/no unintended overlap, and matching picture/audio end frames. Calculate
+`reel.py check` asserts clip bounds, overlaps within a track and stem lengths;
+check intended overlaps across tracks (a caption over a new image) in frames. Calculate
 visual coverage using merged intervals, not a sum of individual durations.
 Read or derive one current speed, rather than carrying per-item values from a
 previous version. Leave a small margin inside the current brief's timing limits.
