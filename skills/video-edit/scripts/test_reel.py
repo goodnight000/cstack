@@ -73,6 +73,30 @@ def main():
         assert text.count("\nadd(") == 5 and "recordFrame=T0+rec" in text and "CreateEmptyTimeline" in text
         assert "card-20f.mov" in text               # stills become movies with an exact length
 
+        # blue for 2 s then green: at 2x from 1 s, output frame 20 reads source 2.33 s (green)
+        ff("-f", "lavfi", "-i", "color=c=blue:s=360x640:r=30:d=2[a];color=c=green:s=360x640:r=30:d=2[b];"
+           "[a][b]concat", "-f", "lavfi", "-i", "sine=f=440:r=48000:d=4", "-c:v", "libx264",
+           "-pix_fmt", "yuv420p", "-shortest", str(d / "cam2.mp4"))
+        fast = {"fps": 30, "width": 360, "height": 640, "resolve": {"project": "Test", "timeline": "t2"},
+                "video": [{"name": "Camera", "clips": [{"file": "cam2.mp4", "in": 30, "start": 0, "frames": 30,
+                                                        "speed": 2}]}],
+                "audio": [{"name": "Dialogue", "clips": [{"file": "cam2.mp4", "in": 30, "start": 0, "frames": 30,
+                                                          "speed": 2}]}]}
+        (d / "fast.json").write_text(json.dumps(fast))
+        fast["video"][0]["clips"][0]["frames"] = 60     # 1 s + 60 * 2 frames overruns the 4 s source
+        (d / "overrun.json").write_text(json.dumps(fast))
+        errors, _ = reel.check(reel.load(d / "overrun.json"))
+        assert any("shorter" in e for e in errors), errors
+        reel.cmd_render(reel.load(d / "fast.json"), d / "fast.mp4")
+        assert reel.cmd_qa(reel.load(d / "fast.json"), d / "fast.mp4", d / "qa2")["problems"] == []
+        r, g, b, _ = pixel(d / "fast.mp4", 20, (180, 320))
+        assert g > 100 and b < 80, (r, g, b)
+        reel.cmd_resolve(reel.load(d / "fast.json"), d / "fast.lua")
+        text = (d / "fast.lua").read_text()
+        assert text.count("-x2.mov',0,30,0,30,") == 2, text   # video and audio use the retimed file
+        retimed = next((d / ".reel").glob("cam2-*-x2.mov"))
+        assert reel.probe(retimed)["fps"] == 30 and abs(reel.probe(retimed)["duration"] - 1.0) < 0.01
+
         placed = d / "placed.mov"
         reel.main(["place", str(d / "card.png"), "-o", str(placed), "--box", "20,40,100,50",
                    "--frames", "12", "--size", "360x640", "--fade", "0"])

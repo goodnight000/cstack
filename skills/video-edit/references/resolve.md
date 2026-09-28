@@ -48,8 +48,10 @@ Verified in Resolve 21 (free, macOS) in September 2026 on a scratch project:
 a new timeline starts at 01:00:00:00, so the script offsets record frames by
 `GetStartFrame()`; a 60 fps camera appended to a 30 fps timeline with source-frame
 in/out landed exactly on picture and audio tracks; stills, converted to movies of
-the exact length first, landed exactly; `base` + `keep` rebuilt only the unkept
-track. Scripts run from the menu have no Lua `io`; to read results from outside,
+the exact length first, landed exactly; so did a clip at `speed` 1.5, which the
+script places as its pre-rendered file rather than retiming with `SetSpeed`
+(native retiming rounds the length unpredictably, below); `base` + `keep` rebuilt
+only the unkept track. Scripts run from the menu have no Lua `io`; to read results from outside,
 export a DRP, which is a zip of XML. The script refuses audio `gain_db`: bake gain
 and fades into one stem with `reel.py mix` and place that.
 

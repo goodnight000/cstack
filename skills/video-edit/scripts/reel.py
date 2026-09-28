@@ -32,7 +32,11 @@ timeline.json (paths relative to the file; all times are integer output frames):
 Video clips are fitted (contain, centred) to the frame and stacked upward, so
 overlays should be full-frame RGBA made with `place`. Audio clips get `fade`
 seconds of fade at both ends (default 8 ms: removes cut clicks, keeps
-consonants; use 0 for a continuous stem). Other clip keys (id, cue, source, reason) are carried
+consonants; use 0 for a continuous stem). `speed` (default 1) plays a clip
+faster or slower with pitch kept: `in` is still the source position in
+timeline frames, `frames` the output length, so the clip reads frames*speed of
+source. It is rendered once into .reel/ and every output uses that file, so
+FFmpeg and Resolve land on the same frames. Other clip keys (id, cue, source, reason) are carried
 along untouched. `keep: true` tells `resolve` to leave that track as it is in
 the duplicated `base` timeline; `render` still uses its clips.
 """
@@ -68,7 +72,7 @@ def load(path):
 @lru_cache(None)
 def probe(path):
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
-                          "format=duration:stream=codec_type,r_frame_rate,width,height,nb_frames",
+                          "format=duration:stream=codec_type,r_frame_rate,width,height,pix_fmt",
                           "-of", "json", str(path)], capture_output=True, text=True)
     if out.returncode:
         return None
@@ -79,7 +83,8 @@ def probe(path):
             "fps": float(num) / float(den or 1) if float(den or 1) else 0,
             "video": v is not None,
             "audio": any(s["codec_type"] == "audio" for s in j.get("streams", [])),
-            "width": (v or {}).get("width"), "height": (v or {}).get("height")}
+            "width": (v or {}).get("width"), "height": (v or {}).get("height"),
+            "alpha": "a" in (v or {}).get("pix_fmt", "").replace("gray", "")}
 
 
 def check(t):
@@ -104,6 +109,10 @@ def check(t):
                     continue
                 if c["frames"] <= 0 or c["start"] < 0 or c["in"] < 0:
                     errors.append(f"{where}: negative or empty")
+                speed = c.get("speed", 1)
+                if not isinstance(speed, (int, float)) or not 0.5 <= speed <= 100:
+                    errors.append(f"{where}: speed must be a number from 0.5 to 100")
+                    continue
                 if last and c["start"] < last["start"] + last["frames"]:
                     errors.append(f"{where}: overlaps previous clip ending {last['start'] + last['frames']}")
                 last = c
@@ -115,6 +124,8 @@ def check(t):
                 if c["_path"].suffix.lower() in IMAGE:
                     if kind == "audio":
                         errors.append(f"{where}: image on an audio track")
+                    if speed != 1:
+                        errors.append(f"{where}: speed on a still")
                     continue
                 p = probe(c["_path"])
                 if p is None:
@@ -124,7 +135,7 @@ def check(t):
                     errors.append(f"{where}: no audio stream")
                 if kind == "video" and not p["video"]:
                     errors.append(f"{where}: no video stream")
-                short = (c["in"] + c["frames"]) / fps - p["duration"]
+                short = (c["in"] + c["frames"] * speed) / fps - p["duration"]
                 if short > 1 / fps:
                     errors.append(f"{where}: source is {short:.3f}s shorter than in+frames")
         if kind == "audio":
@@ -144,6 +155,33 @@ def require_valid(t):
         print("warning:", w, file=sys.stderr)
     if errors:
         sys.exit("timeline errors:\n  " + "\n  ".join(errors))
+    for kind in ("video", "audio"):
+        for track in t[kind]:
+            for c in track["clips"]:
+                if c.get("speed", 1) != 1:
+                    c["_path"], c["in"] = retimed(c, t["fps"], t["_dir"] / ".reel"), 0
+
+
+def retimed(c, fps, cache):
+    """The clip's source span at its speed, exactly `frames` long at timeline fps, pitch kept."""
+    src, p, speed = c["_path"], probe(c["_path"]), c["speed"]
+    cache.mkdir(parents=True, exist_ok=True)
+    out = cache / (f"{src.stem}-{int(src.stat().st_mtime)}-{c['in']}-{c['frames']}f-x{speed:g}"
+                   + (".mov" if p["video"] else ".wav"))
+    if out.exists():
+        return out
+    cmd = ["ffmpeg", "-v", "error", "-y", "-ss", f"{c['in'] / fps:.6f}",
+           "-t", f"{(c['frames'] + 1) * speed / fps:.6f}", "-i", str(src)]
+    if p["video"]:
+        cmd += ["-vf", f"setpts=(PTS-STARTPTS)/{speed},fps={fps},tpad=stop=-1:stop_mode=clone",
+                "-frames:v", str(c["frames"]), "-c:v", "prores_ks",
+                *(["-profile:v", "4444", "-pix_fmt", "yuva444p10le"] if p["alpha"] else ["-profile:v", "hq"])]
+    if p["audio"]:
+        # atempo keeps pitch; apad+atrim make the audio exactly as long as the picture
+        cmd += ["-af", f"atempo={speed},aresample={RATE},apad,atrim=end_sample={round(c['frames'] / fps * RATE)}",
+                "-c:a", "pcm_s24le"]
+    run(cmd + [str(out)])
+    return out
 
 
 # ---------------------------------------------------------------- ffmpeg
@@ -222,7 +260,7 @@ def cmd_render(t, out, preview=False):
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
         f.write(";\n".join(chains + a_chains))
     enc = ["-preset", "veryfast", "-crf", "28"] if preview else ["-preset", "medium", "-crf", "18"]
-    run(["ffmpeg", "-v", "error", "-nostats", "-y", *args, *a_args, "-filter_complex_script", f.name,
+    run(["ffmpeg", "-v", "error", "-nostats", "-y", *args, *a_args, "-/filter_complex", f.name,
          "-map", "[vout]", "-map", "[aout]", "-r", str(fps), "-frames:v", str(N),
          "-c:v", "libx264", *enc, "-c:a", "aac", "-b:a", "192k", "-ar", str(RATE),
          "-movflags", "+faststart", str(out)])

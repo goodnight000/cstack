@@ -108,10 +108,14 @@ An upload copy can use CRF 23 and AAC 128k when it remains visually adequate.
 Generate variants from the same high-quality sources rather than chaining lossy
 transcodes. Upscaling does not restore detail in a low-resolution asset.
 
-The timeline has no speed field. Make a sped-up camera passage a source of its
-own (pitch-preserving tempo, applied once to picture and audio), or in Resolve
-keep the native speed compound as a `keep` track, and time every other layer in
-final output frames. Do not use source seconds as output seconds after a speed change.
+For a speed change, give the camera clip and its audio clip the same `speed`
+(1.15 plays 15% faster) and set `frames` to the output length:
+`round(source frames / speed)`. `reel.py` renders each sped-up span once into
+`.reel/` with pitch kept, and both the FFmpeg render and the Resolve script use
+that file, so they agree to the frame. Time every other layer in final output
+frames; do not use source seconds as output seconds after a speed change. When
+the user wants speed as an adjustable setting in Resolve, use the native compound
+from [Resolve](resolve.md) as a `keep` track instead.
 
 For audio, start near -14 LUFS with peak headroom, for example
 `highpass=f=70,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000`, adapting to the
