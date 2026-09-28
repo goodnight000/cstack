@@ -155,4 +155,11 @@ the cover), the last second (clean, and it loops if intended), and the loudness.
 path, the open issues, and anything synthetic or invented (voice, names, messages). Commit each
 version in the project's local git repo.
 
+When the animation is a slot in a camera edit (video-edit), the editor supplies its frame count,
+size, fps, and cue words; time the beats to those cues. Deliver a full-frame transparent movie
+of exactly that many frames: `npx remotion render src/index.ts <Comp> out/<slot>.mov --codec
+prores --prores-profile 4444 --pixel-format yuva444p10le --image-format png`, then confirm with
+ffprobe a `yuva` pixel format and the frame count. The editor places it as one clip in their
+`timeline.json` and owns the final mix, so hand over sound as a separate stem, not normalized.
+
 When the user asks for a reflection, follow [the reflection protocol](references/reflection.md).
