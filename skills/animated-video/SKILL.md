@@ -5,7 +5,7 @@ description: >-
   stories, motion graphics, kinetic typography, animated infographics and explainers, from a
   script or voiceover, in any aspect ratio. Use when asked to animate a script, make an
   animated video or Reel, or motion graphics. Not for editing camera footage (video-edit) or
-  AI-generated clips (higgsfield-*).
+  AI-generated clips (higgsfield-*). Plan the story with the director skill first.
 ---
 
 # Animated video
@@ -34,15 +34,14 @@ answer and a one-line reason, so "yes" or "your call" is a complete reply.
   review shows a problem only they fix.
 - **Longer or narrated:** run the full production below.
 
-## 1. Direct the story with the user
+## 1. Direct the story
 
-Whenever you invent or shape the story, act as its director before anything is drawn. Ask
-the open intake questions in one message, pitch three different concepts, develop the chosen
-one into a timed beat sheet, and run the director's checks: a protagonist who wants something
-and chooses, an obstacle, a middle that escalates, a turn, an ending that answers the opening.
-Then stop for the user's approval, for short pieces too. [Story process](references/story.md).
+Run the [director](../director/SKILL.md) skill through its approval stop: scope, purpose,
+story, and a one-page `PLAN.md` with one row per shot saying what we see, what we hear and why
+the shot exists. A polished animation cannot rescue a weak story, and the story is cheapest to
+fix in text. This applies to short pieces too.
 
-Done when: the user has approved the logline and beat sheet, or supplied a finished story.
+Done when: the user has approved `PLAN.md`, or supplied a finished story that the plan records.
 
 ## 2. Lock the format before building anything
 
@@ -80,6 +79,8 @@ sound bed sets the timing: choose or build it first and cue beats to it.
    envelope. Fix transcription mis-splits and keep those fixes as a script, because a re-align
    must re-apply them.
 3. Derive every cue from words with `cue("phrase")`. A new VO then re-times the whole film.
+   Write TTS text phonetically ("G P T two"), and write cue phrases from the fixed `words.json`,
+   not the script: the transcript spells things its own way ("GPT-2", "77%").
 4. Write caption chunks by hand as sense units, checked against the transcript.
 5. Source music and effects in this order: the user's files; samples on disk (such as the
    video-edit skill's `assets/sfx` library); sound synthesized in code (Web Audio or Python),
@@ -90,9 +91,9 @@ or, without narration, the sound bed is chosen and the beats are cued to it.
 
 ## 4. Walking skeleton
 
-Turn the approved beat sheet into `STORYBOARD.md`: the logline, the recurring motif, and a
-scene table of timing, picture, on-screen text and the transition into the next scene. List
-uncertain facts in `NOTES.md` and leave them out of the film.
+The approved `PLAN.md` is the storyboard: group its rows into acts and scenes, one scene file
+per group, each naming the row ids it draws. List uncertain facts in `NOTES.md` and leave them
+out of the film. Set the frame size once in `src/lib.ts` (`W`, `H`) to match the composition.
 
 Copy the style-neutral infrastructure in `templates/remotion-film/` (timing lib, camera, the
 still, render, contact-sheet and align scripts). Wire up acts, placeholder scenes, captions and
@@ -109,8 +110,10 @@ and a scale constant for anything recurring. Design them for this brief's style.
 - Characters: one parametric rig per character, documented conventions, and a model sheet
   checked against the references before any shot uses it.
   [Rig lessons](references/character-rig.md).
-- Graphics: an explicit type scale, a palette with meaning assigned to each accent, and a small
-  component kit. [Graphics lessons](references/motion-graphics.md).
+- Graphics: a design system in one token file: palette with one meaning per accent, type
+  scale, two or three named easing curves and durations, and a colour script across the acts
+  ([graphics](../director/references/graphics.md)). Scenes use only the tokens.
+  [Graphics lessons](references/motion-graphics.md).
 - Plan every scale the story needs (wide, medium, close-up). A design that holds up in a wide
   shot can fall apart at 4x.
 
@@ -123,8 +126,15 @@ an API summary without reading the source.
   picture, action) before animators start.
 - In the full production, run one animator per act in parallel, each owning its own files; the
   shared rig, kit, lib and film shell stay read-only. Throttle rendering on a shared machine.
-- Every shot changes meaningfully every 1.5–3s and lands its action on its word within a few
-  frames.
+  Each act brief states what the frame holds at its first and last frame, and both owners snap
+  the frames on either side of each join (`./snap.sh dir f1767 f1768`).
+- Every shot lands its action on its word within a few frames. The rate of change follows
+  the plan's `Shape`: it rises into the peak and falls after it, and the key beat gets a held
+  moment. A fixed interval reads as a metronome ([cutting](../director/references/cutting.md)).
+- One world, one camera: everything in a scene sits inside `<Camera>` and its `<Layer>`s, so a
+  move carries background, midground and foreground together with depth parallax. An element
+  moves on its own only when it is acting; captions and interface stay in screen space
+  ([camera](../director/references/camera.md)).
 - Grow each transition out of the content: a morph, one object becoming the next, a camera
   push through an element, particles that reform. Carry colour and momentum across the cut.
   Generic crossfades turn a film into a slideshow.
@@ -138,9 +148,10 @@ Done when: each act's contact sheet tells its beat with the sound off, and the t
 
 ## 7. Review by frames and measurements
 
-Agents can't watch or hear video. Review by extracting frames (contact sheets, plus dense
-frames around cuts) and by measuring audio with ffmpeg. Use independent judges with different
-lenses, route issues to their owners by time range, fix in parallel, re-render, and repeat.
+Agents can't watch or hear video. Run the director's [review](../director/references/review.md)
+on each render: `reel.py review` with the plan, blind readers given only the frames or only the
+transcript, and the viewer's questions. For the full production, add the judge panel, route
+issues to their owners by time range, fix in parallel, re-render, and repeat.
 [Review loop](references/review-loop.md).
 
 - After each render, spot-check every flagged moment yourself. Fixers introduce regressions.
@@ -150,8 +161,9 @@ lenses, route issues to their owners by time range, fix in parallel, re-render, 
 
 ## 8. Deliver
 
-Render the final (the template normalizes loudness for social). Check the first frame (it's
-the cover), the last second (clean, and it loops if intended), and the loudness. Report the
+Render the final (the template normalizes loudness to the destination's target). Check the first
+frame (it's the cover), the last second (clean, and it loops if intended), and run video-edit's
+`reel.py qa` on the file (decode, loudness, peaks, audio length against picture). Report the
 path, the open issues, and anything synthetic or invented (voice, names, messages). Commit each
 version in the project's local git repo.
 

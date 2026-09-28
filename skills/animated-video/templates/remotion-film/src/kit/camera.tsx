@@ -1,10 +1,11 @@
 import React, { createContext, useContext } from "react";
 import { Easing, interpolate } from "remotion";
+import { W, H } from "../lib";
 
 /*
- * Camera: frames a 1080x1920 world. The world is drawn in frame-sized coordinates; the
+ * Camera: frames a W x H world (set in lib.ts). The world is drawn in frame-sized coordinates; the
  * camera state says which world point sits at the frame centre and how it is zoomed/rolled.
- *   Cam { x, y }  world point at the frame centre (default 540, 960 = identity)
+ *   Cam { x, y }  world point at the frame centre (default W/2, H/2 = identity)
  *   zoom          1 = 1:1, 2 = twice as close (default 1)
  *   rot           camera roll in degrees (default 0)
  * <Camera> renders its own full-frame <svg>. Put <Layer depth={…}> children directly inside
@@ -12,8 +13,8 @@ import { Easing, interpolate } from "remotion";
  */
 export type Cam = { x: number; y: number; zoom: number; rot: number };
 export type Offset = { x: number; y: number; rot: number };
-export const CAM0: Cam = { x: 540, y: 960, zoom: 1, rot: 0 };
-const W = 1080, H = 1920, CX = W / 2, CY = H / 2;
+const CX = W / 2, CY = H / 2;
+export const CAM0: Cam = { x: CX, y: CY, zoom: 1, rot: 0 };
 
 // A camera keyframe: at `frame` the camera reaches `cam` (missing fields carry over from the
 // previous key). The segment INTO this key uses `ease` (default ease-in-out).

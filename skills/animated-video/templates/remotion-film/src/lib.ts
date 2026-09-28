@@ -3,17 +3,20 @@ import words from "./words.json";
 import env from "./vo_env.json";
 
 export const FPS = 30;
+// Frame size for this film (9:16 1080x1920, 16:9 1920x1080, 1:1 1080x1080, ...). Match the composition.
+export const W = 1080, H = 1920;
 export type Word = { w: string; s: number; e: number };
 export const WORDS = words as Word[];
 const ENV = env as number[];
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9']/g, "");
-// Start time (sec) of the nth occurrence of `phrase` in the VO transcript.
-export const cue = (phrase: string, nth = 0): number => {
+// Start time (sec) of the nth occurrence of `phrase` in the VO transcript; `k` picks a later word
+// inside the phrase ("variance one" with k = 1 is "one", anchored by its unique context).
+export const cue = (phrase: string, nth = 0, k = 0): number => {
   const p = phrase.split(/\s+/).map(norm);
   let hit = 0;
   for (let i = 0; i + p.length <= WORDS.length; i++) {
-    if (p.every((x, j) => norm(WORDS[i + j].w) === x) && hit++ === nth) return WORDS[i].s;
+    if (p.every((x, j) => norm(WORDS[i + j].w) === x) && hit++ === nth) return WORDS[i + k].s;
   }
   throw new Error(`cue not found: ${phrase}`);
 };
@@ -24,7 +27,8 @@ export const cueEnd = (phrase: string, nth = 0): number => {
 
 export const f = (sec: number) => Math.round(sec * FPS);
 export const VO_END = WORDS[WORDS.length - 1].e;
-export const TOTAL = f(VO_END + 1.2);
+export const TAIL = 1.2; // seconds the last frame holds after the last word
+export const TOTAL = f(VO_END + TAIL);
 // VO loudness 0..1 at an absolute frame (for mouth flaps when a character speaks on camera).
 export const voLevel = (fr: number) => ENV[fr] ?? 0;
 
@@ -60,10 +64,11 @@ export const chunk = (ws: Word[], lines: string[]): Chunk[] => {
 
 // The film's acts: each owns [start, end) in seconds and one file in src/scenes/.
 // Cut a beat (~0.08s) before the act's first word. Replace with your script's acts.
+// Act boundaries in seconds. Replace the placeholders with cues once words.json exists, e.g.
+//   hook: [0, cue("second line first words") - 0.08], ending: [cue("last line") - 0.08, VO_END + TAIL]
 export const ACTS = {
-  hook: [0, cue("second line first words") - 0.08],
-  // ...
-  ending: [cue("last line first words") - 0.08, VO_END + 1.2],
+  hook: [0, 3],
+  ending: [3, VO_END + TAIL],
 } as const;
 export type ActName = keyof typeof ACTS;
 export type SceneProps = { fr: number };

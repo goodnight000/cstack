@@ -12,9 +12,9 @@ are editorial taste that has worked well, not proven platform-ranking rules.
 | Motion | Choose excerpts with visible action during their on-screen interval and check their entry and exit. Fades complement motion inside the footage; they do not replace it |
 | Layout | Keep the face and captions clear. Vary top, bottom and side placement, single images, simultaneous groups and quick overlapping stacks. Fit imagery to gestures when useful. Captions and visuals are placed independently |
 | Reuse | Show each original visual once, counting its crops and renamed copies |
-| Dwell | At most 5 seconds per appearance at final speed |
+| Dwell | As long as the visual's job takes, with a ceiling of about 5 seconds per appearance at final speed: text needs time to be found and read, a feeling needs longer than its information |
 | Coverage | No gap longer than about 5–8 seconds without supporting imagery, including the opening and ending. Captions and headlines do not count. A brief can ask for speaker-only moments. When no relevant visual exists, list the uncovered beat for the user instead of filling it |
-| Added text | Subtitles and an optional hook headline. Avoid boxed explanatory text, image labels and generated text cards. Text that is part of the source (a headline, a logo, a quoted post) is fine |
+| Added text | Subtitles and an optional hook headline. In talking-head reels, avoid boxed explanatory text, image labels and generated text cards; text that is part of the source (a headline, a logo, a quoted post) is fine. Demos and explainers differ: 1–3-word labels placed on the thing they name, appearing as it is spoken, help the viewer |
 | Color | The camera's natural look. No creative grade or background brightening unless asked; a technical HDR-to-SDR conversion may still be needed |
 | Speed | Normal speed unless asked. Map speed requests by spoken passage; a sped-up edit can keep a normal-speed hook |
 | Ending | Keep the full closing words. Time any image to the actual mention |
@@ -58,8 +58,9 @@ Keep speech dominant. Add music or effects only when the brief supports them,
 and make them audible under speech and in pauses in a short exported test mix.
 
 Use effects sparingly, each on a visible event: a pop as a card appears, a click
-on an interface action, one whoosh on a major scene change, a ding as a message
-lands. Without overlays, a caption emphasis or a cut can be that event. Do not put a whoosh on every cut or stack effects. Choose one of two
+on an interface action, a ding as a message lands. On a major scene change, prefer a
+sound bridge: the next line or ambience starting slightly before the picture. To
+emphasise a key line, drop the music just before it and bring it back after. Without overlays, a caption emphasis or a cut can be that event. Do not put a whoosh on every cut or stack effects. Choose one of two
 similar variants. Keep meme sounds (vine boom, bruh, oof) for edits that are
 deliberately comedic; on a sincere story they make the moment feel manufactured.
 Set levels by comparing short windows (about 50 ms) of the effect with the speech

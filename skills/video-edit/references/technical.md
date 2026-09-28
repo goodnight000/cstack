@@ -95,11 +95,19 @@ as extra keys on the clips; the tools carry them untouched.
 - `resolve` writes the console script (see [Resolve](resolve.md#build-from-the-timeline)).
 - `place` turns an image or video excerpt into a full-frame alpha movie
   fitted to a box, with alpha fades; every overlay layer is one of these.
+- `review` writes the director's review sheet, cut shape and measurements
+  ([review](../../director/references/review.md)); `qa` checks the delivery file.
 
 Times are output frames. Video clips are fitted to the frame and layered above
 lower tracks, so captions go on a track above the visuals they must stay
 readable over. Audio clips get an 8 ms fade at each end: enough to remove cut
-clicks, short enough to keep consonants. Set `fade` to 0 on continuous stems.
+clicks, short enough to keep consonants. Set `fade` to 0 on continuous stems;
+`fade_in` and `fade_out` set one end, such as a longer tail on an L-cut. Mark
+each audio track's `role` (speech, music, effects, ambience) so `review` can
+measure speech against music.
+A punch-in or reframe is a video clip's `crop` [x, y, w, h] in displayed source
+pixels; `check` warns when it enlarges the source more than 1.2x, and Resolve
+gets a pre-cropped file so both renders match.
 For split edits, give the audio track its own clip boundaries and check the
 incoming pre-roll and picture join explicitly. Do not create a frozen face to
 fill every missing handle.

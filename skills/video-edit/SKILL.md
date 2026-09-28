@@ -5,7 +5,7 @@ description: >-
   Use for quiet-audio recovery, separate-audio sync, preprocessing, take selection, DaVinci Resolve editing,
   relevant sourced visuals, captions, speed or color corrections, and authorized
   video publishing or scheduling. Also use for post-edit reflection and updates
-  to this editing workflow.
+  to this editing workflow. New videos are planned with the director skill first.
 ---
 
 # Video edit
@@ -30,6 +30,10 @@ asset libraries, standing preferences); offer to record lasting preferences ther
 
 - Read the current brief, accepted reference, and profile. Scope preferences to
   their intended projects instead of treating them as universal.
+- For a new video, or a cut whose story isn't working, plan it with the
+  [director](../director/SKILL.md) skill first. Its approved `PLAN.md` is the story:
+  takes, visuals, sound and captions are chosen row by row against it. Revisions to
+  an accepted cut skip planning unless they change the story.
 - Without a brief, ask once: where the video will be posted, roughly how long,
   whether to add music, sound effects, or a hook headline, and for screenshots or
   recordings when claims concern the user's own data or product. Offer the
@@ -81,6 +85,8 @@ against the supplied script. Mark each spoken rejection such as "cut that" or
 from every section, not just the location of the rejection words. Use surrounding
 context to find the restart instead of deleting an arbitrary number of seconds.
 
+With a plan, its rows are the paper edit: select takes row by row, and cut or
+reorder by the plan's links rather than by recording order.
 Select the longest fluent, accurate delivery of each sentence or coherent passage.
 When the user prefers the last take, start from the last complete successful take;
 reorder it by script meaning rather than recording/file order. Check completeness;
@@ -111,7 +117,9 @@ as the timing authority; treat playback speed as a separate setting.
 
 ## 3. Find and compose relevant visuals
 
-Search by the claim or entity being spoken, not the broad topic. An essay opening
+Fill the plan's `see` column row by row. Each visual's `reason` names the claim it
+serves and whether it is evidence, explanation or metaphor; prefer evidence
+([cutting](../director/references/cutting.md)). Search by the claim or entity being spoken, not the broad topic. An essay opening
 calls for its real title; an endorsement calls for the actual statement; a policy
 calls for the relevant policy passage. Choose the visual medium from the current
 brief and creative defaults, using primary sources. Generic AI/server stock rarely
@@ -165,6 +173,8 @@ the active placement/reuse/dwell/coverage rules in final playback time.
 
 Keep one `timeline.json` as the edit and build every output from it with
 `scripts/reel.py` ([technical reference](references/technical.md#cut-and-render)).
+With a plan, set `"plan": "PLAN.md"` and give every clip its row `id` and `reason`;
+`reel.py check` flags any clip without them.
 Assemble and render in native Resolve when it is installed, with separate camera,
 visual, caption, and mastered-audio tracks, using its generated console script.
 Without Resolve, render the same timeline with FFmpeg. FFmpeg remains useful for audio, previews,
@@ -214,7 +224,9 @@ actual export, with prior accepted work preserved.
 
 Keep editorial and technical evidence separate:
 
-- Editorial review checks coherent story, complete words, fluent longer takes,
+- Editorial review follows the director's [review](../director/references/review.md):
+  `reel.py review`, blind readers given only the frames or only the transcript,
+  and the viewer's questions. It also checks complete words, fluent longer takes,
   camera contact, timely relevant visuals, readable captions, and a finished
   ending. Check that emphasis extends beyond the opening, each effect fits the sentence,
   and quieter passages provide contrast; identify automatic reuse of one treatment.

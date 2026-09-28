@@ -35,7 +35,7 @@
       "checks": [
         "Tells the user once that Claude Opus 5.5 gives the best results, then continues",
         "Confirms the named format in one line instead of asking a format question",
-        "Uses one agent with a storyboard, not parallel animators or a judge panel",
+        "Uses one agent building from the approved PLAN.md, not parallel animators or a judge panel",
         "Designs from the supplied screenshot and sets timing from music or a sound bed",
         "Prefers on-disk samples over synthesized sound and labels any synthesized sound",
         "Plans transitions that grow out of the content rather than crossfades",
@@ -48,11 +48,11 @@
       "request": "Use the animated-video skill to make a short animated video about a story you come up with.",
       "session": "The user gives no topic, audience, length or tone. Remotion, ffmpeg and a music library are available. The session runs Claude Opus 5.5.",
       "checks": [
-        "Asks the open intake questions (where it's posted, the feeling or takeaway, length, tone) in one message, with defaults",
-        "Pitches three different story concepts with protagonist, want, obstacle, turn and ending image",
-        "Develops the chosen concept into a timed beat sheet where each beat is one image that changes something",
-        "Checks the story for a protagonist who chooses, an escalating middle, a turn and an ending that answers the opening",
-        "Waits for the user to approve the beat sheet before writing the storyboard or building anything"
+        "Runs the director skill first and asks, with a recommendation, whether to co-write the story or have the model work it out alone",
+        "Asks the other open questions (where it's posted, the feeling or takeaway, length, tone) in the same message, with defaults",
+        "Offers or drafts several genuinely different spines with protagonist, want, obstacle, turn and ending image",
+        "Writes a one-page PLAN.md whose rows say what we see, what we hear and why each shot exists, joined by 'but' or 'therefore'",
+        "Waits for the user to approve PLAN.md before building anything beyond a style frame"
       ]
     }
   ]

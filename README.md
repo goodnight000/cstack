@@ -7,6 +7,7 @@ Reusable agent skills by Charles Zheng, built and refined through real work.
 | Skill | What it does |
 | --- | --- |
 | [reflect](skills/reflect/SKILL.md) | Reviews outcomes and efficiency, shows findings before asking for feedback, and proposes improvements for approval. Works with completed, incomplete, and unsuccessful sessions. |
+| [director](skills/director/SKILL.md) | Directs any video, from a reel or product demo to a launch film, explainer, short film or feature. Sets the purpose and story, writes a one-page shot plan for approval, and reviews each cut as a viewer would. Its craft references cover story, camera, cutting, sound, graphics and viewer psychology. |
 | [video-edit](skills/video-edit/SKILL.md) | Edits talking-head videos, reels, demos, and screen recordings. Covers audio recovery, take selection, supporting visuals, Resolve revisions, captions, and final-export checks. |
 | [animated-video](skills/animated-video/SKILL.md) | Makes animated videos in code with Remotion: character stories, motion graphics, kinetic type, and animated infographics. Locks the format with a style frame, times everything from the voiceover, builds recurring assets once, animates in parallel, and reviews renders by frames and audio measurements. |
 
@@ -24,7 +25,7 @@ cd cstack
 Choose a skill, then link it into your agent's skills directory. Run the appropriate commands from the repository root.
 
 ```sh
-skill_name=reflect  # or video-edit, animated-video
+skill_name=reflect  # or director, video-edit, animated-video
 ```
 
 For Codex:
@@ -57,6 +58,21 @@ Show me the findings and proposed changes before editing reusable instructions.
 You can also name other threads and a time window when your agent has access to their history. Reflect does not provide its own history connector.
 
 The review separates consequential findings from changes worth adding to reusable guidance. It can report an inefficiency without recommending another rule. It asks for approval before editing instructions and does not authorize publication, memory changes, or resuming the reviewed task.
+
+## Use Director
+
+```text
+Use the director skill to plan a 90-second launch video for our new sync feature.
+Ask me whether we write the story together or you work it out and show me the plan.
+```
+
+The director writes `PLAN.md`: the purpose (what the viewer should feel, know and
+do), the story, and one row per shot with what we see, what we hear and why the
+shot exists. It checks the plan before showing it, waits for your approval, then
+hands it to video-edit or animated-video to build. Each cut gets a viewer's review:
+`reel.py review` measurements, readers who see only the frames or only the
+transcript, and one request for you to watch it where it will be posted. Install
+it alongside video-edit, whose `reel.py` it uses for measurements.
 
 ## Use Video Edit
 
@@ -108,6 +124,8 @@ art direction, and creative defaults are designed per project or supplied by you
 ## Evaluation
 
 [Reflect's evaluation cases](skills/reflect/evals/evals.json) cover feedback, constructive pushback, unnecessary repeat checks, necessary investigation, findings that warrant no instruction changes, and keeping one project's output from becoming a default when it seeds a new skill.
+
+[Director's evaluation cases](skills/director/evals/evals.json) cover a demo planned alone, a live-action short film, reviewing an existing cut, and planning at feature length.
 
 [Animated Video's evaluation cases](skills/animated-video/evals/evals.json) cover locking the format before building and treating a past film as evidence rather than a template.
 
