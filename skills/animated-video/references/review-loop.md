@@ -1,17 +1,13 @@
 # Review loop: judge panel, routing, stop rule
 
 ## Panel
-Three independent judges per render, each with a lens and a structured critique: `{score 1–10,
-verdict, issues[{start_sec, end_sec, severity, problem, fix}], keep[]}`. Tell each one to
-extract frames itself, relate them to `words.json`, read the source for precise fixes, and
-write only under `out/judge/`. Judge against the current brief and platform. Past films aren't the benchmark.
-- **Animation or motion director:** on-model consistency against the reference, acting,
-  anticipation and overshoot, continuity across cuts, and broken frames (missing limbs, z-order,
-  pops, ghosting, empty frames).
-- **Growth and story:** does frame 0 stop the scroll in 1.5s; is each line shown with the sound
-  off; the emotional arc; dead stretches over 3s; comment or share moments; an ending that loops.
-- **Design and sound:** composition, colour script, accent discipline, safe zones, caption
-  legibility, and the audio measured with ffmpeg (VO-to-bed ratio, masking, loudness, true peak).
+Use the three judges from the director's [review](../../director/references/review.md#5-judges-for-larger-pieces)
+(story and viewer; picture; cut and sound), judging against `PLAN.md`, the brief and the platform.
+Past films aren't the benchmark. Tell each one to extract frames itself, relate them to
+`words.json`, read the source for precise fixes, and write only under `out/judge/`. The picture
+judge also checks the animation itself: on-model consistency against the reference, acting,
+anticipation and overshoot, continuity across cuts, and broken frames (missing limbs, z-order,
+pops, ghosting, empty frames).
 
 ## Routing fixes
 - Route each issue to the owner of its time range (the act files). Issues spanning 20s or more

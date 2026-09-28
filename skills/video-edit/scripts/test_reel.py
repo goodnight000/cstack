@@ -97,6 +97,40 @@ def main():
         retimed = next((d / ".reel").glob("cam2-*-x2.mov"))
         assert reel.probe(retimed)["fps"] == 30 and abs(reel.probe(retimed)["duration"] - 1.0) < 0.01
 
+        # crop: the right half of cam2 (green after 2 s) fills the frame; out of bounds is an error
+        crop = {"fps": 30, "width": 180, "height": 320, "plan": "PLAN.md",
+                "video": [{"name": "Camera", "clips": [{"file": "cam2.mp4", "in": 0, "start": 0, "frames": 90,
+                                                        "crop": [180, 0, 180, 320], "id": "1", "reason": "the setup"},
+                                                       {"file": "cam2.mp4", "in": 90, "start": 90, "frames": 30,
+                                                        "id": "9"}]}],
+                "audio": [{"name": "Voice", "role": "speech", "reason": "the argument", "clips": [
+                              {"file": "cam2.mp4", "in": 0, "start": 0, "frames": 120, "fade_in": 0, "fade_out": 0.5}]},
+                          {"name": "Music", "role": "music", "reason": "carries the mood", "clips": [
+                              {"file": "music.wav", "start": 0, "frames": 120}]}]}
+        ff("-f", "lavfi", "-i", "sine=f=220:r=48000:d=4", "-af", "volume=0.1", str(d / "music.wav"))
+        (d / "PLAN.md").write_text("# Plan\n\n| id | start | beat | see |\n|---|---|---|---|\n"
+                                   "| 1 | 0:00 | setup | blue |\n| 2 | 0:02.5 | turn | green |\n")
+        (d / "crop.json").write_text(json.dumps(crop))
+        errors, warnings = reel.check(reel.load(d / "crop.json"))
+        assert errors == [] and any("id 9 is not a plan row" in w for w in warnings) \
+            and any("no reason" in w for w in warnings), (errors, warnings)
+        assert [r["id"] for r in reel.plan_rows(d / "PLAN.md")] == ["1", "2"]
+        reel.cmd_render(reel.load(d / "crop.json"), d / "crop.mp4")
+        assert pixel(d / "crop.mp4", 75, (90, 160))[1] > 100      # green half, filling the frame
+        bad = json.loads((d / "crop.json").read_text())
+        bad["video"][0]["clips"][0]["crop"] = [200, 0, 180, 320]
+        (d / "badcrop.json").write_text(json.dumps(bad))
+        assert any("outside" in e for e in reel.check(reel.load(d / "badcrop.json"))[0])
+        reel.cmd_resolve({**reel.load(d / "crop.json"), "resolve": {"project": "T", "timeline": "c"}}, d / "c.lua")
+        assert "-crop180x320+180+0.mov" in (d / "c.lua").read_text()
+
+        rv = reel.cmd_review(d / "crop.mp4", d / "rv", d / "PLAN.md", d / "crop.json")
+        assert (d / "rv" / "sheet.png").exists() and (d / "rv" / "shape.png").exists()
+        assert rv["changes_from"] == "timeline" and rv["shots"]["changes_at"] == [3.0], rv["shots"]
+        seen = reel.cmd_review(d / "crop.mp4", d / "rv2")                              # no timeline: detect
+        assert any(abs(c - 2.0) < 0.1 for c in seen["shots"]["changes_at"]), seen["shots"]  # blue -> green
+        assert 17 < rv["speech_over_music"]["median_lu"] < 23, rv["speech_over_music"]  # sine at 0.1x = -20 dB
+
         placed = d / "placed.mov"
         reel.main(["place", str(d / "card.png"), "-o", str(placed), "--box", "20,40,100,50",
                    "--frames", "12", "--size", "360x640", "--fade", "0"])

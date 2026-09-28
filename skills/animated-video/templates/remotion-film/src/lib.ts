@@ -3,6 +3,8 @@ import words from "./words.json";
 import env from "./vo_env.json";
 
 export const FPS = 30;
+// Frame size for this film (9:16 1080x1920, 16:9 1920x1080, 1:1 1080x1080, ...). Match the composition.
+export const W = 1080, H = 1920;
 export type Word = { w: string; s: number; e: number };
 export const WORDS = words as Word[];
 const ENV = env as number[];

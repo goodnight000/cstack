@@ -1,6 +1,8 @@
 # Motion graphics, kinetic type and animated infographics
 
-Process lessons from one graphics-led attempt. It was technically sound but was the wrong format
+Remotion-specific lessons; the general craft of graphics, text and explaining visually is in the
+director's [graphics reference](../../director/references/graphics.md). Process lessons from one
+graphics-led attempt. It was technically sound but was the wrong format
 for its brief. The specifics it used (typefaces, accent colour, particular gags) belong to that
 piece; choose fresh per brief.
 

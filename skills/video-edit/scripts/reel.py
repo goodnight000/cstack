@@ -12,19 +12,22 @@
     reel.py place   INPUT -o out.mov --box X,Y,W,H --frames N [...]
     reel.py view    VIDEO START END [--words words.json] [--mark T ...] [-o out.png]
     reel.py qa      timeline.json OUT.mp4 [--dir qa/]
+    reel.py review  VIDEO [--plan PLAN.md] [--timeline timeline.json] [--dir review/]
 
 timeline.json (paths relative to the file; all times are integer output frames):
 
 {
   "fps": 30, "width": 1080, "height": 1920,
   "frames": 1894,                                   optional; default = last clip end
+  "plan": "PLAN.md",                                optional; turns on plan-row checks
   "resolve": {"project": "...", "timeline": "v7", "base": "v6",
               "drp": "out.drp", "render": {"dir": ".", "name": "v7"}},   optional
   "video": [                                        bottom track first
     {"name": "Camera", "keep": false, "clips": [
-      {"file": "cam.mov", "in": 15, "start": 0, "frames": 174}]}],
+      {"file": "cam.mov", "in": 15, "start": 0, "frames": 174,
+       "id": "3", "reason": "she admits the risk", "crop": [0, 200, 2160, 3840]}]}],
   "audio": [
-    {"name": "Dialogue", "enabled": true, "clips": [
+    {"name": "Dialogue", "role": "speech", "enabled": true, "clips": [
       {"file": "cam.mov", "in": 15, "start": 0, "frames": 174,
        "gain_db": 0, "fade": 0.008}]}]
 }
@@ -32,7 +35,12 @@ timeline.json (paths relative to the file; all times are integer output frames):
 Video clips are fitted (contain, centred) to the frame and stacked upward, so
 overlays should be full-frame RGBA made with `place`. Audio clips get `fade`
 seconds of fade at both ends (default 8 ms: removes cut clicks, keeps
-consonants; use 0 for a continuous stem). `speed` (default 1) plays a clip
+consonants; use 0 for a continuous stem; `fade_in`/`fade_out` override one end,
+e.g. a longer tail for an L-cut). `crop` [x, y, w, h] in displayed source
+pixels reframes a video clip (a punch-in); check warns when it upscales.
+With `plan`, every clip needs a `reason` (its own or its track's) and any `id`
+must name a row of the plan. Audio track `role` (speech, music, effects,
+ambience) lets `review` measure speech against music. `speed` (default 1) plays a clip
 faster or slower with pitch kept: `in` is still the source position in
 timeline frames, `frames` the output length, so the clip reads frames*speed of
 source. It is rendered once into .reel/ and every output uses that file, so
@@ -72,18 +80,21 @@ def load(path):
 @lru_cache(None)
 def probe(path):
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
-                          "format=duration:stream=codec_type,r_frame_rate,width,height,pix_fmt",
+                          "format=duration:stream=codec_type,r_frame_rate,width,height,pix_fmt:"
+                          "stream_side_data=rotation",
                           "-of", "json", str(path)], capture_output=True, text=True)
     if out.returncode:
         return None
     j = json.loads(out.stdout)
     v = next((s for s in j.get("streams", []) if s["codec_type"] == "video"), None)
     num, den = (v or {}).get("r_frame_rate", "0/1").split("/")
+    turned = any(abs(int(d.get("rotation", 0))) == 90 for d in (v or {}).get("side_data_list", []))
+    w, h = (v or {}).get("width"), (v or {}).get("height")
     return {"duration": float(j.get("format", {}).get("duration", 0) or 0),
             "fps": float(num) / float(den or 1) if float(den or 1) else 0,
             "video": v is not None,
             "audio": any(s["codec_type"] == "audio" for s in j.get("streams", [])),
-            "width": (v or {}).get("width"), "height": (v or {}).get("height"),
+            "width": h if turned else w, "height": w if turned else h,
             "alpha": "a" in (v or {}).get("pix_fmt", "").replace("gray", "")}
 
 
@@ -96,6 +107,12 @@ def check(t):
     if errors:
         return errors, warnings
     fps = t["fps"]
+    rows = None
+    if t.get("plan"):
+        plan = t["_dir"] / t["plan"]
+        rows = {r["id"] for r in plan_rows(plan)} if plan.exists() else set()
+        if not rows:
+            errors.append(f"plan {plan}: no rows found (table columns start with | id | start |)")
     for kind in ("video", "audio"):
         for n, track in enumerate(t[kind], 1):
             label = f"{kind} {n} ({track.get('name', '')})"
@@ -113,6 +130,11 @@ def check(t):
                 if not isinstance(speed, (int, float)) or not 0.5 <= speed <= 100:
                     errors.append(f"{where}: speed must be a number from 0.5 to 100")
                     continue
+                if rows is not None:
+                    if not (c.get("reason") or track.get("reason")):
+                        warnings.append(f"{where}: no reason (clip or track)")
+                    if "id" in c and str(c["id"]) not in rows:
+                        warnings.append(f"{where}: id {c['id']} is not a plan row")
                 if last and c["start"] < last["start"] + last["frames"]:
                     errors.append(f"{where}: overlaps previous clip ending {last['start'] + last['frames']}")
                 last = c
@@ -121,6 +143,25 @@ def check(t):
                 if not c["_path"].exists():
                     errors.append(f"{where}: missing {c['_path']}")
                     continue
+                crop = c.get("crop")
+                if crop is not None:
+                    if kind == "audio" or not (isinstance(crop, list) and len(crop) == 4
+                                               and all(isinstance(v, int) and v >= 0 for v in crop)
+                                               and crop[2] > 0 and crop[3] > 0):
+                        errors.append(f"{where}: crop must be [x, y, w, h] integer pixels on a video clip")
+                        continue
+                    if c["_path"].suffix.lower() in IMAGE:
+                        size = image_size(c["_path"])
+                    else:
+                        pr = probe(c["_path"])
+                        size = (pr["width"], pr["height"]) if pr and pr["video"] else None
+                    if size and (crop[0] + crop[2] > size[0] or crop[1] + crop[3] > size[1]):
+                        errors.append(f"{where}: crop {crop} falls outside the {size[0]}x{size[1]} source")
+                    up = min(t["width"] / crop[2], t["height"] / crop[3])
+                    if up > 1.2:
+                        warnings.append(f"{where}: crop is enlarged {up:.2f}x and will look soft")
+                    if abs(crop[2] / crop[3] - t["width"] / t["height"]) > 0.01 * t["width"] / t["height"]:
+                        warnings.append(f"{where}: crop aspect differs from the frame; it will be letterboxed")
                 if c["_path"].suffix.lower() in IMAGE:
                     if kind == "audio":
                         errors.append(f"{where}: image on an audio track")
@@ -149,6 +190,32 @@ def check(t):
     return errors, warnings
 
 
+def image_size(path):
+    from PIL import Image
+    with Image.open(path) as im:
+        return im.size
+
+
+def plan_rows(path):
+    """Rows of the PLAN.md shot table: [{id, start (seconds), cells}], in file order."""
+    rows, header = [], None
+    for line in Path(path).read_text().splitlines():
+        cells = [x.strip() for x in line.strip().strip("|").split("|")] if line.lstrip().startswith("|") else None
+        if not cells:
+            header = None
+            continue
+        if [x.lower() for x in cells[:2]] == ["id", "start"]:
+            header = [x.lower() for x in cells]
+            continue
+        if header and not set(cells[0]) <= set("-: "):
+            try:
+                start = sum(float(v) * 60 ** k for k, v in enumerate(reversed(cells[1].split(":"))))
+            except ValueError:
+                continue
+            rows.append({"id": cells[0], "start": start, **dict(zip(header[2:], cells[2:]))})
+    return rows
+
+
 def require_valid(t):
     errors, warnings = check(t)
     for w in warnings:
@@ -159,21 +226,24 @@ def require_valid(t):
         for track in t[kind]:
             for c in track["clips"]:
                 if c.get("speed", 1) != 1:
-                    c["_path"], c["in"] = retimed(c, t["fps"], t["_dir"] / ".reel"), 0
+                    c["_path"], c["in"] = derived(c, t["fps"], t["_dir"] / ".reel", speed=c["speed"]), 0
 
 
-def retimed(c, fps, cache):
-    """The clip's source span at its speed, exactly `frames` long at timeline fps, pitch kept."""
-    src, p, speed = c["_path"], probe(c["_path"]), c["speed"]
+def derived(c, fps, cache, speed=1, crop=None):
+    """The clip's source span, exactly `frames` long at timeline fps: retimed with pitch kept, and/or cropped."""
+    src, p = c["_path"], probe(c["_path"])
     cache.mkdir(parents=True, exist_ok=True)
-    out = cache / (f"{src.stem}-{int(src.stat().st_mtime)}-{c['in']}-{c['frames']}f-x{speed:g}"
+    tag = f"-x{speed:g}" if speed != 1 else ""
+    tag += "-crop{}x{}+{}+{}".format(crop[2], crop[3], crop[0], crop[1]) if crop else ""
+    out = cache / (f"{src.stem}-{int(src.stat().st_mtime)}-{c['in']}-{c['frames']}f{tag}"
                    + (".mov" if p["video"] else ".wav"))
     if out.exists():
         return out
     cmd = ["ffmpeg", "-v", "error", "-y", "-ss", f"{c['in'] / fps:.6f}",
            "-t", f"{(c['frames'] + 1) * speed / fps:.6f}", "-i", str(src)]
     if p["video"]:
-        cmd += ["-vf", f"setpts=(PTS-STARTPTS)/{speed},fps={fps},tpad=stop=-1:stop_mode=clone",
+        cut = "crop={2}:{3}:{0}:{1},".format(*crop) if crop else ""
+        cmd += ["-vf", f"{cut}setpts=(PTS-STARTPTS)/{speed},fps={fps},tpad=stop=-1:stop_mode=clone",
                 "-frames:v", str(c["frames"]), "-c:v", "prores_ks",
                 *(["-profile:v", "4444", "-pix_fmt", "yuva444p10le"] if p["alpha"] else ["-profile:v", "hq"])]
     if p["audio"]:
@@ -198,18 +268,20 @@ def clip_input(c, fps, audio=False):
     return ["-ss", f"{c['in'] / fps:.6f}", "-t", dur, "-i", str(c["_path"])]
 
 
-def audio_graph(t, first_input):
-    """Inputs and filters for the enabled audio tracks, output label [aout]."""
+def audio_graph(t, first_input, role=None):
+    """Inputs and filters for the enabled audio tracks (optionally one role), output label [aout]."""
     fps, total = t["fps"], t["frames"] / t["fps"]
     args, chains, labels, i = [], [], [], first_input
     for track in t["audio"]:
-        if not track.get("enabled", True):
+        if not track.get("enabled", True) or (role and track.get("role") != role):
             continue
         for c in track["clips"]:
             args += clip_input(c, fps, audio=True)
             d = c["frames"] / fps
-            f = min(c.get("fade", 0.008), d / 2)
-            fades = f",afade=t=in:d={f:.4f},afade=t=out:st={d - f:.6f}:d={f:.4f}" if f > 0 else ""
+            fi = min(c.get("fade_in", c.get("fade", 0.008)), d / 2)
+            fo = min(c.get("fade_out", c.get("fade", 0.008)), d / 2)
+            fades = (f",afade=t=in:d={fi:.4f}" if fi > 0 else "") + \
+                    (f",afade=t=out:st={d - fo:.6f}:d={fo:.4f}" if fo > 0 else "")
             delay = round(c["start"] / fps * RATE)
             chains.append(f"[{i}:a]aresample={RATE},aformat=sample_fmts=fltp:channel_layouts=stereo,"
                           f"apad,atrim=end_sample={round(d * RATE)}{fades},"
@@ -235,7 +307,8 @@ def cmd_render(t, out, preview=False):
                 parts.append(f"color=c=black@0:s={W}x{H}:r={fps},format=rgba,trim=end_frame={c['start'] - pos}")
             args += clip_input(c, fps)
             # tpad+trim guarantees exactly `frames` frames even when a decode comes up short
-            parts.append(f"[{i}:v]fps={fps},scale={W}:{H}:force_original_aspect_ratio=decrease,"
+            crop = "crop={2}:{3}:{0}:{1},".format(*c["crop"]) if c.get("crop") else ""
+            parts.append(f"[{i}:v]{crop}fps={fps},scale={W}:{H}:force_original_aspect_ratio=decrease,"
                          f"format=rgba,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=black@0,"
                          f"tpad=stop=-1:stop_mode=clone,trim=end_frame={c['frames']},setpts=PTS-STARTPTS")
             pos, i = c["start"] + c["frames"], i + 1
@@ -285,10 +358,13 @@ def lua(s):
 def still_movie(c, fps, cache):
     """Resolve gives appended stills a 5 s default length; a movie keeps the frame count."""
     cache.mkdir(parents=True, exist_ok=True)
-    out = cache / f"{c['_path'].stem}-{c['frames']}f.mov"
+    crop = c.get("crop")
+    out = cache / (f"{c['_path'].stem}-{c['frames']}f" + ("-crop{}x{}+{}+{}".format(*crop[2:], *crop[:2])
+                                                        if crop else "") + ".mov")
     if not out.exists():
+        cut = "crop={2}:{3}:{0}:{1},".format(*crop) if crop else ""
         run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-framerate", str(fps), "-i", str(c["_path"]),
-             "-frames:v", str(c["frames"]), "-vf", "format=argb", "-c:v", "qtrle", str(out)])
+             "-frames:v", str(c["frames"]), "-vf", f"{cut}format=argb", "-c:v", "qtrle", str(out)])
     return out
 
 
@@ -346,6 +422,9 @@ def cmd_resolve(t, out):
                 path = c["_path"]
                 if path.suffix.lower() in IMAGE:
                     path, s = still_movie(c, fps, cache), 0
+                    e = c["frames"]
+                elif c.get("crop"):  # one reframed file keeps Resolve identical to the FFmpeg render
+                    path, s = derived(c, fps, cache, crop=c["crop"]), 0
                     e = c["frames"]
                 else:
                     # startFrame/endFrame count the source's own frames; pure audio files use timeline frames
@@ -501,6 +580,161 @@ def cmd_qa(t, video, qa_dir, words=None):
     return report
 
 
+# ---------------------------------------------------------------- review
+
+def loudness_curve(path):
+    """Momentary loudness (LUFS, 400 ms window) every 100 ms: [(t, lufs)]."""
+    with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as f:
+        meta = f.name
+    run(["ffmpeg", "-v", "error", "-nostats", "-i", str(path), "-vn", "-af",
+         f"ebur128=metadata=1,ametadata=mode=print:key=lavfi.r128.M:file={meta}", "-f", "null", "-"])
+    out, ts = [], None
+    for line in Path(meta).read_text().splitlines():
+        if line.startswith("frame:"):
+            ts = float(line.rsplit("pts_time:", 1)[1])
+        elif line.startswith("lavfi.r128.M=") and ts is not None:
+            if ts >= 0.4:  # the 400 ms window is still filling before this
+                out.append((ts, max(-70.0, float(line.split("=", 1)[1]))))
+    Path(meta).unlink()
+    return out
+
+
+def detect_cuts(video, threshold=0.1):
+    """Times (s) where the picture changes abruptly: cuts, jump cuts, overlays popping on or off.
+    Dissolves and camera moves change gradually and mostly stay under the threshold."""
+    r = subprocess.run(["ffmpeg", "-v", "error", "-nostats", "-i", str(video), "-an", "-vf",
+                        f"scale=160:-2,select='gt(scene,{threshold})',metadata=print:file=-", "-f", "null", "-"],
+                       capture_output=True, text=True)
+    hits = [float(l.rsplit("pts_time:", 1)[1]) for l in r.stdout.splitlines() if "pts_time:" in l]
+    return [h for k, h in enumerate(hits) if k == 0 or h - hits[k - 1] > 0.25]  # a fade-on is one change
+
+
+def speech_vs_music(t):
+    """Speech minus music momentary loudness wherever speech is active, from the timeline's track roles."""
+    curves = {}
+    for role in ("speech", "music"):
+        if not any(tr.get("role") == role and tr.get("enabled", True) and tr["clips"] for tr in t["audio"]):
+            return None
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+            stem = f.name
+        args, chains = audio_graph(t, 0, role)
+        run(["ffmpeg", "-v", "error", "-y", *args, "-filter_complex", ";".join(chains),
+             "-map", "[aout]", "-c:a", "pcm_s16le", stem])
+        curves[role] = {round(ts, 1): v for ts, v in loudness_curve(stem)}
+        Path(stem).unlink()
+    diffs = [(ts, sp - curves["music"].get(ts, -70.0)) for ts, sp in curves["speech"].items() if sp > -45]
+    return sorted(diffs)
+
+
+def cmd_review(video, out_dir, plan=None, timeline=None):
+    """Frames-only sheet for a sound-off retell, and the shape of the cut: shots, loudness, plan rows."""
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFont
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    dur = probe(Path(video))["duration"]
+    rows = plan_rows(plan) if plan else []
+    report = {"video": str(video), "seconds": round(dur, 3), "plan_rows": len(rows)}
+
+    # sheet: one frame per plan row at its midpoint (or evenly spaced), labelled only with the row id
+    if rows:
+        marks = [(r["id"], (r["start"] + (rows[k + 1]["start"] if k + 1 < len(rows) else dur)) / 2)
+                 for k, r in enumerate(rows)]
+    else:
+        n = min(24, max(6, int(dur // 2)))
+        marks = [(f"{dur * (k + 0.5) / n:.1f}s", dur * (k + 0.5) / n) for k in range(n)]
+    font = ImageFont.load_default(size=22)
+    thumbs = []
+    for label, ts in marks:
+        png = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{min(ts, dur - 0.05):.3f}", "-i", str(video),
+                              "-frames:v", "1", "-vf", "scale=-2:360", "-f", "image2pipe", "-vcodec", "png", "-"],
+                             capture_output=True).stdout
+        import io
+        im = Image.open(io.BytesIO(png)).convert("RGB") if png else Image.new("RGB", (202, 360), "#333")
+        ImageDraw.Draw(im).text((8, 6), label, fill="#ffd400", font=font, stroke_width=2, stroke_fill="black")
+        thumbs.append(im)
+    cols = min(6, len(thumbs))
+    tw, th = max(i.width for i in thumbs), max(i.height for i in thumbs)
+    sheet = Image.new("RGB", (cols * tw, -(-len(thumbs) // cols) * th), "#111")
+    for k, im in enumerate(thumbs):
+        sheet.paste(im, ((k % cols) * tw, (k // cols) * th))
+    sheet.save(out_dir / "sheet.png")
+
+    # picture changes: exact from the timeline's video clips when given, else detected
+    t = load(timeline) if timeline else None
+    if t:
+        edges = sorted({e / t["fps"] for tr in t["video"] for c in tr["clips"]
+                        for e in (c["start"], c["start"] + c["frames"]) if 0 < e < t["frames"]})
+        cuts = [e for k, e in enumerate(edges) if k == 0 or e - edges[k - 1] > 0.25]
+    else:
+        cuts = detect_cuts(video)
+    report["changes_from"] = "timeline" if t else "detected"
+    bounds = [0.0] + cuts + [dur]
+    shots = [round(b - a, 3) for a, b in zip(bounds, bounds[1:]) if b - a > 0.02]
+    runs, run_len = [], 1  # consecutive shots within 15% of each other: a metronome, not a rhythm
+    for a, b in zip(shots, shots[1:]):
+        if abs(a - b) <= 0.15 * max(a, b):
+            run_len += 1
+        else:
+            runs.append(run_len)
+            run_len = 1
+    runs.append(run_len)
+    arr = np.array(shots) if shots else np.zeros(1)
+    report["shots"] = {"count": len(shots), "changes_at": [round(c, 2) for c in cuts],
+                       "median": round(float(np.median(arr)), 2), "min": round(float(arr.min()), 2),
+                       "max": round(float(arr.max()), 2),
+                       "variation": round(float(arr.std() / arr.mean()), 2) if arr.mean() else 0,
+                       "longest_even_run": max(runs)}
+
+    # loudness
+    curve = loudness_curve(video)
+    if curve:
+        loud = max(curve, key=lambda x: x[1])
+        report["loudness"] = {"loudest_at": round(loud[0], 2), "loudest_lufs": round(loud[1], 1),
+                              "quiet_below_-40_seconds": round(sum(0.1 for _, v in curve if v < -40), 1)}
+        if rows:
+            report["loudness"]["loudest_row"] = next((r["id"] for r in reversed(rows) if r["start"] <= loud[0]), None)
+    diffs = speech_vs_music(t) if t else None
+    if diffs:
+        d = np.array([x for _, x in diffs])
+        low = []  # merged windows where speech sits less than 10 LU above music
+        for ts, x in diffs:
+            if x >= 10:
+                continue
+            if low and ts - low[-1][1] < 0.3:
+                low[-1][1] = ts + 0.1
+            else:
+                low.append([ts, ts + 0.1])
+        report["speech_over_music"] = {"median_lu": round(float(np.median(d)), 1),
+                                       "p10_lu": round(float(np.percentile(d, 10)), 1),
+                                       "under_10_lu": [[round(a, 1), round(b, 1)] for a, b in low if b - a >= 0.3]}
+
+    # shape.png: plan rows, shots and loudness on one time axis
+    W, H = 1600, 360
+    img = Image.new("RGB", (W, H), "#111")
+    dr = ImageDraw.Draw(img)
+    small = ImageFont.load_default(size=14)
+    x = lambda s: s / dur * (W - 20) + 10
+    for k, r in enumerate(rows):
+        dr.line([(x(r["start"]), 0), (x(r["start"]), H)], fill="#444")
+        dr.text((x(r["start"]) + 3, 4 + 16 * (k % 2)), r["id"], fill="#e0e0e0", font=small)
+    for a, b in zip(bounds, bounds[1:]):  # shot bars: height = length
+        h = min(1.0, (b - a) / max(shots or [1])) * 100
+        dr.rectangle([x(a) + 1, 150 - h, max(x(a) + 1, x(b) - 1), 150], fill="#7fb3ff")
+    for (t0, v0), (t1, v1) in zip(curve, curve[1:]):
+        y = lambda v: 340 - (v + 70) / 70 * 170
+        dr.line([(x(t0), y(v0)), (x(t1), y(v1))], fill="#ffd400")
+    for ts, xv in diffs or []:
+        if xv < 10:
+            dr.line([(x(ts), 345), (x(ts), 355)], fill="#ff5a4f")
+    dr.text((10, 155), "time between picture changes (bar height)   loudness (yellow)   speech under 10 LU over music (red)",
+            fill="#888", font=small)
+    img.save(out_dir / "shape.png")
+    (out_dir / "review.json").write_text(json.dumps(report, indent=2))
+    print(json.dumps(report, indent=2))
+    return report
+
+
 # ---------------------------------------------------------------- cli
 
 def main(argv=None):
@@ -524,6 +758,9 @@ def main(argv=None):
     s.add_argument("--mark", type=float, action="append", default=[]); s.add_argument("-o")
     s = sub.add_parser("qa"); s.add_argument("timeline"); s.add_argument("video")
     s.add_argument("--dir", default="qa"); s.add_argument("--words", help="words JSON of the final audio")
+    s = sub.add_parser("review"); s.add_argument("video"); s.add_argument("--plan")
+    s.add_argument("--timeline", help="with audio track roles, measures speech against music")
+    s.add_argument("--dir", default="review")
     a = ap.parse_args(argv)
     if a.cmd == "check":
         errors, warnings = check(load(a.timeline))
@@ -540,6 +777,8 @@ def main(argv=None):
     elif a.cmd == "view":
         words = load_words(a.words) if a.words else None
         print(view(a.video, a.start, a.end, a.o or f"view-{a.start:.2f}-{a.end:.2f}.png", words, a.mark, a.frames))
+    elif a.cmd == "review":
+        cmd_review(a.video, a.dir, a.plan, a.timeline)
     elif a.cmd == "qa":
         return 1 if cmd_qa(load(a.timeline), a.video, a.dir, a.words)["problems"] else 0
     return 0

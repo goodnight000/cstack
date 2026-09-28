@@ -1,0 +1,57 @@
+{
+  "skill_name": "director",
+  "evals": [
+    {
+      "id": 1,
+      "name": "product_demo_alone",
+      "request": "Make a 60-second demo video of our CSV import feature from this screen recording. Just make it.",
+      "session": "A 6-minute 16:9 screen recording of the import flow and a one-paragraph product note are in the project folder. No script, no voiceover yet.",
+      "checks": [
+        "Works out the story alone because the user said to make it, and stops once with a one-page PLAN.md before building",
+        "States a purpose (feel, know, do) and names watching the import succeed as the engine, without withholding the result",
+        "Opens on the result or the pain it removes, not on a feature list or a logo",
+        "Fills Claims → proof, with the key result shown in one continuous, readable take and any speed-up labelled",
+        "Plans zooms to the changing region with a trigger each, and a full-screen view before any zoom",
+        "Lists open decisions (voiceover source, length trade-offs) each with a recommended answer"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "live_action_short_film",
+      "request": "I want to shoot a 4-minute short film about a night-shift nurse. Help me direct it.",
+      "session": "No footage exists yet. The user has a phone camera, one friend who can act, and a free weekend.",
+      "checks": [
+        "Recommends co-writing because the story and production are the user's, and asks the open questions in one message with defaults",
+        "Mines for real detail before inventing, and offers two or three genuinely different spines with their ending images",
+        "Gives the protagonist a want, an obstacle and a decisive action, with one peak and an ending image that answers the opening",
+        "Scales the plan to scenes with coverage per scene, what the actor is doing and why, and a capture list that works as a shoot schedule",
+        "Fits the plan to the constraints (one actor, a phone, one weekend) instead of planning shots it cannot get"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "review_existing_cut",
+      "request": "Here's my latest reel cut. Something feels off but I can't say what. Review it.",
+      "session": "The project has cut.mp4, timeline.json with audio track roles, and words.json. There is no PLAN.md.",
+      "checks": [
+        "Writes the plan's header fields from the cut before judging it against them",
+        "Runs reel.py review with the timeline and reads sheet.png, shape.png and review.json",
+        "Gives the frames alone and the transcript alone to fresh readers who have not seen the brief, and compares their retell with the purpose",
+        "Answers the viewer's questions with evidence (frames, measurements, ledger lines), each issue with a time, the principle it breaks and a fix",
+        "Asks the user to watch once on their phone and name the second they would have left and the moment they remember"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "feature_scale",
+      "request": "I'm writing a feature-length sci-fi film. Can the director skill help me plan it?",
+      "session": "The user has a two-page idea document and no script.",
+      "checks": [
+        "Starts from purpose, controlling idea and engine rather than shots",
+        "Scales the plan to a treatment, then sequences, then scene and shot pages planned one sequence ahead, instead of one giant shot table",
+        "Plans acts with named turns, sub-questions nested in the main question, and an intensity shape with one climax",
+        "Treats film examples as reasons a technique works, not as scenes to copy"
+      ]
+    }
+  ]
+}
