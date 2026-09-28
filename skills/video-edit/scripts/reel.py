@@ -11,8 +11,8 @@
     reel.py resolve timeline.json -o build.lua    Resolve console script (dofile it)
     reel.py place   INPUT -o out.mov --box X,Y,W,H --frames N [...]
     reel.py view    VIDEO START END [--words words.json] [--mark T ...] [-o out.png]
-    reel.py qa      timeline.json OUT.mp4 [--dir qa/]
-    reel.py review  VIDEO [--plan PLAN.md] [--timeline timeline.json] [--dir review/]
+    reel.py qa      [timeline.json] OUT.mp4 [--dir qa/]
+    reel.py review  VIDEO [--plan PLAN.md] [--timeline timeline.json] [--words words.json] [--dir review/]
 
 timeline.json (paths relative to the file; all times are integer output frames):
 
@@ -475,7 +475,9 @@ def load_words(path):
     j = json.loads(Path(path).read_text())
     if isinstance(j, dict):
         j = [w for s in j.get("segments", []) for w in s.get("words", [])] or j.get("words", [])
-    return [w for w in j if "start" in w and "end" in w]
+    j = [{"word": w.get("word", w.get("text", w.get("w", ""))), "start": w.get("start", w.get("s")),
+          "end": w.get("end", w.get("e"))} for w in j]  # Whisper keys or the animation template's w/s/e
+    return [w for w in j if w["start"] is not None and w["end"] is not None]
 
 
 def view(video, start, end, out, words=None, marks=(), n=8):
@@ -534,8 +536,8 @@ def view(video, start, end, out, words=None, marks=(), n=8):
 # ---------------------------------------------------------------- qa
 
 def cmd_qa(t, video, qa_dir, words=None):
-    """Numbers and join images for the exact deliverable; listening and taste stay with people."""
-    fps, N = t["fps"], t["frames"]
+    """Numbers and join images for the exact deliverable; listening and taste stay with people.
+    Without a timeline (an animation render) it checks the file against itself."""
     qa_dir = Path(qa_dir)
     qa_dir.mkdir(parents=True, exist_ok=True)
     report = {"file": str(video), "problems": []}
@@ -547,11 +549,12 @@ def cmd_qa(t, video, qa_dir, words=None):
     num, den = map(int, vs["r_frame_rate"].split("/"))
     report.update(width=vs["width"], height=vs["height"], fps=num / den, frames=int(vs["nb_read_packets"]),
                   audio_seconds=float(aus[0]["duration"]) if aus else None)
-    if (vs["width"], vs["height"]) != (t["width"], t["height"]):
+    fps, N = (t["fps"], t["frames"]) if t else (num / den, report["frames"])
+    if t and (vs["width"], vs["height"]) != (t["width"], t["height"]):
         report["problems"].append(f"size {vs['width']}x{vs['height']} != {t['width']}x{t['height']}")
-    if abs(num / den - fps) > 0.01:
+    if t and abs(num / den - fps) > 0.01:
         report["problems"].append(f"fps {num / den:.3f} != {fps}")
-    if report["frames"] != N:
+    if t and report["frames"] != N:
         report["problems"].append(f"{report['frames']} frames != timeline {N}")
     if not aus:
         report["problems"].append("no audio stream")
@@ -570,7 +573,7 @@ def cmd_qa(t, video, qa_dir, words=None):
     except (ValueError, KeyError):
         report["problems"].append("loudness not measurable")
     w = load_words(words) if words else None
-    joins = sorted({c["start"] for c in (t["video"][0]["clips"] if t["video"] else []) if c["start"] > 0})
+    joins = sorted({c["start"] for c in (t["video"][0]["clips"] if t and t["video"] else []) if c["start"] > 0})
     report["join_views"] = []
     for f in joins:
         s = f / fps
@@ -626,8 +629,17 @@ def speech_vs_music(t):
     return sorted(diffs)
 
 
-def cmd_review(video, out_dir, plan=None, timeline=None):
-    """Frames-only sheet for a sound-off retell, and the shape of the cut: shots, loudness, plan rows."""
+def even_run(values, tol=0.15):
+    """Longest run of consecutive values within tol of each other: a metronome, not a rhythm."""
+    best = cur = 1
+    for a, b in zip(values, values[1:]):
+        cur = cur + 1 if abs(a - b) <= tol * max(a, b) else 1
+        best = max(best, cur)
+    return best if values else 0
+
+
+def cmd_review(video, out_dir, plan=None, timeline=None, words=None):
+    """Frames-only sheet for a sound-off retell, and the shape of the cut: shots, pauses, loudness, plan rows."""
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont
     out_dir = Path(out_dir)
@@ -671,20 +683,14 @@ def cmd_review(video, out_dir, plan=None, timeline=None):
     report["changes_from"] = "timeline" if t else "detected"
     bounds = [0.0] + cuts + [dur]
     shots = [round(b - a, 3) for a, b in zip(bounds, bounds[1:]) if b - a > 0.02]
-    runs, run_len = [], 1  # consecutive shots within 15% of each other: a metronome, not a rhythm
-    for a, b in zip(shots, shots[1:]):
-        if abs(a - b) <= 0.15 * max(a, b):
-            run_len += 1
-        else:
-            runs.append(run_len)
-            run_len = 1
-    runs.append(run_len)
     arr = np.array(shots) if shots else np.zeros(1)
     report["shots"] = {"count": len(shots), "changes_at": [round(c, 2) for c in cuts],
                        "median": round(float(np.median(arr)), 2), "min": round(float(arr.min()), 2),
                        "max": round(float(arr.max()), 2),
                        "variation": round(float(arr.std() / arr.mean()), 2) if arr.mean() else 0,
-                       "longest_even_run": max(runs)}
+                       "longest_even_run": even_run(shots)}
+    if len(shots) <= 1 and rows:
+        report["shots"]["note"] = "no picture changes: continuous motion; judge rhythm by plan rows and speech"
 
     # loudness
     curve = loudness_curve(video)
@@ -694,6 +700,27 @@ def cmd_review(video, out_dir, plan=None, timeline=None):
                               "quiet_below_-40_seconds": round(sum(0.1 for _, v in curve if v < -40), 1)}
         if rows:
             report["loudness"]["loudest_row"] = next((r["id"] for r in reversed(rows) if r["start"] <= loud[0]), None)
+    # speech pacing from word timings: pauses and speaking rate per plan row
+    pauses = []
+    if words:
+        w = load_words(words)
+        pauses = [(a["end"], b["start"]) for a, b in zip(w, w[1:]) if b["start"] - a["end"] >= 0.25]
+        gaps = [round(b - a, 2) for a, b in pauses]
+        g = np.array(gaps) if gaps else np.zeros(1)
+        span = w[-1]["end"] - w[0]["start"] if w else 0
+        report["speech"] = {"words_per_second": round(len(w) / span, 2) if span else 0,
+                            "pauses": len(gaps), "pause_median": round(float(np.median(g)), 2),
+                            "pause_variation": round(float(g.std() / g.mean()), 2) if g.mean() else 0,
+                            "longest_pause": max(gaps, default=0), "longest_even_pause_run": even_run(gaps)}
+        if rows:
+            per = []
+            for k, r in enumerate(rows):
+                end = rows[k + 1]["start"] if k + 1 < len(rows) else dur
+                n = sum(r["start"] <= x["start"] < end for x in w)
+                inside = [b - a for a, b in pauses if r["start"] <= a < end]
+                per.append({"id": r["id"], "words_per_second": round(n / (end - r["start"]), 2) if end > r["start"] else 0,
+                            "longest_pause": round(max(inside, default=0), 2)})
+            report["speech"]["rows"] = per
     diffs = speech_vs_music(t) if t else None
     if diffs:
         d = np.array([x for _, x in diffs])
@@ -724,10 +751,12 @@ def cmd_review(video, out_dir, plan=None, timeline=None):
     for (t0, v0), (t1, v1) in zip(curve, curve[1:]):
         y = lambda v: 340 - (v + 70) / 70 * 170
         dr.line([(x(t0), y(v0)), (x(t1), y(v1))], fill="#ffd400")
+    for a, b in pauses:  # pauses as grey bars under the loudness curve
+        dr.rectangle([x(a), 322, max(x(a) + 1, x(b)), 330], fill="#666")
     for ts, xv in diffs or []:
         if xv < 10:
             dr.line([(x(ts), 345), (x(ts), 355)], fill="#ff5a4f")
-    dr.text((10, 155), "time between picture changes (bar height)   loudness (yellow)   speech under 10 LU over music (red)",
+    dr.text((10, 155), "time between picture changes (bar height)   loudness (yellow)   pauses (grey)   speech under 10 LU over music (red)",
             fill="#888", font=small)
     img.save(out_dir / "shape.png")
     (out_dir / "review.json").write_text(json.dumps(report, indent=2))
@@ -756,10 +785,11 @@ def main(argv=None):
     s = sub.add_parser("view"); s.add_argument("video"); s.add_argument("start", type=float)
     s.add_argument("end", type=float); s.add_argument("--words"); s.add_argument("--frames", type=int, default=8)
     s.add_argument("--mark", type=float, action="append", default=[]); s.add_argument("-o")
-    s = sub.add_parser("qa"); s.add_argument("timeline"); s.add_argument("video")
+    s = sub.add_parser("qa"); s.add_argument("files", nargs="+", metavar="[timeline.json] VIDEO")
     s.add_argument("--dir", default="qa"); s.add_argument("--words", help="words JSON of the final audio")
     s = sub.add_parser("review"); s.add_argument("video"); s.add_argument("--plan")
     s.add_argument("--timeline", help="with audio track roles, measures speech against music")
+    s.add_argument("--words", help="word timings of the final audio: pauses and speaking rate")
     s.add_argument("--dir", default="review")
     a = ap.parse_args(argv)
     if a.cmd == "check":
@@ -778,9 +808,10 @@ def main(argv=None):
         words = load_words(a.words) if a.words else None
         print(view(a.video, a.start, a.end, a.o or f"view-{a.start:.2f}-{a.end:.2f}.png", words, a.mark, a.frames))
     elif a.cmd == "review":
-        cmd_review(a.video, a.dir, a.plan, a.timeline)
+        cmd_review(a.video, a.dir, a.plan, a.timeline, a.words)
     elif a.cmd == "qa":
-        return 1 if cmd_qa(load(a.timeline), a.video, a.dir, a.words)["problems"] else 0
+        t = load(a.files[0]) if len(a.files) > 1 else None
+        return 1 if cmd_qa(t, a.files[-1], a.dir, a.words)["problems"] else 0
     return 0
 
 

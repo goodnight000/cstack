@@ -11,18 +11,22 @@ With the render, `PLAN.md`, the edit's `timeline.json` when there is one, and a 
 transcript of the final audio:
 
 ```sh
-uv run <video-edit>/scripts/reel.py review cut.mp4 --plan PLAN.md --timeline timeline.json --dir review/v3
+uv run <video-edit>/scripts/reel.py review cut.mp4 --plan PLAN.md --timeline timeline.json --words words.json --dir review/v3
 ```
 
 For a render with no timeline (an animation), leave out `--timeline`; picture changes are then
-detected. It writes:
+detected, and continuous motion shows few of them, so judge its rhythm by plan rows and speech
+pacing. It writes:
 - `sheet.png`: one frame per plan row, labelled only with the row id.
 - `shape.png`: time between picture changes, the loudness curve, and the plan rows on one axis.
 - `review.json`: picture-change statistics (`variation`, `longest_even_run`), the loudest
-  moment and its row, and, when the timeline marks speech and music tracks, speech minus music
-  per moment with the windows under 10 LU.
+  moment and its row; with `--words`, pauses (count, median, `pause_variation`,
+  `longest_even_pause_run`) and each plan row's speaking rate and longest pause; and, when the
+  timeline marks speech and music tracks, speech minus music per moment with the windows under
+  10 LU.
 
-For a delivery, also run `reel.py qa` (size, frames, decode, loudness, peaks, each camera join).
+For a delivery, also run `reel.py qa [timeline.json] cut.mp4` (size, frames, decode, loudness,
+peaks, audio length against picture, and each camera join when there is a timeline).
 
 ## 2. Blind readers
 
@@ -55,11 +59,14 @@ Answer each with evidence: a frame, a measurement, a ledger line, a timeline ent
 2. **Focus:** one focal point at a time; after each cut, the new subject sits where the eye
    already was (look at frames 2–4 after each change).
 3. **Load:** no moment with two new elements starting together or two blocks of text at once;
-   text readable in its time; captions kept off dense charts and interfaces.
+   text readable in its time; captions kept off dense charts and interfaces. Text and key
+   content stay inside the safe margins and clear of platform interface, including mid-move and
+   at the most zoomed-in frame of every camera push, where edges get cut.
 4. **Purpose:** every visual and every sound has a `reason` that matches its plan row; nothing
    decorative is left.
-5. **Rhythm:** picture-change lengths vary with the plan's shape (`variation`, `longest_even_run`,
-   `shape.png`); density rises into the peak and falls after it.
+5. **Rhythm:** picture-change lengths and pauses vary with the plan's shape (`variation`,
+   `longest_even_run`, `pause_variation`, per-row speaking rate, `shape.png`); density rises into
+   the peak, the peak and key lines get room, and no row is too fast to follow.
 6. **Sound:** speech clear of music (`under_10_lu` windows); the music changes at story turns;
    each effect sits on a visible event; planned silences present, and no accidental dead air.
 7. **Peak and end:** the peak frame is the strongest and least cluttered; the last frame means
@@ -75,6 +82,8 @@ judges in parallel instead of reviewing alone. Each gets the render, the measure
 lens references, extracts its own frames, and returns
 `{issues: [{start, end, severity, problem, fix, principle}], keep: []}`:
 - **Story and viewer:** [story](story.md), [viewer](viewer.md), plus the blind readers' answers.
+  This judge also recomputes every number and formula on screen from its source and checks
+  each label says where a number came from.
 - **Picture:** [camera](camera.md), [graphics](graphics.md).
 - **Cut and sound:** [cutting](cutting.md), [sound](sound.md), plus `review.json`.
 

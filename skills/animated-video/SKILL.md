@@ -79,6 +79,8 @@ sound bed sets the timing: choose or build it first and cue beats to it.
    envelope. Fix transcription mis-splits and keep those fixes as a script, because a re-align
    must re-apply them.
 3. Derive every cue from words with `cue("phrase")`. A new VO then re-times the whole film.
+   Write TTS text phonetically ("G P T two"), and write cue phrases from the fixed `words.json`,
+   not the script: the transcript spells things its own way ("GPT-2", "77%").
 4. Write caption chunks by hand as sense units, checked against the transcript.
 5. Source music and effects in this order: the user's files; samples on disk (such as the
    video-edit skill's `assets/sfx` library); sound synthesized in code (Web Audio or Python),
@@ -124,6 +126,8 @@ an API summary without reading the source.
   picture, action) before animators start.
 - In the full production, run one animator per act in parallel, each owning its own files; the
   shared rig, kit, lib and film shell stay read-only. Throttle rendering on a shared machine.
+  Each act brief states what the frame holds at its first and last frame, and both owners snap
+  the frames on either side of each join (`./snap.sh dir f1767 f1768`).
 - Every shot lands its action on its word within a few frames. The rate of change follows
   the plan's `Shape`: it rises into the peak and falls after it, and the key beat gets a held
   moment. A fixed interval reads as a metronome ([cutting](../director/references/cutting.md)).
@@ -157,8 +161,9 @@ issues to their owners by time range, fix in parallel, re-render, and repeat.
 
 ## 8. Deliver
 
-Render the final (the template normalizes loudness for social). Check the first frame (it's
-the cover), the last second (clean, and it loops if intended), and the loudness. Report the
+Render the final (the template normalizes loudness to the destination's target). Check the first
+frame (it's the cover), the last second (clean, and it loops if intended), and run video-edit's
+`reel.py qa` on the file (decode, loudness, peaks, audio length against picture). Report the
 path, the open issues, and anything synthetic or invented (voice, names, messages). Commit each
 version in the project's local git repo.
 

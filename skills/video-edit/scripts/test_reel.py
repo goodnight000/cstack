@@ -127,6 +127,12 @@ def main():
         rv = reel.cmd_review(d / "crop.mp4", d / "rv", d / "PLAN.md", d / "crop.json")
         assert (d / "rv" / "sheet.png").exists() and (d / "rv" / "shape.png").exists()
         assert rv["changes_from"] == "timeline" and rv["shots"]["changes_at"] == [3.0], rv["shots"]
+        (d / "words.json").write_text(json.dumps([{"w": "one", "s": 0.1, "e": 0.4}, {"w": "two", "s": 0.5, "e": 0.8},
+                                                  {"w": "three", "s": 2.6, "e": 3.0}]))    # animation w/s/e keys
+        rw = reel.cmd_review(d / "crop.mp4", d / "rv3", d / "PLAN.md", words=d / "words.json")
+        assert rw["speech"]["pauses"] == 1 and rw["speech"]["longest_pause"] == 1.8, rw["speech"]
+        assert [r["id"] for r in rw["speech"]["rows"]] == ["1", "2"]
+        assert reel.cmd_qa(None, d / "crop.mp4", d / "qa3")["frames"] == 120              # qa without a timeline
         seen = reel.cmd_review(d / "crop.mp4", d / "rv2")                              # no timeline: detect
         assert any(abs(c - 2.0) < 0.1 for c in seen["shots"]["changes_at"]), seen["shots"]  # blue -> green
         assert 17 < rv["speech_over_music"]["median_lu"] < 23, rv["speech_over_music"]  # sine at 0.1x = -20 dB

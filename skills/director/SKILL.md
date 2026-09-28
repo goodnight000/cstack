@@ -38,8 +38,11 @@ narration, references, deadline. Read the brief, the project folder and any prof
 skill names. Then ask the user how to work, recommending one: co-write the story together when
 it is their own story, product or opinion, or the stakes are high; or have the model work it
 out alone and stop once for approval of the plan ([plan](references/plan.md#two-ways-of-working)).
-Ask everything still open in the same message, each question with a recommended answer and a
-one-line reason, so "yes" is a complete reply.
+Ask everything still open in the same message, including the crew skill's own intake questions
+(format, production route, reference look), each with a recommended answer and a one-line
+reason, so "yes" is a complete reply. When the brief's content conflicts with a stored profile
+default (a math explainer against a character-led default), recommend what the brief needs and
+ask.
 
 Done when the scope fields of the plan header can be filled and the way of working is chosen.
 

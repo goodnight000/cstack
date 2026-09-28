@@ -42,11 +42,13 @@ The craft is the same at every length; the unit grows from shot to scene to sequ
 | 1 | 0:00 | <what changes> | — | <subject, size in frame, source; any camera move and its trigger> | <line; music state; effect or silence> | <one idea, 8 words or fewer; opens, sharpens or answers the question; serves feel, know or do> | have |
 | 2 | 0:04.5 | … | therefore … | … | … | … | build |
 
+**Spines considered:** <the chosen spine and the runner-up, one line each, and why this one>
 **Setups → payoffs:** S1 <setup row> → <payoff row>; …
 **Claims → proof:** <claim> → <row whose picture proves it, or "reworded as opinion">
 **Pitfalls:** <the two or three ways this piece could fail>
 **Open decisions:** <decision> — <recommended answer> — <one-line reason>
 **Capture and build list:** <what to film, record, draw or source; facts to verify>
+**Checks run:** <each check's result, and what the sound-off reader found>
 ```
 
 Keep the table's first two columns exactly `id` and `start` (`m:ss`, `m:ss.s` or seconds):
@@ -73,13 +75,23 @@ Run every check and fix what fails; list anything left failing under Open decisi
 6. **One idea per shot:** each `why` fits in 8 words with no "and"; a second idea is a second row.
 7. **Sight and sound complement:** no row where `hear` narrates what `see` already shows. A
    demo says each step while showing it; that pairing is the exception.
-8. **Sound-off retell:** a fresh subagent given only the `see` column retells the story and
-   states the "know". A mismatch is a planning failure, not the reader's.
+8. **Sound-off retell:** give a fresh subagent only the `see` column and ask it to (a) retell
+   the story, (b) state the one thing a viewer should know at the end, (c) name the opening
+   question and the shot that answers it, (d) list shots that make no sense without sound, and
+   (e) list places where one shot only follows the last ("and then"). For anything with speech,
+   give a second fresh subagent only the spoken text and ask the same, plus what would lose a
+   listener: symbols never defined aloud, a named word that sounds like grammar, a spoken
+   formula whose grouping is ambiguous, two facts that blur into one. A mismatch with the plan
+   is a planning failure, not the reader's.
 9. **Shape:** one peak, a contrast before it, a release after it.
 10. **Time:** row times add up to the length, and each row's spoken words fit its duration at
-    the speaker's measured pace (from their recording when it exists).
-11. **Proof and assets:** every claim has a proof row or is reworded as opinion; every row has
-    an asset source; facts to verify are listed.
+    the speaker's measured pace (from their recording when it exists). With a synthetic voice,
+    voice the draft narration during planning, take each row's `start` from its alignment, and
+    cut the script until it fits; estimates run long. After any re-voice, refresh every `start`
+    from the new alignment so the plan and the review stay in step.
+11. **Proof and assets:** every claim has a proof row or is reworded as opinion; every number
+    shown names its source (a data file, a paper, or illustrative and labelled so on screen);
+    every row has an asset source; facts to verify are listed.
 12. **Remove-this-row:** state what each row's removal would lose; a row that loses nothing goes.
 
 ## Two ways of working

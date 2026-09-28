@@ -32,7 +32,7 @@ A mix has four stems: speech, room tone and ambience, effects, music. The ear hu
 A gap that falls to digital zero reads as a dropout, not as quiet.
 - **Masters:** *A Quiet Place* goes to true zero once, when Regan removes her implant. It works because the rest of the film is tended near-silence (Slate; No Film School).
 - **Use / hold back:** fill cut gaps with room tone from the same take, and put low ambience under screen recordings and animation. Use true zero only as a planned beat.
-- **In our tools:** loop no-speech source on an `ambience` track under all speech.
+- **In our tools:** loop no-speech source on an `ambience` track under all speech. With no recording to take it from (animation, a synthetic voice), synthesize a faint noise floor well below the speech (FFmpeg `anoisesrc`, pink) and label it synthetic.
 - **Check:** FFmpeg `silencedetect` below the measured floor. Any hit not listed as a planned silence in `hear` is a dropout. If the noise floor steps by more than a few dB across a jump cut, the room tone flickers.
 
 ### 4. Know which side of the line each sound lives on
