@@ -29,10 +29,60 @@ audio filter and inspect its output. Adjust to the recording's noise floor.
 Compare low-energy consonants with nearby waveform/frame evidence before
 moving boundaries. The threshold is a search aid, not a rule to delete every pause.
 
-Whisper can suppress repeated words across adjacent takes, hallucinate over silence, miss weak onsets, absorb padding into
+ASR can suppress repeated words across adjacent takes, hallucinate over silence, miss weak onsets, absorb padding into
 word timestamps, and misspell names. Keep the raw transcript and a separate
 checked spelling map. Do not fix missing or incomplete spoken words by
 changing captions. ASR recognition is not proof of an intact phoneme.
+
+## Measure a reference reel
+
+Public Instagram, TikTok and YouTube posts usually download without login. Keep
+references in the project's `refs/` and do not pass browser cookies.
+
+```bash
+uvx yt-dlp -o "refs/%(id)s.%(ext)s" --write-info-json URL      # info.json has likes, comments, caption
+ffmpeg -i REF -vf "select='gt(scene,0.25)',showinfo" -f null - 2>&1 | grep -o 'pts_time:[0-9.]*'   # hard cuts
+ffmpeg -i REF -af silencedetect=noise=-40dB:d=0.3 -f null - 2>&1 | grep silence_   # audio dips before a drop
+ffmpeg -i REF -vf "fps=2,scale=360:-1,tile=8x4" -frames:v 1 sheet.jpg   # tile n = n/2 seconds
+```
+
+Identify the music (unofficial Shazam client; needs network; try each half of an
+edited meme sound separately):
+
+```bash
+ffmpeg -i REF -vn -ac 1 -ar 44100 ref.wav
+uv run --with shazamio python -c "import asyncio,sys;from shazamio import Shazam;t=asyncio.run(Shazam().recognize(sys.argv[1])).get('track') or {};print(t.get('title'),'|',t.get('subtitle'))" ref.wav
+```
+
+Measure camera moves, speed changes and transitions before copying a style, so
+the edit adds only what the reference does (`scripts/ref_motion.py REF`, run with
+the `uv` line in its docstring). A dip to black shows as luma falling to near 0
+over a few frames, and the shot table splits there.
+
+Lower the scene threshold (0.05) when a known cut is missed. Measure text
+position and size from one full-resolution frame. `drawtext` may be missing;
+count tile positions instead of stamping timecodes.
+
+## Camera moves on still footage
+
+`zoompan` rounds its crop to whole pixels and jitters on slow moves. Use
+`perspective` with `eval=frame` and cubic interpolation for subpixel push-ins and
+drift. With zoom `Z(t)` toward point (ax, ay) on a WxH frame, the source corners are
+`x0=ax*(1-1/Z)`, `y0=ay*(1-1/Z)`, `x1=x0+W/Z`, `y2=y0+H/Z`; time is `in/FPS`.
+Quote each expression in the filtergraph (`x0='…'`) because they contain commas.
+Ease with `u=clip((t-start)/dur,0,1)`, `u*u*(3-2*u)`. For handheld drift, add two
+summed sines of 3–4 px at 0.3–0.8 Hz to x0 and y0, and start at zoom 1.02 so the
+edges never show. To copy a reference reel's
+handheld path instead, use `scripts/borrow_camera.py`.
+
+## Shell gotchas in build scripts
+
+- Caption copy with an apostrophe breaks `${TEXT:-I can't…}` in bash. Assign it
+  first, `CAPTION="I can't…"; TEXT=${TEXT:-$CAPTION}`.
+- In zsh, `"$k[out]"` is an array subscript. Write `"${k}[out]"` when a variable
+  holding a filter sits right before a filtergraph label.
+- `bc` prints `.70` without a leading zero. ffmpeg accepts it, but integer
+  millisecond delays need `$(echo "$T*1000/1" | bc)`.
 
 ## Quiet external audio and separate recordings
 
@@ -120,7 +170,10 @@ source and mix. On a quiet source whose true peak is already near the ceiling,
 `loudnorm` cannot reach the target linearly and silently switches to dynamic mode;
 measure first (`loudnorm=print_format=json`), and if so apply gentle compression
 and a limiter (for example `acompressor`, then `volume`, then `alimiter`) before a
-final linear pass. Measure the actual final export because encoding/mixing
+final linear pass. `alimiter` delays its output by its lookahead (5 ms by default)
+unless `latency=1`; set it when the limited mix is muxed against picture. Its
+`level` option defaults to auto-level, which raises the output after limiting;
+set `level=0` for a plain ceiling. Measure the actual final export because encoding/mixing
 can change loudness and peaks. Sparse sound effects should sit below speech.
 
 Place effects on the speech track with `adelay` and mix without auto-normalizing:

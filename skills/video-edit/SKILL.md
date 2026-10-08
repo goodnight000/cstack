@@ -1,7 +1,8 @@
 ---
 name: video-edit
 description: >-
-  Edit and revise talking-head videos, social reels, demos, and screen recordings.
+  Edit and revise talking-head videos, social reels, text-overlay skits and memes,
+  reel recreations, demos, and screen recordings.
   Use for quiet-audio recovery, separate-audio sync, preprocessing, take selection, DaVinci Resolve editing,
   relevant sourced visuals, captions, speed or color corrections, and authorized
   video publishing or scheduling. Also use for post-edit reflection and updates
@@ -10,9 +11,33 @@ description: >-
 
 # Video edit
 
-Make the speaker's story easy to follow. Start with complete, camera-facing
-speech, then show the actual people, documents, products, and events being
-discussed. A valid render is only one part of a finished edit.
+Make the video's idea land for its style. A valid render is only one part of a
+finished edit.
+
+## Choose the style
+
+Choose from the footage, the goal and any reference before planning the edit.
+The [style library](references/styles.md) lists the styles this skill can make
+(talking head, skits and meme cuts, lists, demos, explainers and more). It
+describes each one by its layers (spine, structure, picture, text, sound,
+effects) and explains how to fuse them: one spine per section, with borrowed
+layers that fix a real weakness. Write the result into the brief as a style map.
+
+The two most developed styles have full guides:
+
+- **Talking head**: someone speaks to camera to tell a story or explain. Start
+  with complete, camera-facing speech, then show the actual people, documents,
+  products, and events being discussed. Follow steps 1–5 and the
+  [default style](references/style.md).
+- **Skit**: silent acting, one on-screen line carries the joke, a trending
+  sound carries the energy, often with a meme cut. Follow the
+  [skit guide](references/skit.md); for skit sections it replaces steps 2–3 and
+  the default style's dialogue, coverage, dwell and caption-emphasis rules. Steps
+  1, 4 and 5 still govern probing, color, rendering and verification.
+
+To recreate a posted reel, [download and measure it](references/technical.md#measure-a-reference-reel)
+first (cut times, duration, camera motion, text position, audio dips) and name its
+styles before touching the footage.
 
 ## Set up
 
