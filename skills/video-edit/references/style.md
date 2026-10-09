@@ -71,4 +71,4 @@ at the same instant, then listening: an accent should be clearly heard without
 covering a word, and textures like typing sit lower. Peak-matching under-mixes
 brief transients. Clips differ widely in source level (see `rms_dbfs` in the
 catalog), so never drop one in at unity gain. The bundled
-[sound-effect library](../assets/sfx/README.md) has 55 cataloged effects.
+[sound-effect library](../assets/sfx/README.md) has 61 cataloged effects.

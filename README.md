@@ -94,7 +94,7 @@ be, and whether you want music, sound effects, or a hook headline, then follows
 its [default short-form style](skills/video-edit/references/style.md). To keep
 your own defaults across updates, put them in `~/.video-edit/profile.md`.
 
-Of the bundled [sound effects](skills/video-edit/assets/sfx/README.md), 27 are
+Of the bundled [sound effects](skills/video-edit/assets/sfx/README.md), 33 are
 CC0 Freesound recordings; the other 28 are not covered by the MIT license and
 their sources and unverified rights status are listed in their catalog.
 
