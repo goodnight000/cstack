@@ -56,6 +56,10 @@
 - Many agents rendering on one machine starve each other, and a full render can be killed
   (exit 137). Throttle, and render final cuts when the machine is quiet.
 - The last renderable frame is `TOTAL - 1`.
+- To re-cut a finished composition from source-frame segments, offset with nested sequences
+  (`<Sequence from={outStart} durationInFrames={len}><Sequence from={-sourceIn}>…`).
+  `<Freeze frame={n}>` clamps n to the host composition's last frame, so it silently shows the
+  wrong frame for any source frame past the output length.
 - Full-frame SVG filters (turbulence grain) on every frame are slow.
 - Whisper merges and splits words and hyphenations. Fix `words.json` with a kept script.
 - TTS job JSON can hold a voice-preview URL as well as the output. Take the job's result URL.

@@ -28,6 +28,10 @@ looks. Logos next to an aspiration ("we want to raise from…") illustrate the
 aspiration; they must not suggest those firms are backers. "More visuals" means
 more useful imagery in varied layouts, not more text or arbitrary objects.
 
+A screenshot, table or demo the user supplies is evidence the viewer should
+read. Show it whole and long enough to read, and shorten a demo by speeding up
+dead time, not by cutting its result. The dwell limit is for sourced illustration.
+
 ## Placement
 
 Choose placement from the current shot and content: torso-wide card, lower-left

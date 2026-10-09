@@ -36,5 +36,3 @@ write only under `out/judge/`. Judge against the current brief and platform. Pas
 - Your own spot-check after each render still catches things: a per-word duck that pumps, a
   see-through character, floating legs, a blurred last frame. Pull frames at every flagged
   time before reporting "done".
-- A long run needs visible progress. Send the latest contact sheet and an ETA at each stage
-  boundary.

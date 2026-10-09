@@ -7,8 +7,10 @@ These are the skills that I use almost every day. I am always adding more skills
 | Skill | What it does |
 | --- | --- |
 | [reflect](skills/reflect/SKILL.md) | Reviews outcomes and efficiency, shows findings before asking for feedback, and proposes improvements for approval. Works with completed, incomplete, and unsuccessful sessions. |
+| [rsi](skills/rsi/SKILL.md) | Tests changes to agent skills, instructions, tools, and working processes against the current version, with bounded runs and evidence for keeping or rejecting each change. |
 | [video-edit](skills/video-edit/SKILL.md) | Edits talking-head videos, reels, demos, and screen recordings. Covers audio recovery, take selection, supporting visuals, Resolve revisions, captions, and final-export checks. |
 | [animated-video](skills/animated-video/SKILL.md) | Makes animated videos in code with Remotion: character stories, motion graphics, kinetic type, and animated infographics. Locks the format with a style frame, times everything from the voiceover, builds recurring assets once, animates in parallel, and reviews renders by frames and audio measurements. |
+| [video-script](skills/video-script/SKILL.md) | Brainstorms short-form video ideas and writes scripts from the creator's own analytics: who has a stake, a hook that lands in 3 seconds, a second sentence that keeps viewers, and proof on screen. Also turns posted-video insights into lessons, with a script that reads retention curves from screenshots. |
 
 Each skill lives in its own directory under `skills/` and can be installed separately.
 
@@ -24,7 +26,7 @@ cd cstack
 Choose a skill, then link it into your agent's skills directory. Run the appropriate commands from the repository root.
 
 ```sh
-skill_name=reflect  # or video-edit, animated-video
+skill_name=reflect  # or rsi, video-edit, animated-video, video-script
 ```
 
 For Codex:
@@ -57,6 +59,20 @@ Show me the findings and proposed changes before editing reusable instructions.
 You can also name other threads and a time window when your agent has access to their history. Reflect does not provide its own history connector.
 
 The review separates consequential findings from changes worth adding to reusable guidance. It can report an inefficiency without recommending another rule. It asks for approval before editing instructions and does not authorize publication, memory changes, or resuming the reviewed task.
+
+## Use RSI
+
+```text
+Use the rsi skill to test one improvement to this agent workflow.
+Reuse our Reflect findings, compare with the current version, and state a bounded
+experiment plan. Keep installed instructions unchanged until I approve adoption.
+```
+
+RSI uses the project's existing runners and checks. It can reuse Reflect when installed,
+or reconstruct the necessary evidence directly. It adds no background service or test
+platform. Give it the task, experiment budget, and adoption scope; it preserves those
+bounds across the work. A successful local comparison is evidence for the tested scope,
+not proof of unlimited recursive improvement.
 
 ## Use Video Edit
 
@@ -100,11 +116,27 @@ such as the video-edit sound library, or sound synthesized in code. The template
 infrastructure only (timing, camera, still and render scripts). Characters,
 art direction, and creative defaults are designed per project or supplied by you.
 
+## Use Video Script
+
+```text
+Use the video-script skill to brainstorm ideas for my next video.
+Rank them by who has a stake, and give each a hook, a second sentence, and what we'll show.
+```
+
+It works best with a library of your past videos and their analytics: one Markdown
+file per video plus an index, in the [library format](skills/video-script/references/library.md).
+Point the skill at it, and at your voice and pace, in `~/.video-script/profile.md`.
+To review a posted video, give it the insights screenshots; it reads the retention
+curve with `scripts/retention_curve.py` (Python 3 with Pillow and numpy) and
+checks the reading against the app's average watch time.
+
 ## Evaluation
 
 [Reflect's evaluation cases](skills/reflect/evals/evals.json) cover feedback, constructive pushback, unnecessary repeat checks, necessary investigation, findings that warrant no instruction changes, and keeping one project's output from becoming a default when it seeds a new skill.
 
 [Animated Video's evaluation cases](skills/animated-video/evals/evals.json) cover locking the format before building and treating a past film as evidence rather than a template.
+
+[RSI's evaluation cases](skills/rsi/evals/evals.json) cover missed skill discovery, exposed final tests, altered graders, authorized local adoption, creative judgment, and unproven improvement of the improvement process.
 
 To assess behavior, give an independent agent `SKILL.md`, a case's request and session evidence, then its feedback at the appropriate point. Keep the case's `checks` hidden until reviewing the response. These are evaluation scenarios, not an automated test suite or a guarantee of future performance.
 

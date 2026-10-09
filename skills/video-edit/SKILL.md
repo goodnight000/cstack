@@ -49,12 +49,16 @@ console or UI here, render with FFmpeg and say the result has no editable projec
 Report missing browser or account access rather than claiming checks that did not run.
 
 Read `~/.video-edit/profile.md` if it exists (creative defaults, project locations,
-asset libraries, standing preferences); offer to record lasting preferences there.
+asset libraries, standing preferences). When the user marks an instruction as a
+habit ("always", "as usual", "like before") or repeats one from an earlier brief,
+offer then to record it there, so they don't have to say it again.
 
 ## Choose the task
 
 - Read the current brief, accepted reference, and profile. Scope preferences to
-  their intended projects instead of treating them as universal.
+  their intended projects instead of treating them as universal. Open the first
+  reply with one line naming the stored defaults you are applying (takes, audio
+  source, speed, sound), so the user can correct one instead of repeating them all.
 - Without a brief, ask once: where the video will be posted, roughly how long,
   whether to add music, sound effects, or a hook headline, and for screenshots or
   recordings when claims concern the user's own data or product. Offer the
@@ -105,6 +109,12 @@ against the supplied script. Mark each spoken rejection such as "cut that" or
 "forget that" and the abandoned take it refers to. Exclude that rejected delivery
 from every section, not just the location of the rejection words. Use surrounding
 context to find the restart instead of deleting an arbitrary number of seconds.
+Use Phonon-2 for English transcription, restart checks, and final audio QA on
+Apple silicon. Use Whisper only for an unsupported language/host or a specific
+failure that remains after Phonon retries; record that reason. Check older
+project scripts before reuse so historical Whisper commands do not run by habit.
+Review speech-gap flags before captioning; see
+[transcription](references/technical.md#probe-and-transcribe).
 
 Select the longest fluent, accurate delivery of each sentence or coherent passage.
 When the user prefers the last take, start from the last complete successful take;
@@ -125,9 +135,8 @@ do not fabricate delivery or freeze a face to conceal a bad cut.
 For every join, check the outgoing tail AND the incoming lead-in in context.
 Long ASR can silently remove repeated words and stretch one timestamp over both.
 When repetitions are reported, use overlapping short windows around the join,
-then source windows and waveform/frame evidence. Inspect suspected restarts inside
-a selected take too; clip boundaries are not the only places repetition occurs.
-A clean transcript of one take cannot prove the next take does not repeat it. Listening is preferred when
+then source windows and waveform/frame evidence. Whole-clip ASR merges restarts inside
+a take: run `scripts/restart_scan.py AUDIO CUTLIST.json` before the first render. A clean transcript of one take cannot prove the next take does not repeat it. Listening is preferred when
 available; do not claim it occurred if only ASR and frames were inspected.
 
 Complete when every required beat has a selected non-rejected take and the
@@ -214,6 +223,8 @@ music or effect audibility. Plan attribution needs when choosing the track so
 publishing does not unexpectedly expand a requested short caption.
 Pick effects from the profile's libraries and the bundled
 [sound-effect library](assets/sfx/README.md); read its rights note before publishing.
+Keep one cue sheet for the whole video, even when beats are built in parallel; count
+uses per file before rendering and justify every repeat (per-beat quotas multiply into clutter).
 
 For revisions, change the cutlist/manifest or native timeline instead of copying
 an entire pipeline per version. Ripple all dependent layers after a cut. Apply

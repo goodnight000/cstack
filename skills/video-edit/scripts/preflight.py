@@ -11,6 +11,8 @@ Resolve is optional here; the brief decides whether it is required.
 import json
 import os
 import platform
+from pathlib import Path
+import shlex
 import shutil
 import subprocess
 import sys
@@ -56,9 +58,8 @@ def missing_filters(filter_listing):
 def transcribe_cmd(system, machine):
     """Word-timestamp JSON (segments[].words[]) in the format make_captions.py reads."""
     if system == "Darwin" and machine == "arm64":
-        return ("uvx --from mlx-whisper mlx_whisper audio.wav --model "
-                "mlx-community/whisper-large-v3-turbo --word-timestamps True "
-                "--output-format json --output-dir .")
+        script = shlex.quote(str(Path(__file__).with_name("transcribe.py").resolve()))
+        return f"uv run {script} audio.wav --output-dir ."
     return ("uvx whisper-ctranslate2 audio.wav --model large-v3-turbo "
             "--word_timestamps True --output_format json --output_dir .")
 
@@ -82,11 +83,15 @@ def main():
     checks["python"] = {"ok": sys.version_info >= (3, 9), "required": True,
                         "found": platform.python_version(),
                         "install": "Install Python 3.9 or newer from https://www.python.org/downloads/"}
-    checks["transcription"] = {"ok": has("uvx"), "required": True,
+    phonon = system == "Darwin" and machine == "arm64"
+    checks["transcription"] = {"ok": has("uv" if phonon else "uvx"), "required": True,
                                "command": transcribe_cmd(system, machine),
                                "install": install_cmd("uv", system, has),
-                               "note": "uv runs the local model without a manual environment; "
-                                       "the first run downloads it (about 1.5 GB)."}
+                               "note": ("Local Phonon-2 for English speech; first run downloads "
+                                        "164 MB of weights plus Python dependencies. Speech-gap "
+                                        "flags require review. Use Whisper for other languages."
+                                        if phonon else "This host is unsupported by the Phonon helper; "
+                                        "use local Whisper. First run downloads about 1.5 GB of weights.")}
     app = RESOLVE_APP.get(system, "")
     checks["resolve"] = {"ok": bool(app) and os.path.exists(app), "required": False,
                          "found": app if app and os.path.exists(app) else None,

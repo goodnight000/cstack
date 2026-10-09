@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Dependency-free check of preflight's per-OS install and transcription commands."""
 import os
+from pathlib import Path
+import shlex
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -14,7 +16,10 @@ assert install_cmd("uv", "Darwin", only()).startswith("curl -LsSf https://astral
 assert install_cmd("ffmpeg", "Windows", only()) == "winget install Gyan.FFmpeg"
 assert install_cmd("ffmpeg", "Linux", only("dnf")) == "sudo dnf install -y ffmpeg"
 assert install_cmd("ffmpeg", "Linux", only()).startswith("Install ffmpeg")
-assert "mlx_whisper" in transcribe_cmd("Darwin", "arm64")
+command = shlex.split(transcribe_cmd("Darwin", "arm64"))
+assert command[:2] == ["uv", "run"]
+assert Path(command[2]).is_file()
+assert command[3:] == ["audio.wav", "--output-dir", "."]
 assert "whisper-ctranslate2" in transcribe_cmd("Darwin", "x86_64")
 assert "whisper-ctranslate2" in transcribe_cmd("Linux", "x86_64")
 listing = " ... subtitles         V->V       Render text subtitles\n ... zscale   V->V  Apply resizing\n"

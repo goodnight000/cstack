@@ -12,15 +12,25 @@ paths, keep source files untouched, and overwrite only known derived outputs.
 ```bash
 ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,sample_aspect_ratio,pix_fmt,sample_rate,channel_layout:stream_tags=rotate:stream_side_data=rotation:format=duration -of json IN
 ffmpeg -v error -i IN -vn -ac 1 -ar 16000 audio.wav
-# Apple Silicon:
-uvx --from mlx-whisper mlx_whisper audio.wav --model mlx-community/whisper-large-v3-turbo --word-timestamps True --output-format json --output-dir . --verbose False
-# Any other macOS, Linux or Windows host:
+# English on Apple Silicon (replace SKILL_DIR with this skill's directory):
+uv run "SKILL_DIR/scripts/transcribe.py" audio.wav --output-dir .
+# Whisper exception: unsupported language or concrete failure after Phonon retries:
+uvx --from mlx-whisper mlx_whisper audio.wav --model mlx-community/whisper-large-v3-turbo --word-timestamps True --condition-on-previous-text False --output-format json --output-dir . --verbose False
+# Unsupported host for this Phonon helper (other macOS, Linux or Windows):
 uvx whisper-ctranslate2 audio.wav --model large-v3-turbo --word_timestamps True --output_format json --output_dir . --verbose False
 ```
 
-Both write `segments[].words[].{word,start,end}` JSON, the input the caption
-helper reads; `preflight.py` prints the one for this host. Prefer an existing
-local Whisper environment/model cache over downloading another.
+These write `segments[].words[].{word,start,end}` JSON, the input the caption
+helper reads; `preflight.py` prints the default for this host. Phonon-2 runs
+locally, batches inputs under one loaded model, and uses a speech detector plus
+shorter re-decodes to repair suspected omissions. Unresolved gaps stop output;
+review those windows with source audio and retry Phonon with useful context.
+Use Phonon for routine final-audio QA and restart checks too. Invoke Whisper
+only for unsupported input/host or a specific unresolved Phonon failure, and
+record the reason. An independent QA transcript means a fresh decode of final
+audio in a separate file; it does not require a second model. Preserve raw text separately
+from caption spelling corrections. Existing outputs require `--force` with
+Phonon; use another output directory for independent checks. Reuse model caches.
 Probe rotation, color/HDR information when relevant, and displayed geometry;
 encoded width/height alone may describe a rotated source incorrectly.
 
@@ -83,6 +93,10 @@ handheld path instead, use `scripts/borrow_camera.py`.
   holding a filter sits right before a filtergraph label.
 - `bc` prints `.70` without a leading zero. ffmpeg accepts it, but integer
   millisecond delays need `$(echo "$T*1000/1" | bc)`.
+- Run full-length renders and transcription as background jobs and cap their
+  parallelism (Remotion `--concurrency`, transcription in chunks). A job killed
+  for memory (exit 137) in the foreground can end the agent session with it; the
+  same job at lower load usually finishes.
 
 ## Quiet external audio and separate recordings
 
@@ -126,6 +140,11 @@ zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:peak=10:de
 It was encoded at full upright 1080x1920/60fps with H.264 VideoToolbox at 40 Mbps,
 tagged BT.709. Resolve used `davinciYRGB` with Rec.709 Gamma 2.4 timeline/output.
 These values are a source-specific working example, not a universal iPhone LUT.
+Some FFmpeg builds lack `zscale` (and `drawtext`); check `ffmpeg -filters`. On macOS,
+`avconvert -s IN -p Preset1920x1080 -o OUT --start S --duration D` gave upright BT.709
+SDR with Apple's tone mapping that matched the source by eye (one project, 2026-09).
+Its trims land a few tens of milliseconds off: re-sync each window by audio
+cross-correlation rather than trusting `--start`.
 Probe each recording, inspect the sample, and retain original HDR media. Reuse
 normalized windows for revisions whose source ranges remain within their handles.
 
@@ -151,7 +170,7 @@ Use a smaller, fast-encoded preview until the story and layout settle.
 For final social delivery, these are starting settings, not platform mandates:
 
 ```bash
-ffmpeg -i IN -filter_complex_script filters.txt -map '[vout]' -map '[aout]' -c:v libx264 -crf 19 -preset medium -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart master.mp4
+ffmpeg -i IN -/filter_complex filters.txt -map '[vout]' -map '[aout]' -c:v libx264 -crf 19 -preset medium -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart master.mp4
 ```
 
 An upload copy can use CRF 23 and AAC 128k when it remains visually adequate.
@@ -325,17 +344,27 @@ music-free hook silent in the music stem. Inspect loop boundaries in context whe
 listening is available. Loop length and crossfade duration depend on the recording;
 numeric settings alone do not prove a seamless audible loop.
 
+When ducking a bed with `sidechaincompress`, pad the speech key with `apad` and trim
+the output to the final duration with `atrim`. The filter stops when the key ends,
+silently dropping the bed's tail and any fade scheduled there. Before mixing, confirm
+every stem (speech, music, effects) is as long as the picture.
+
 ## Repeated-speech checks
+
+`scripts/restart_scan.py` automates the interior check below for a whole cutlist.
+For a first survey of a long take-heavy recording, transcribe per speech island
+(split at silences) with conditioning off: whole-file decoding with conditioning on
+has looped one sentence for minutes, and chunked decoding still merged restarts.
 
 Treat unexpectedly long word timestamps as a reason to inspect the underlying
 audio. A recognizer can assign a single word a long interval containing repeated
 speech. A long transcription and a short check ending at the previous take can
 both miss it.
 
-Transcribe each window as its own file and call; several inputs in one call can
-return a single mismatched JSON. Add `--condition-on-previous-text False` (mlx) or
-`--condition_on_previous_text False` (whisper-ctranslate2) to reduce invented text,
-and treat low-probability words at a window edge as suspect.
+Decode each window separately. Phonon can batch files under one loaded model
+while writing a separate JSON for each input. Treat words at clipped window
+edges as suspect and include context. If a concrete failure justifies Whisper,
+use separate input calls with previous-text conditioning off.
 
 Inspect overlapping windows containing the outgoing phrase, the join, and the
 first phrase of the incoming clip. Include the interior of a selected passage
@@ -345,6 +374,15 @@ repeat, then verify the combined final join again. Tiny-window ASR can also
 hallucinate; reconcile conflicting results against source context, waveform, and
 listening when available. An instruction to transcribe verbatim does not make
 the recognizer reliable by itself.
+
+## Cutting under a finished composition
+
+When animation, cards and captions are already cued to the old timeline, removing a
+span from the camera, cutout and dialogue can leave every layer untouched: map the
+composition frame to the old ("story") frame (`story = f < CUT ? f : f + N`), pass that
+to the layers, map effect cues back, and drop cues inside the removed span. Correct the
+word timings ASR had merged across the removed span first. Check the join's picture as
+well as its audio: elements whose entrances fell inside the span appear already in place.
 
 ## Frame-rounded timing
 

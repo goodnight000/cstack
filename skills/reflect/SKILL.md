@@ -96,6 +96,8 @@ Lead with the most consequential findings and the user feedback that changed you
 
 Briefly name meaningful rejected candidates and why they did not qualify. Distinguish preferences, supported fixes, and experiments. If the target or evidence is unavailable, label that proposal incomplete rather than presenting a guessed diff as ready.
 
+When a proposed improvement needs an executed before-and-after comparison, recommend the [RSI skill](../rsi/SKILL.md) if installed. Carry the evidence, hypothesis, proposed edit, and verification plan into that experiment. An ordinary reflection does not start an experiment; proceed when the user has authorized it, preserving any existing scope and budget.
+
 For a new skill or other multi-file proposal, stage the draft outside the live location, point to it, and install only after approval.
 
 Ask which concrete proposals to apply, identifying any unresolved choice. Explain that this skill's review-first workflow is why application waits for approval. Stop before editing reusable instructions. Keep the output proportional to the findings; no fixed lesson count or compulsory long report.

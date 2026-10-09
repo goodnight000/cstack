@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate burned-in-style ASS captions from a Whisper word-timestamp JSON
+"""Generate burned-in-style ASS captions from a word-timestamp JSON
 and an edit cutlist. See references/technical.md in the video-edit skill for the rationale
 behind the chunking/timing rules — they were debugged on real footage; keep
 them.
@@ -7,7 +7,7 @@ them.
 Usage:
     make_captions.py audio.json cutlist.json captions.ass [--expected expected.txt]
 
-audio.json: mlx_whisper/whisper output with per-word timestamps
+audio.json: transcription output with per-word timestamps
             (segments[].words[].{word,start,end}).
 
 cutlist.json schema (only "segments" is required):

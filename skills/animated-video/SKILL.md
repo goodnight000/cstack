@@ -122,7 +122,9 @@ an API summary without reading the source.
 - Write the art bible (look, colour script, cast, staging, safe zones) and per-act briefs (line,
   picture, action) before animators start.
 - In the full production, run one animator per act in parallel, each owning its own files; the
-  shared rig, kit, lib and film shell stay read-only. Throttle rendering on a shared machine.
+  shared rig, kit, lib and film shell stay read-only. Others can storyboard while the rig owner
+  finishes, gated on a ready file. Sound effects stay on the director's one cue sheet: per-act
+  quotas multiply into repeated clutter. Throttle rendering on a shared machine.
 - Every shot changes meaningfully every 1.5–3s and lands its action on its word within a few
   frames.
 - Grow each transition out of the content: a morph, one object becoming the next, a camera
@@ -144,9 +146,15 @@ lenses, route issues to their owners by time range, fix in parallel, re-render, 
 [Review loop](references/review-loop.md).
 
 - After each render, spot-check every flagged moment yourself. Fixers introduce regressions.
+- When the brief names a reference video, put each act's frame beside the reference's frame for
+  the same beat before delivering. Check finish (detail, depth, lighting, real interfaces), not
+  only breakage. A cut that looks sparser than its reference is not ready.
 - Stop when a round gains less than about half a point, or when the top issue needs the user
   (their likeness, their voice, a format decision). Say so and ask.
-- On long runs, send progress at each stage boundary with the latest contact sheet and an ETA.
+- Keep the open issues in `ISSUES.md` (time range, owner, severity, status) and update it after
+  each render; it outlives compaction.
+- On long runs, send progress at each stage boundary — latest contact sheet and an ETA — in the
+  same message as your next action. Keep working unless the next step needs the user.
 
 ## 8. Deliver
 
