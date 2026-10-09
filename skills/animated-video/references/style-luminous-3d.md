@@ -16,6 +16,8 @@ brief; a luminous film can be warm or cold, sparse or dense, stylised or near-ph
   example, one colour for the data being followed, one for infrastructure, one for failure).
 - **Depth.** Fog fading toward the base colour, out-of-focus particles near the lens, far things
   smaller, dimmer and cooler, and a camera that drifts, pushes or orbits rather than holding.
+  The template has no depth-of-field pass, so draw background props as soft sprites or blurred
+  planes; sharp geometry in the background reads as a set.
 - **Modelled objects.** Look up the real object and model its parts (bevels, panel lines,
   ports, cables, housings), plus procedural roughness or normal detail from canvas textures.
 - **Ambient life.** Particles, blinking indicators, pulses running along idle links, haze.

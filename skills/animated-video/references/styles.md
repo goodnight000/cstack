@@ -19,6 +19,12 @@ call for one that isn't here.
   what the film would feel like in each and the one you recommend.
 - Render a style frame of the **same beat** in each, at the delivery aspect ratio and finish,
   so the user compares like with like. A frame is worth more than adjectives.
+- Make each frame that style's honest best, with its own lighting, materials and caption
+  treatment. Frames may share geometry, but two that differ only in lighting or palette are one
+  style shown twice.
+- Recommend from the brief. A style the user liked on an earlier film is evidence about their
+  taste, not a default for this one.
+- A quick throwaway scene is enough for style frames; the real build starts in step 4.
 - The user's feedback may land between options ("the first, but more realistic"). Treat each
   round as a revision of the chosen frame, and keep the parts already approved.
 - Once chosen, write the style down for the art bible: palette with one meaning per accent, type

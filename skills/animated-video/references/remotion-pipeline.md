@@ -13,7 +13,8 @@
 - `align.py`: word timestamps (faster-whisper) and the per-frame VO envelope.
 - `snap.sh <dir> <secs…>`: stills from a shared bundle, two at a time, plus a contact sheet.
 - `render.sh <name>`: full MP4 with two-pass loudnorm (-14 LUFS, -1.5 dBTP, linear).
-- `sheet.py`: contact sheets.
+- `sheet.py`: contact sheets. `board.py`: the key-frame board, each still labelled with its beat,
+  time and line.
 - Written per project: `src/index.ts`, `src/Root.tsx`, a film shell that switches acts and draws
   captions and audio, the scenes, and every visual asset.
 - Setup: `npm i remotion @remotion/cli @remotion/google-fonts react react-dom typescript
@@ -53,7 +54,9 @@ Sound stays on the picture when both come from the same numbers.
   exporting `EVENTS: SoundEvent[]` (`{id, fr, dur?, what, x?}` from `lib.ts`): `fr` is the
   frame the thing visibly happens (contact, not the approach), `dur` for anything that lasts,
   `x` from -1 to 1 for its place on screen. The scene imports its timing constants from this
-  file, so moving a beat moves its sound.
+  file, so moving a beat moves its sound. To hand them to a Python mixer, bundle a two-line
+  script that prints `JSON.stringify(EVENTS)`:
+  `npx esbuild dump-events.mts --bundle --platform=node --format=esm | node --input-type=module > out/events.json`.
 - List every appearance, hit, press, landing, start and end of a travelling object or camera
   move, each transition, and each place change with its span (for an ambience bed). Repeated
   events: each one up to about a dozen, otherwise first, last and a count. About 25–50 per
@@ -65,6 +68,8 @@ Sound stays on the picture when both come from the same numbers.
   is heard for a picture that isn't on screen.
 
 ## Audio mechanics
+- Before the VO exists, mix music and effects at the level they will sit under the voice, so the
+  first cut previews the final balance.
 - Duck music by phrase (merge words less than 0.4s apart, ramp over about 0.2s). Per-word
   ducking pumps.
 - Keep SFX off key spoken words. Place a hit 1–2 frames before the word it punctuates.
@@ -79,6 +84,12 @@ Sound stays on the picture when both come from the same numbers.
 - Many agents rendering on one machine starve each other, and a full render can be killed
   (exit 137). Throttle, and render final cuts when the machine is quiet.
 - The last renderable frame is `TOTAL - 1`.
+- 3D framing: with a vertical field of view F, a camera at distance d frames a height of
+  2·d·tan(F/2). Set distances from the size the subject must fill, before modelling detail.
+- Nested transparent parts (an x-ray reveal, glass over a chip) need explicit `renderOrder`, or
+  the outer surface paints over what it should reveal.
+- Render a placeholder still of the hardest shot early in the build; scale and framing problems
+  surface there, before hundreds of lines of world-building.
 - To re-cut a finished composition from source-frame segments, offset with nested sequences
   (`<Sequence from={outStart} durationInFrames={len}><Sequence from={-sourceIn}>…`).
   `<Freeze frame={n}>` clamps n to the host composition's last frame, so it silently shows the

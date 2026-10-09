@@ -29,10 +29,10 @@ answer and a one-line reason, so "yes" or "your call" is a complete reply.
 
 ## Scale the production to the piece
 
-- **Short and unnarrated (under about 60s):** one agent through steps 1, 2 and 4, then build
-  scene by scene checking stills, render, and polish once second by second. Skip the rig
-  freeze, parallel animators and judge panel unless a review shows a problem only they fix.
-- **Longer or narrated:** run the full production below.
+- **Short (under about 60s, one or two acts), narrated or not:** one agent through every step,
+  building scene by scene and checking stills. Skip the rig freeze, parallel animators and judge
+  panel unless a review shows a problem only they fix.
+- **Longer, or many acts and sets:** run the full production below.
 
 ## 1. Direct the story with the user
 
@@ -46,7 +46,8 @@ Pick the spine that fits the brief:
 
 Either way: intake questions in one message, three different concepts with a recommendation,
 the chosen one developed into a timed beat sheet, then stop for the user's approval, for short
-pieces too. Narration wording goes through the video-script skill when it is installed.
+pieces too. When the video-script skill is installed, check narration against its script
+checklist.
 
 Done when: the user has approved the concept and beat sheet, or supplied a finished script.
 
@@ -139,7 +140,8 @@ the chosen style's bar from its reference, and this **finish bar**, which holds 
 - **Light.** One brightest thing per shot, and light sources affect their surroundings: a glow
   lights the floor, a screen lights the hand.
 - **Real things.** Hero objects and interfaces are recognisably the real thing, drawn in the
-  style's language, never a box or a coloured rectangle standing in.
+  style's language, never a box or a coloured rectangle standing in. When a line describes a
+  human action (a tap, a press, a hand holding), show the hand doing it.
 - **Life.** Secondary motion that belongs to the scene; anticipation, overshoot and settle.
 - **Transitions through content.** A morph, a push through an object, particles that reform.
   Carry colour and momentum across the cut; skip crossfades and flat-colour flashes.
@@ -184,7 +186,7 @@ lenses, route issues to their owners by time range, fix in parallel, re-render, 
 Render the final (the template normalizes loudness for social). Check the first frame (it's
 the cover), the last second, and the loudness. Report the path, the open issues, and anything
 synthetic or invented (voice, names, messages, stand-in images). Commit each version in the
-project's local git repo. For changes to a finished film (speed, trim, a caption), take the
+project's local git repo (`git init` at setup). For changes to a finished film (speed, trim, a caption), take the
 cheapest route that preserves quality, such as an ffmpeg pass on the delivered file, and offer
 a re-render only if that route visibly falls short.
 
