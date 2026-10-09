@@ -1,6 +1,6 @@
 # cstack
 
-Reusable agent skills by Charles Zheng, built and refined through real work.
+These are the skills that I use almost every day. I am always adding more skills here. The skills here have saved me hours on on workflows. lmk your experiences with them and drop any feedback! These skills are also refined quite often.
 
 ## Skills
 
