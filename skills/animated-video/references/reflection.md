@@ -22,7 +22,7 @@ after the user approves them. A standing approval recorded in the user's profile
    - graphics lessons → `motion-graphics.md`
    - review and stop rules → `review-loop.md`
    - reusable, style-neutral code → `../templates/`
-   Keep SKILL.md under about 190 lines. When a project's specifics illustrate a lesson, label
+   When a project's specifics illustrate a lesson, label
    them as one example among many possible and say what would change for another brief.
 5. Prune stale or duplicate rules. Keep transcripts, credentials, personal project history and
    machine-specific paths out of the skill.
