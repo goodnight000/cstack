@@ -10,8 +10,10 @@ write only under `out/judge/`. Judge against the current brief and platform. Pas
   pops, ghosting, empty frames).
 - **Growth and story:** does frame 0 stop the scroll in 1.5s; is each line shown with the sound
   off; the emotional arc; dead stretches over 3s; comment or share moments; an ending that loops.
-- **Design and sound:** composition, colour script, accent discipline, safe zones, caption
-  legibility, and the audio measured with ffmpeg (VO-to-bed ratio, masking, loudness, true peak).
+- **Design and sound:** the finish bar (full frame, depth, light, real objects, life,
+  transitions) against each shot's anchor frame, composition, colour script, accent discipline,
+  safe zones, caption legibility, and the audio measured with ffmpeg (VO-to-bed ratio, masking,
+  loudness, true peak, effects landing on their events).
 
 ## Routing fixes
 - Route each issue to the owner of its time range (the act files). Issues spanning 20s or more

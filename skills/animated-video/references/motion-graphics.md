@@ -26,22 +26,18 @@ piece; choose fresh per brief.
 
 ## Craft techniques
 
-Techniques from widely shared code-drawn Opus 5.5 animations (X, September 2026). They are
-tools, not a house style: a brief can call for clean vector work instead.
+Tools that hold across styles. Style-specific craft (texture, 3D lighting) lives in the
+[style files](styles.md).
 
-- **Handmade texture:** procedural paper grain and slightly uneven tone, torn or deckled edges,
-  cut-paper layers with soft shadows, shapes and outlines that are a little irregular. Render the
-  grain once and reuse it; recomputing a full-frame texture every frame is slow.
-- **Line boil for a stop-motion feel:** re-jitter outlines with seeded noise and hold each
-  drawing for 2–3 frames.
-- **Avoid the generic looks:** SaaS illustration, flat corporate icons, neon glow, stock-looking
-  gradients, and photorealism unless the brief asks for it.
+- **Leave out the generic looks:** SaaS illustration, flat corporate icons, stock-looking
+  gradients, glow that lights nothing around it, and photorealism unless the brief asks for it.
 - **Motion:** easing or springs, never linear. Squash and stretch, anticipation and secondary
   motion make even simple shapes feel alive.
 - **On-screen text:** picture first. Cover the words: if a beat stops reading, redesign the
   picture instead of adding labels. Keep words for real names, numbers and quotes the picture
   can't carry: at most about 8 at once, each line visible for at least 2.5s. One display face,
-  plus a monospace face if something is "machine output".
+  plus a monospace face if something is "machine output". Large numbers can be the hero of a
+  shot when the narration's point is the number.
 - **Recurring motif:** one character or object that travels through every scene and changes
   with the story (a single glowing word gaining senses and hands, a jar collecting phrases). It
   holds a long piece together better than a narrator.

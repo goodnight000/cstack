@@ -67,5 +67,6 @@ export const ACTS = {
 } as const;
 export type ActName = keyof typeof ACTS;
 export type SceneProps = { fr: number };
-// SFX cue for Film.tsx to schedule; `hero` marks a hit meant to land on a word (duck it less).
-export type Sfx = { at: number; src: string; vol?: number; hero?: true };
+// A visible event worth hearing, exported by each act (src/scenes/<act>-events.ts) for the cue sheet.
+// `fr` is the absolute frame it visibly happens, `dur` frames if it lasts, `x` -1..1 left to right.
+export type SoundEvent = { id: string; fr: number; dur?: number; what: string; x?: number };

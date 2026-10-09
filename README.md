@@ -9,7 +9,7 @@ These are the skills that I use almost every day. I am always adding more skills
 | [reflect](skills/reflect/SKILL.md) | Reviews outcomes and efficiency, shows findings before asking for feedback, and proposes improvements for approval. Works with completed, incomplete, and unsuccessful sessions. |
 | [rsi](skills/rsi/SKILL.md) | Tests changes to agent skills, instructions, tools, and working processes against the current version, with bounded runs and evidence for keeping or rejecting each change. |
 | [video-edit](skills/video-edit/SKILL.md) | Edits talking-head videos, reels, demos, and screen recordings. Covers audio recovery, take selection, supporting visuals, Resolve revisions, captions, and final-export checks. |
-| [animated-video](skills/animated-video/SKILL.md) | Makes animated videos in code with Remotion: character stories, motion graphics, kinetic type, and animated infographics. Locks the format with a style frame, times everything from the voiceover, builds recurring assets once, animates in parallel, and reviews renders by frames and audio measurements. |
+| [animated-video](skills/animated-video/SKILL.md) | Makes animated videos in code with Remotion, in 2D or 3D: explainers, character stories, motion graphics, kinetic type, and animated infographics. Directs the story or explainer, picks a visual style from side-by-side style frames, gets a key-frame board approved, times everything from the voiceover, holds every shot to a finish bar, animates in parallel with sound cued to picture events, and reviews renders by frames and audio measurements. |
 | [video-script](skills/video-script/SKILL.md) | Brainstorms short-form video ideas and writes scripts from the creator's own analytics: who has a stake, a hook that lands in 3 seconds, a second sentence that keeps viewers, and proof on screen. Also turns posted-video insights into lessons, with a script that reads retention curves from screenshots. |
 
 Each skill lives in its own directory under `skills/` and can be installed separately.
@@ -134,7 +134,7 @@ checks the reading against the app's average watch time.
 
 [Reflect's evaluation cases](skills/reflect/evals/evals.json) cover feedback, constructive pushback, unnecessary repeat checks, necessary investigation, findings that warrant no instruction changes, and keeping one project's output from becoming a default when it seeds a new skill.
 
-[Animated Video's evaluation cases](skills/animated-video/evals/evals.json) cover locking the format before building and treating a past film as evidence rather than a template.
+[Animated Video's evaluation cases](skills/animated-video/evals/evals.json) cover locking the format before building, treating a past film as evidence rather than a template, and making an explainer without a reference video.
 
 [RSI's evaluation cases](skills/rsi/evals/evals.json) cover missed skill discovery, exposed final tests, altered graders, authorized local adoption, creative judgment, and unproven improvement of the improvement process.
 

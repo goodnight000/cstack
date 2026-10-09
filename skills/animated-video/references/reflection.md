@@ -14,12 +14,15 @@ after the user approves them. A standing approval recorded in the user's profile
    user was only partly satisfied, record the direction they endorsed and what they disliked,
    not the output as a model.
 4. Put each lesson in its one home:
-   - workflow steps → `../SKILL.md`
+   - workflow steps and the finish bar → `../SKILL.md`
    - pipeline commands and gotchas → `remotion-pipeline.md`
+   - story lessons → `story.md`; explainer lessons → `explainer.md`
+   - a visual style's bar and mechanics → its `style-*.md` file, listed in `styles.md`
    - rig lessons → `character-rig.md`
    - graphics lessons → `motion-graphics.md`
    - review and stop rules → `review-loop.md`
    - reusable, style-neutral code → `../templates/`
-   Keep SKILL.md under about 150 lines.
+   Keep SKILL.md under about 190 lines. When a project's specifics illustrate a lesson, label
+   them as one example among many possible and say what would change for another brief.
 5. Prune stale or duplicate rules. Keep transcripts, credentials, personal project history and
    machine-specific paths out of the skill.

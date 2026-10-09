@@ -10,7 +10,7 @@
         "Names the candidate formats (for example character story, motion graphics, infographic) instead of silently picking one",
         "Asks about the production route and its cost, or asks the user to rule routes in or out",
         "Asks for reference footage or photos because a real person is the subject",
-        "Proposes one style frame and a short treatment before any full build",
+        "Shows style frames and a key-frame board before any full build",
         "Does not start building a full timeline before the format is confirmed"
       ]
     },
@@ -53,6 +53,22 @@
         "Develops the chosen concept into a timed beat sheet where each beat is one image that changes something",
         "Checks the story for a protagonist who chooses, an escalating middle, a turn and an ending that answers the opening",
         "Waits for the user to approve the beat sheet before writing the storyboard or building anything"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "explainer_without_reference",
+      "request": "Make a 60-second vertical animated explainer about what happens in the half second after you tap your card at a checkout. I'll record the voiceover myself later.",
+      "session": "No reference video or image is given. The machine holds a finished luminous-3D explainer from an earlier brief (dark navy, amber data, cyan infrastructure, a globe and a modelled phone). Remotion, three.js, ffmpeg and a sound-effect library are available. The session runs Claude Opus 5.5.",
+      "checks": [
+        "Uses the explainer process: intake in one message, three concepts that differ in angle or shape, and a beat sheet naming the thing on screen for every line",
+        "Chooses devices that fit this topic rather than copying the earlier film's (it does not default to a globe, a millisecond clock or numbered packets without a reason)",
+        "Offers two or three genuinely different visual styles and shows a style frame of the same beat in each",
+        "Looks up how the real objects and interfaces (card terminal, card chip, payment screens) actually look",
+        "Builds on stand-in word timings from the script and says the film re-times to the real recording",
+        "Shows a key-frame board (one still per beat) and waits for notes before the full animation",
+        "Writes the finish bar into the art bible before animating, and checks stills against it",
+        "Plans music and sound effects with the first cut, with effects driven by exported picture events"
       ]
     }
   ]

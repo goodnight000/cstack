@@ -5,6 +5,11 @@
   (eased 0→1), `pop()` (spring), `voLevel(fr)` (VO loudness), `chunk()` (hand-authored caption
   lines checked against the transcript), and an `ACTS` table to fill in.
 - `src/kit/camera.tsx`: keyframed pan, zoom and rotate, shake, handheld drift, and parallax layers.
+- `src/kit/three-canvas.tsx`: a drop-in `ThreeCanvas` that holds each frame until the 3D scene
+  inside it has drawn, and `settle()` for releasing a `delayRender` after a state change.
+  Needs `npm i @remotion/three three @react-three/fiber @types/three`.
+- `src/kit/finish.tsx`: `Finish` wraps a scene with optional bloom, a vignette and fine grain.
+  Tune or drop each layer for the chosen style.
 - `align.py`: word timestamps (faster-whisper) and the per-frame VO envelope.
 - `snap.sh <dir> <secs…>`: stills from a shared bundle, two at a time, plus a contact sheet.
 - `render.sh <name>`: full MP4 with two-pass loudnorm (-14 LUFS, -1.5 dBTP, linear).
@@ -32,7 +37,8 @@
 - Scene logic uses absolute frames (`fr`), with no nested `<Sequence>` offsets, so a cue means
   the same frame everywhere.
 - Every time comes from `cue()`, so re-aligning a new VO re-times the film.
-- Scenes export `Scene({fr})` plus a list of their SFX, and the film shell mixes them.
+- Scenes export `Scene({fr})` plus their sound events, and the director's cue sheet turns those
+  events into the mix.
 - Captions come from hand-authored sense-unit lines, verified against the transcript at load.
   Their look (font, stroke, highlight) is a per-project design choice.
 
@@ -40,6 +46,23 @@
 - The top ~220px and bottom ~420px are covered by UI, and so is a right rail (x > 930 at
   y > 1100). Keep faces, key props and on-screen text inside the remaining area.
 - Deliver around -14 LUFS integrated and under -1.5 dBTP.
+
+## Sound events
+Sound stays on the picture when both come from the same numbers.
+- Each act writes `src/scenes/<act>-events.ts`, a pure module (no React, three or DOM imports)
+  exporting `EVENTS: SoundEvent[]` (`{id, fr, dur?, what, x?}` from `lib.ts`): `fr` is the
+  frame the thing visibly happens (contact, not the approach), `dur` for anything that lasts,
+  `x` from -1 to 1 for its place on screen. The scene imports its timing constants from this
+  file, so moving a beat moves its sound.
+- List every appearance, hit, press, landing, start and end of a travelling object or camera
+  move, each transition, and each place change with its span (for an ambience bed). Repeated
+  events: each one up to about a dozen, otherwise first, last and a count. About 25–50 per
+  minute of film.
+- The director keeps one cue sheet mapping event ids to sounds, levels and treatments. Give
+  each place one ambience and each recurring thing one recognisable sound, and vary the rest so
+  effects stay diverse without repeating one sample.
+- Drop effects under any stretch replaced by other footage (a talking-head insert), so nothing
+  is heard for a picture that isn't on screen.
 
 ## Audio mechanics
 - Duck music by phrase (merge words less than 0.4s apart, ramp over about 0.2s). Per-word

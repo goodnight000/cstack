@@ -1,5 +1,8 @@
 # Directing the story
 
+For a story with a protagonist. When the film explains how something works, use
+[explainer.md](explainer.md) instead.
+
 Use this whenever you have to invent or shape the story. A polished animation cannot rescue a
 weak story, and the story is the cheapest thing to change: fix it in text before anything is
 drawn.
