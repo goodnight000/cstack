@@ -113,8 +113,10 @@ The skill needs a shell, Node.js with Remotion, FFmpeg/ffprobe, and Python 3
 with faster-whisper for word timings. Voiceover comes from the user or a
 separate tool. Music and effects come from the user's files, on-disk samples
 such as the video-edit sound library, or sound synthesized in code. The template holds style-neutral
-infrastructure only (timing, camera, still and render scripts). Characters,
-art direction, and creative defaults are designed per project or supplied by you.
+infrastructure only (timing, camera, still and render scripts, synthesis helpers). Optional
+parts from past films (a globe with a cable web, an iPhone running iMessage, synthesised sound
+effects) sit beside it to copy and restyle. Characters, art direction, and creative defaults are
+designed per project or supplied by you.
 
 ## Use Video Script
 

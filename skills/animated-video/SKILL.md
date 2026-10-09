@@ -87,7 +87,8 @@ sound bed sets the timing: choose or build it first and cue beats to it.
 4. Write caption chunks by hand as sense units, checked against the transcript.
 5. Plan music and sound effects now; they ship with the first cut. Source them in this order:
    the user's files; samples on disk (such as the video-edit skill's `assets/sfx` library);
-   sound synthesized in code, labelled as synthetic because you can't audition it. Given a
+   sound synthesized in code (start from `templates/parts/audio/designed.py`), labelled as
+   synthetic because you can't audition it. Given a
    reference video, measure its music (key, tempo, drop-outs) and match its role.
 
 Done when: the transcript (or stand-in) matches the script and every cue resolves, or, without
@@ -123,7 +124,8 @@ apart at 4x.
 - Characters: one parametric rig each, with a model sheet checked against the references
   ([rig lessons](references/character-rig.md)). Graphics: a type scale, a palette with one
   meaning per accent, a small component kit ([graphics lessons](references/motion-graphics.md)).
-- Real objects and interfaces: model how the thing really looks, in the film's style.
+- Real objects and interfaces: model how the thing really looks, in the film's style. A globe
+  and an iPhone running iMessage are in `templates/parts/`; restyle them rather than reuse their look.
 
 Done when: a showcase composition shows every recurring asset at the size it is used, and
 animators can use them from an API summary without reading the source.

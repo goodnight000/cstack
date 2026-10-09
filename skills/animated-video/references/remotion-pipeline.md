@@ -10,11 +10,17 @@
   Needs `npm i @remotion/three three @react-three/fiber @types/three`.
 - `src/kit/finish.tsx`: `Finish` wraps a scene with optional bloom, a vignette and fine grain.
   Tune or drop each layer for the chosen style.
+- `audio/dsp.py`: numpy/scipy synthesis helpers (notes, filters, envelopes, reverb, echo, mix
+  with `put()`, 16-bit `write()`, `read()` and `loudness()` through FFmpeg) and `cue()`, which
+  reads the same `src/words.json` so sound is timed from the words too.
 - `align.py`: word timestamps (faster-whisper) and the per-frame VO envelope.
 - `snap.sh <dir> <secs…>`: stills from a shared bundle, two at a time, plus a contact sheet.
 - `render.sh <name>`: full MP4 with two-pass loudnorm (-14 LUFS, -1.5 dBTP, linear).
 - `sheet.py`: contact sheets. `board.py`: the key-frame board, each still labelled with its beat,
   time and line.
+- Optional parts in `templates/parts/` ([README](../templates/parts/README.md)): a globe with
+  an undersea cable web, a modelled iPhone running iMessage, and about 30 synthesised sound
+  effects. They carry one film's look; copy only what the story needs and restyle it.
 - Written per project: `src/index.ts`, `src/Root.tsx`, a film shell that switches acts and draws
   captions and audio, the scenes, and every visual asset.
 - Setup: `npm i remotion @remotion/cli @remotion/google-fonts react react-dom typescript

@@ -46,3 +46,4 @@ the photo's data, cyan for infrastructure and red for loss, a globe with a dense
 seabed, a modelled phone running a messaging app, and rack routers. Its first cut was rejected
 as flat and sparse; the rebuild that met the bar above was accepted. Those colours and objects
 were that topic's; a film about, say, the immune system or a power grid would choose its own.
+Its globe and phone are in `templates/parts/` for films that need those objects.
