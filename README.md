@@ -163,6 +163,8 @@ dependencies. Open `icons/index.html` from a local server to browse them.
 
 Keep each skill self-contained and focused on a recurring need. Include examples or evaluation cases that expose meaningful mistakes. Keep transcripts, credentials, personal project history, and machine-specific paths out of published skills. For third-party contributions, preserve attribution and confirm license compatibility.
 
+Skills stay general; personalization lives outside the repo, in each skill's `~/.<skill>/profile.md` and the files it points to. Before changing a skill, ask whether the change would be right for a stranger making their own videos. If so, write it here generically. If it is right only for you (your audience, taste, numbers, machine or accounts), put it in your profile. When it is both, split it: the general rule here, your value and the evidence behind it in your profile. Bundle only assets whose license allows redistribution, and keep the creator's own footage, likeness and personal media out.
+
 ## License
 
 [MIT](LICENSE).
