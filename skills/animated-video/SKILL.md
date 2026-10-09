@@ -2,7 +2,7 @@
 name: animated-video
 description: >-
   Make animated videos in code with Remotion (React, SVG, three.js): explainers, character
-  stories, motion graphics, kinetic typography and animated infographics, in 2D or 3D, from a
+  stories, motion graphics, kinetic typography, paper collage and animated infographics, in 2D or 3D, from a
   script or voiceover, in any aspect ratio. Use when asked to animate a script, make an
   animated video or Reel, or motion graphics. Not for editing camera footage (video-edit) or
   AI-generated clips (higgsfield-*).
@@ -10,8 +10,8 @@ description: >-
 
 # Animated video
 
-Turn a brief into a finished animated video in which every image is drawn in code. Treat it as
-a film production: agree the story, choose the visual style, build an audio spine, approve a
+Turn a brief into a finished animated video in which every image is drawn in code (collage-like
+styles may also use sourced images, treated in code). Treat it as a film production: agree the story, choose the visual style, build an audio spine, approve a
 key-frame board, make recurring assets once, animate shots, then review renders through frames
 and measurements. A film is finished when each line of the script is shown on screen, the
 opening earns attention, every shot meets the finish bar, and the review checks pass.
@@ -184,8 +184,8 @@ lenses, route issues to their owners by time range, fix in parallel, re-render, 
 ## 8. Deliver
 
 Render the final (the template normalizes loudness for social). Check the first frame (it's
-the cover), the last second, and the loudness. Report the path, the open issues, and anything
-synthetic or invented (voice, names, messages, stand-in images). Commit each version in the
+the cover), the last second, and the loudness. Report the path, the open issues, any sourced
+images, and anything synthetic or invented (voice, names, messages, stand-in images). Commit each version in the
 project's local git repo (`git init` at setup). For changes to a finished film (speed, trim, a caption), take the
 cheapest route that preserves quality, such as an ffmpeg pass on the delivered file, and offer
 a re-render only if that route visibly falls short.
