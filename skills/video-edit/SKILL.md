@@ -155,6 +155,13 @@ For a comparison, show the actual compared category or named examples during
 that clause, then clear them when the subject changes. Playfulness must preserve
 the literal subject; an adjacent topic is not a substitute for the compared category.
 
+Every named company, school, product, person or place gets its real logo, photo or
+footage on its word; use as much real imagery as the story allows. A request to add
+animation or motion graphics adds to the real visuals and never replaces them: drawn
+elements annotate real imagery (a circle, a cross-out, an arrow) or illustrate what
+has no real image, such as a feeling or an abstract idea. A drawing standing in for
+something nameable reads as filler and makes the edit look simple.
+
 Maintain a visual manifest with original identity, local file, URL/credit,
 publication context, spoken cue, explanatory purpose, crop/highlight, layout, and
 timing. Distinguish an existing policy from a new agreement and a risk scenario
@@ -210,6 +217,15 @@ Record their words, timing, treatment and placement in existing caption data or 
 Test the hook, one later emphasis passage and a quiet passage against their actual visuals
 before extending the treatment. Keep captions restrained when viewers need to read dense evidence.
 
+The opening caption is the hook and must stop the scroll, whether or not a headline
+was requested. Design it as its own composition rather than the first phrase caption:
+larger condensed type, a word-by-word reveal timed to the speech, and the key word
+landing hardest (scale, colour, a punch-in or a marker stroke). Keep it clear of the
+face and hand over to the body captions at a cut. Skit sections keep the skit guide's
+boxed caption instead. After the opening, choose each emphasized word's treatment for
+what it means (the self, a big claim, a rejected idea, a name in its brand colour, a
+number that counts up) rather than one highlight style for every keyword.
+
 Create short phrase captions from the selected speech with a checked name map.
 Keep text clear of the face, visuals, and platform controls. Preserve editable
 caption data and an SRT even if the rendered layers are images. Do not use caption
@@ -247,7 +263,8 @@ Keep editorial and technical evidence separate:
 
 - Editorial review checks coherent story, complete words, fluent longer takes,
   camera contact, timely relevant visuals, readable captions, and a finished
-  ending. Check that emphasis extends beyond the opening, each effect fits the sentence,
+  ending. Check that the opening caption pops as its own composition and that every named
+  entity has its real asset on its word. Check that emphasis extends beyond the opening, each effect fits the sentence,
   and quieter passages provide contrast; identify automatic reuse of one treatment.
   Use contextual playback/listening when available. User feedback is
   stronger evidence of taste than a contact sheet or automated transcript.

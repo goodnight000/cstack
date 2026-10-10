@@ -84,7 +84,10 @@ sound bed sets the timing: choose or build it first and cue beats to it.
 2. Run `templates/remotion-film/align.py` to get word timestamps and a per-frame loudness
    envelope. Fix transcription mis-splits and keep those fixes as a script.
 3. Derive every cue from words with `cue("phrase")`. A new VO then re-times the whole film.
-4. Write caption chunks by hand as sense units, checked against the transcript.
+4. Write caption chunks by hand as sense units, checked against the transcript. Design the
+   opening caption as the hook, its own composition: larger condensed type revealed word by
+   word on the voice, the key word landing hardest. Later emphasis is chosen per word for what
+   it means, not one highlight style for every keyword.
 5. Plan music and sound effects now; they ship with the first cut. Source them in this order:
    the user's files; samples on disk (such as the video-edit skill's `assets/sfx` library);
    sound synthesized in code (start from `templates/parts/audio/designed.py`), labelled as
@@ -143,7 +146,9 @@ the chosen style's bar from its reference, and this **finish bar**, which holds 
   lights the floor, a screen lights the hand.
 - **Real things.** Hero objects and interfaces are recognisably the real thing, drawn in the
   style's language, never a box or a coloured rectangle standing in. When a line describes a
-  human action (a tap, a press, a hand holding), show the hand doing it.
+  human action (a tap, a press, a hand holding), show the hand doing it. A named company,
+  school, product or place appears as its real logo or a faithful likeness, never a generic
+  symbol.
 - **Life.** Secondary motion that belongs to the scene; anticipation, overshoot and settle.
 - **Transitions through content.** A morph, a push through an object, particles that reform.
   Carry colour and momentum across the cut; skip crossfades and flat-colour flashes.
