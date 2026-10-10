@@ -8,16 +8,20 @@ export const WORDS = words as Word[];
 const ENV = env as number[];
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9']/g, "");
-// Start time (sec) of the nth occurrence of `phrase` in the VO transcript.
-export const cue = (phrase: string, nth = 0): number => {
-  const p = phrase.split(/\s+/).map(norm);
-  let hit = 0;
+// Start time (sec) of the nth occurrence of `phrase` in the VO transcript. Matching ignores punctuation,
+// so a phrase said more than once needs an explicit nth; without one it would land on the first, earlier
+// occurrence ("company" in "billion dollar company?" instead of "into a company").
+export const cue = (phrase: string, nth?: number): number => {
+  const p = phrase.split(/\s+/).map(norm), hits: number[] = [];
   for (let i = 0; i + p.length <= WORDS.length; i++) {
-    if (p.every((x, j) => norm(WORDS[i + j].w) === x) && hit++ === nth) return WORDS[i].s;
+    if (p.every((x, j) => norm(WORDS[i + j].w) === x)) hits.push(WORDS[i].s);
   }
-  throw new Error(`cue not found: ${phrase}`);
+  if (nth === undefined && hits.length > 1) throw new Error(`cue "${phrase}" is said ${hits.length} times; pass nth`);
+  const s = hits[nth ?? 0];
+  if (s === undefined) throw new Error(`cue not found: ${phrase}`);
+  return s;
 };
-export const cueEnd = (phrase: string, nth = 0): number => {
+export const cueEnd = (phrase: string, nth?: number): number => {
   const i = WORDS.findIndex((w) => w.s === cue(phrase, nth));
   return WORDS[i + phrase.split(/\s+/).length - 1].e;
 };

@@ -2,7 +2,8 @@
 name: video-edit
 description: >-
   Edit and revise talking-head videos, social reels, text-overlay skits and memes,
-  reel recreations, demos, and screen recordings.
+  reel recreations, demos, and screen recordings, including animation, logos and
+  motion graphics added over existing footage.
   Use for quiet-audio recovery, separate-audio sync, preprocessing, take selection, DaVinci Resolve editing,
   relevant sourced visuals, captions, speed or color corrections, and authorized
   video publishing or scheduling. Also use for post-edit reflection and updates

@@ -93,6 +93,10 @@ handheld path instead, use `scripts/borrow_camera.py`.
   holding a filter sits right before a filtergraph label.
 - `bc` prints `.70` without a leading zero. ffmpeg accepts it, but integer
   millisecond delays need `$(echo "$T*1000/1" | bc)`.
+- Overlay cues looked up by phrase (`at("company")`) match the first occurrence,
+  and punctuation-blind matching makes "startup." equal to an earlier "startup".
+  When a phrase is said more than once, pass the occurrence explicitly, or make
+  the lookup throw on ambiguity as the animated-video template's `cue()` does.
 - Run full-length renders and transcription as background jobs and cap their
   parallelism (Remotion `--concurrency`, transcription in chunks). A job killed
   for memory (exit 137) in the foreground can end the agent session with it; the

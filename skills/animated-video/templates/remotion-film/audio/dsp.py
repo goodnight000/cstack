@@ -151,19 +151,19 @@ def words():
     return _words
 
 
-def cue(phrase, nth=0):
-    """Start time (s) of the nth occurrence of a phrase in the narration. Mirrors cue() in src/lib.ts."""
+def cue(phrase, nth=None):
+    """Start time (s) of the nth occurrence of a phrase in the narration. Mirrors cue() in src/lib.ts:
+    a phrase said more than once needs an explicit nth."""
     W, p = words(), [_norm(w) for w in phrase.split()]
-    hit = 0
-    for i in range(len(W) - len(p) + 1):
-        if all(_norm(W[i + j]['w']) == x for j, x in enumerate(p)):
-            if hit == nth:
-                return W[i]['s']
-            hit += 1
-    raise KeyError(f'cue not found: {phrase}')
+    hits = [W[i]['s'] for i in range(len(W) - len(p) + 1) if all(_norm(W[i + j]['w']) == x for j, x in enumerate(p))]
+    if nth is None and len(hits) > 1:
+        raise KeyError(f'cue "{phrase}" is said {len(hits)} times; pass nth')
+    if (nth or 0) >= len(hits):
+        raise KeyError(f'cue not found: {phrase}')
+    return hits[nth or 0]
 
 
-def cue_end(phrase, nth=0):
+def cue_end(phrase, nth=None):
     """End time (s) of the phrase's last word."""
     W, s = words(), cue(phrase, nth)
     i = next(k for k, w in enumerate(W) if w['s'] == s)

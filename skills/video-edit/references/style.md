@@ -28,6 +28,13 @@ looks. Logos next to an aspiration ("we want to raise from…") illustrate the
 aspiration; they must not suggest those firms are backers. "More visuals" means
 more useful imagery in varied layouts, not more text or arbitrary objects.
 
+A request to "add animation" to footage adds to the real visuals; it does not
+replace them. A named company, school, product, person or place still gets its
+real logo, photo or footage on its word, and drawn elements annotate that
+imagery (a circle, a cross-out, an arrow) or illustrate what has no real image,
+such as a feeling or an abstract idea. A drawing standing in for something
+nameable reads as filler.
+
 A screenshot, table or demo the user supplies is evidence the viewer should
 read. Show it whole and long enough to read, and shorten a demo by speeding up
 dead time, not by cutting its result. The dwell limit is for sourced illustration.
@@ -44,6 +51,11 @@ choice. Count actual image/video appearances separately from scenes, titles and
 wordcards. For hand-anchored imagery, inspect the gesture's start, hold and exit.
 
 ## Captions
+
+The opening caption is the hook, so design it as its own composition rather
+than the first phrase caption: larger condensed type, a word-by-word reveal on
+the speech, and one word that lands hardest. Keep it clear of the face, and
+hand over to the body captions at a cut.
 
 Plan emphasis around the meaning and delivery of each passage, not a keyword
 list. Emphasize strong claims, contrasts, numbers and payoffs throughout the
@@ -66,6 +78,9 @@ on an interface action, one whoosh on a major scene change, a ding as a message
 lands. Without overlays, a caption emphasis or a cut can be that event. Do not put a whoosh on every cut or stack effects. Choose one of two
 similar variants. Keep meme sounds (vine boom, bruh, oof) for edits that are
 deliberately comedic; on a sincere story they make the moment feel manufactured.
+Land an accent in the gap after its cue word, not on the word's onset: an
+effect that starts on a word masks it, and names suffer most. Re-transcribing
+the final mix shows any word an effect covered.
 Set levels by comparing short windows (about 50 ms) of the effect with the speech
 at the same instant, then listening: an accent should be clearly heard without
 covering a word, and textures like typing sit lower. Peak-matching under-mixes
