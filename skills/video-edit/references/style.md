@@ -7,8 +7,8 @@ are editorial taste that has worked well, not proven platform-ranking rules.
 | Choice | Default |
 | --- | --- |
 | Frame | Full-height 9:16, usually 1080x1920. Keep the camera upright with no embedded black bars |
-| Hook | Start on the exact first intended word. Give the first three seconds a deliberate composition. A large unboxed headline, when requested, stays separate from the subtitles and uses the user's exact wording |
-| Visuals | Moving footage of the actual person, product, event or demonstration that the speaker names, timed to that claim. Prefer video over stills; use a still when the evidence only exists as one, such as a document, quote or photo. Unrelated moving stock is not a substitute for relevance |
+| Hook | Start on the exact first intended word. Give the first three seconds a deliberate composition, including an opening caption designed as the hook whether or not a headline was requested (SKILL.md step 4). A separate large unboxed headline, when requested, stays separate from the subtitles and uses the user's exact wording |
+| Visuals | Moving footage of the actual person, product, event or demonstration that the speaker names, timed to that claim. Prefer video over stills; use a still when the evidence only exists as one, such as a document, quote or photo. Unrelated moving stock is not a substitute for relevance. A named company, school or product with no fitting footage gets its real logo; added animation annotates real imagery rather than replacing it (SKILL.md step 3) |
 | Motion | Choose excerpts with visible action during their on-screen interval and check their entry and exit. Fades complement motion inside the footage; they do not replace it |
 | Layout | Keep the face and captions clear. Vary top, bottom and side placement, single images, simultaneous groups and quick overlapping stacks. Fit imagery to gestures when useful. Captions and visuals are placed independently |
 | Reuse | Show each original visual once, counting its crops and renamed copies |
